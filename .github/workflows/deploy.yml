@@ -1,0 +1,44 @@
+name: Deploy to S3 + CloudFront
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::901779867920:role/GitHubActions-Deploy
+          aws-region: us-east-1
+
+      - name: Sync to S3
+        run: |
+          aws s3 sync . s3://nebius-projects \
+            --exclude ".git/*" \
+            --exclude ".github/*" \
+            --exclude ".gitignore" \
+            --exclude "*.md" \
+            --exclude "*.docx" \
+            --exclude "*.pdf" \
+            --exclude "*.code-workspace" \
+            --exclude "badge-mockup.html" \
+            --exclude "acm-validation.json" \
+            --exclude "cloudfront-config.json" \
+            --exclude "bucket-policy.json" \
+            --exclude "route53-alias.json"
+
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id E3K7BNEXGNYAIR \
+            --paths "/*"

@@ -11,17 +11,17 @@
     --nebius-green: #00C853;
     --nebius-green-dim: #00C85322;
     --nebius-green-mid: #00C85355;
-    --bg-base: #080B0D;
-    --bg-surface: #0E1316;
-    --bg-card: #141920;
-    --bg-card-hover: #1C2430;
-    --bg-expanded: #111820;
-    --border-subtle: #1E2A32;
-    --border-mid: #243040;
+    --bg-base: #0C1A3A;
+    --bg-surface: #10224A;
+    --bg-card: #162C52;
+    --bg-card-hover: #1C3660;
+    --bg-expanded: #142848;
+    --border-subtle: #1E3A5C;
+    --border-mid: #2A4D70;
     --border-accent: #00C85340;
-    --text-primary: #E8EDF2;
-    --text-secondary: #7A909E;
-    --text-muted: #3D5060;
+    --text-primary: #F0F6FF;
+    --text-secondary: #B0CFEA;
+    --text-muted: #5A8AAE;
     --text-green: #00C853;
     --sa-color: #3B9EFF;
     --sa-dim: #3B9EFF18;
@@ -43,7 +43,7 @@
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--bg-base);
+    background: linear-gradient(180deg, #0C1A3A 0%, #0A3050 40%, #0E3558 100%);
     color: var(--text-primary);
     font-family: 'Inter', sans-serif;
     font-size: 14px;
@@ -58,10 +58,10 @@
     position: fixed;
     inset: 0;
     background-image:
-      linear-gradient(var(--border-subtle) 1px, transparent 1px),
-      linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
     background-size: 48px 48px;
-    opacity: 0.35;
+    opacity: 0.5;
     pointer-events: none;
     z-index: 0;
   }
@@ -717,7 +717,7 @@
 
   .footer-note {
     font-size: 12px;
-    color: var(--text-secondary);
+    color: #ffffff;
   }
 
   .footer-badge {

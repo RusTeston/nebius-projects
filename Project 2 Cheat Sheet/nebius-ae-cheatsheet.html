@@ -1,0 +1,1440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebius AI Cloud — AE Technical Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  /* ─── RESET & BASE ─── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 13px; }
+
+  :root {
+    --green:        #00C853;
+    --green-dim:    #00C85320;
+    --green-mid:    #00C85345;
+    --green-dark:   #007A32;
+    --bg:           #0C1A3A;
+    --bg-2:         #10224A;
+    --bg-3:         #162C52;
+    --bg-4:         #1C3660;
+    --border:       #1E3A5C;
+    --border-2:     #2A4D70;
+    --text-1:       #F0F6FF;
+    --text-2:       #B0CFEA;
+    --text-3:       #5A8AAE;
+    --sa-blue:      #3B9EFF;
+    --sa-blue-dim:  #3B9EFF15;
+    --warn:         #FF9F3B;
+    --warn-dim:     #FF9F3B15;
+    --danger:       #FF4D4D;
+    --danger-dim:   #FF4D4D15;
+    --purple:       #B47FFF;
+    --purple-dim:   #B47FFF15;
+    --radius:       8px;
+    --radius-sm:    5px;
+  }
+
+  body {
+    background: linear-gradient(180deg, #0C1A3A 0%, #0A3050 40%, #0E3558 100%);
+    color: var(--text-1);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    line-height: 1.55;
+    min-height: 100vh;
+  }
+
+  /* ─── BACKGROUND TEXTURE ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── PAGE SHELL ─── */
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 32px 28px 60px;
+  }
+
+  /* ─── TOP BAR ─── */
+  .top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand-mark {
+    width: 28px; height: 28px;
+    background: var(--green);
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+  }
+
+  .brand-mark svg { width: 16px; height: 16px; }
+
+  .brand-name {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--text-1);
+    letter-spacing: -0.2px;
+  }
+
+  .top-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .doc-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .creator-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border: 1px solid var(--border-2);
+    border-radius: 100px;
+    background: var(--bg-3);
+  }
+
+  .creator-dot {
+    width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .creator-text {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-2);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    margin-bottom: 24px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--green);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 6px;
+  }
+
+  .hero h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    color: var(--text-1);
+    margin-bottom: 10px;
+  }
+
+  .hero h1 span { color: var(--green); }
+
+  .hero-sub {
+    font-size: 0.9rem;
+    color: var(--text-2);
+    max-width: 680px;
+    line-height: 1.6;
+  }
+
+  /* ─── MASTER GRID ─── */
+  .grid {
+    display: grid;
+    gap: 14px;
+  }
+
+  /* Row layouts */
+  .row-1 { grid-template-columns: 1fr; }
+  .row-2 { grid-template-columns: 1fr 1fr; }
+  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .row-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+  .row-2-1 { grid-template-columns: 2fr 1fr; }
+  .row-1-2 { grid-template-columns: 1fr 2fr; }
+  .row-3-2 { grid-template-columns: 3fr 2fr; }
+  .row-2-3 { grid-template-columns: 2fr 3fr; }
+
+  /* ─── CARD ─── */
+  .card {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+  }
+
+  .card:hover {
+    transform: scale(1.02);
+    border-color: var(--border-2);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    z-index: 2;
+  }
+
+  /* ─── MODAL OVERLAY ─── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 8, 20, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .modal-content {
+    background: var(--bg-2);
+    border: 1px solid var(--border-2);
+    border-radius: 12px;
+    padding: 40px 48px;
+    max-width: 900px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+
+  .modal-overlay.active .modal-content {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: var(--bg-3);
+    border: 1px solid var(--border-2);
+    border-radius: 8px;
+    color: var(--text-2);
+    font-size: 1.2rem;
+    width: 36px;
+    height: 36px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .modal-close:hover {
+    background: var(--bg-4);
+    color: var(--text-1);
+  }
+
+  /* ─── MODAL ENLARGED TEXT ─── */
+  .modal-content .card-label {
+    font-size: 1.15rem;
+    margin-bottom: 20px;
+  }
+
+  .modal-content .position-statement {
+    font-size: 1.4rem;
+    line-height: 1.6;
+  }
+
+  .modal-content .proof-chip {
+    font-size: 0.9rem;
+    padding: 5px 14px;
+  }
+
+  .modal-content .product-desc,
+  .modal-content .gpu-use,
+  .modal-content .workload-val,
+  .modal-content .q-text,
+  .modal-content .obj-q,
+  .modal-content .obj-a,
+  .modal-content .comp-line,
+  .modal-content .proof-desc,
+  .modal-content .esc-trigger,
+  .modal-content .product-when {
+    font-size: 1.15rem;
+    line-height: 1.65;
+  }
+
+  .modal-content .gpu-name {
+    font-size: 1.05rem;
+  }
+
+  .modal-content .gpu-badge {
+    font-size: 0.82rem;
+  }
+
+  .modal-content .workload-key {
+    font-size: 0.85rem;
+  }
+
+  .modal-content .workload-title {
+    font-size: 1.2rem;
+  }
+
+  .modal-content .q-num {
+    font-size: 0.88rem;
+    padding: 4px 8px;
+  }
+
+  .modal-content .q-why {
+    font-size: 1rem;
+  }
+
+  .modal-content .obj-flag {
+    font-size: 0.82rem;
+  }
+
+  .modal-content .comp-name {
+    font-size: 0.9rem;
+  }
+
+  .modal-content .proof-stat {
+    font-size: 2rem;
+  }
+
+  .modal-content .proof-source {
+    font-size: 0.85rem;
+  }
+
+  .modal-content .esc-note {
+    font-size: 1rem;
+  }
+
+  .modal-content .signal {
+    font-size: 0.9rem;
+    padding: 4px 10px;
+  }
+
+  .modal-content .product-name {
+    font-size: 1.2rem;
+  }
+
+  .modal-content .product-tag {
+    font-size: 0.82rem;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .card.accent-green::before  { background: var(--green); box-shadow: 0 0 12px var(--green-dim); }
+  .card.accent-blue::before   { background: var(--sa-blue); box-shadow: 0 0 12px var(--sa-blue-dim); }
+  .card.accent-orange::before { background: var(--warn); box-shadow: 0 0 12px var(--warn-dim); }
+  .card.accent-red::before    { background: var(--danger); box-shadow: 0 0 12px var(--danger-dim); }
+  .card.accent-purple::before { background: var(--purple); box-shadow: 0 0 12px var(--purple-dim); }
+  .card.accent-none::before   { display: none; }
+
+  .card-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: -0.2px;
+    color: var(--text-1);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-label .label-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .green-dot  { background: var(--green); }
+  .blue-dot   { background: var(--sa-blue); }
+  .orange-dot { background: var(--warn); }
+  .red-dot    { background: var(--danger); }
+  .purple-dot { background: var(--purple); }
+
+  /* ─── POSITIONING STATEMENT ─── */
+  .position-statement {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.08rem;
+    font-weight: 600;
+    color: var(--text-1);
+    line-height: 1.4;
+    letter-spacing: -0.2px;
+  }
+
+  .position-statement em {
+    color: var(--green);
+    font-style: normal;
+  }
+
+  .position-proof {
+    margin-top: 10px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .proof-chip {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--green-mid);
+    background: var(--green-dim);
+    color: var(--green);
+  }
+
+  /* ─── GPU TIERS ─── */
+  .gpu-tier {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 7px;
+  }
+
+  .gpu-row {
+    display: grid;
+    grid-template-columns: 140px 90px 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    transition: border-color 0.18s ease;
+  }
+
+  .gpu-row:hover { border-color: var(--border-2); }
+
+  .gpu-row.flagship {
+    background: linear-gradient(90deg, #0A2818 0%, var(--bg-3) 100%);
+    border-color: var(--green-mid);
+  }
+
+  .gpu-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-1);
+  }
+
+  .gpu-row.flagship .gpu-name { color: var(--green); }
+
+  .gpu-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 100px;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  .badge-flagship { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-mid); }
+  .badge-training { background: #1A2030; color: var(--sa-blue); border: 1px solid #2A3A55; }
+  .badge-balanced { background: #1E1A12; color: var(--warn); border: 1px solid #3A3020; }
+  .badge-inference { background: #1A1230; color: var(--purple); border: 1px solid #2A2045; }
+  .badge-entry { background: var(--bg-3); color: var(--text-2); border: 1px solid var(--border-2); }
+
+  .gpu-use {
+    font-size: 0.78rem;
+    color: var(--text-2);
+    line-height: 1.35;
+  }
+
+  /* ─── WORKLOAD DECODER ─── */
+  .workload-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+  }
+
+  .workload-col {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+  }
+
+  .workload-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+
+  .workload-col:nth-child(1) .workload-title { color: var(--sa-blue); }
+  .workload-col:nth-child(2) .workload-title { color: var(--warn); }
+  .workload-col:nth-child(3) .workload-title { color: var(--green); }
+
+  .workload-item {
+    font-size: 0.75rem;
+    color: var(--text-2);
+    padding: 3px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .workload-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+  .workload-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .workload-val {
+    font-size: 0.76rem;
+    color: var(--text-2);
+    line-height: 1.35;
+  }
+
+  /* ─── DISCOVERY QUESTIONS ─── */
+  .q-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .q-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 8px 10px;
+    background: var(--bg-3);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .q-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--green);
+    background: var(--green-dim);
+    border: 1px solid var(--green-mid);
+    border-radius: 4px;
+    padding: 2px 6px;
+    flex-shrink: 0;
+    margin-top: 1px;
+    min-width: 26px;
+    text-align: center;
+  }
+
+  .q-text {
+    font-size: 0.8rem;
+    color: var(--text-1);
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .q-why {
+    font-size: 0.72rem;
+    color: var(--text-3);
+    margin-top: 2px;
+    font-style: italic;
+  }
+
+  /* ─── OBJECTION HANDLER ─── */
+  .obj-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .obj-item {
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .obj-q {
+    background: var(--bg-4);
+    padding: 7px 12px;
+    font-size: 0.77rem;
+    font-weight: 500;
+    color: var(--text-2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .obj-flag {
+    font-size: 0.6rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 100px;
+    flex-shrink: 0;
+  }
+
+  .flag-competitive { background: var(--danger-dim); color: var(--danger); border: 1px solid #3A1515; }
+  .flag-commercial  { background: var(--warn-dim);   color: var(--warn);   border: 1px solid #3A2A10; }
+  .flag-trust       { background: var(--sa-blue-dim); color: var(--sa-blue); border: 1px solid #152035; }
+  .flag-technical   { background: var(--purple-dim); color: var(--purple); border: 1px solid #251540; }
+
+  .obj-a {
+    background: var(--bg-3);
+    padding: 8px 12px;
+    font-size: 0.78rem;
+    color: var(--text-2);
+    line-height: 1.45;
+    border-top: 1px solid var(--border);
+  }
+
+  .obj-a strong {
+    color: var(--text-1);
+    font-weight: 600;
+  }
+
+  /* ─── COMPETITIVE ─── */
+  .comp-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .comp-card {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+
+  .comp-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-3);
+    margin-bottom: 5px;
+  }
+
+  .comp-line {
+    font-size: 0.79rem;
+    color: var(--text-2);
+    line-height: 1.45;
+  }
+
+  .comp-line strong { color: var(--green); font-weight: 600; }
+
+  /* ─── PROOF POINTS ─── */
+  .proof-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .proof-item {
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+  }
+
+  .proof-stat {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--green);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .proof-desc {
+    font-size: 0.75rem;
+    color: var(--text-2);
+    line-height: 1.4;
+  }
+
+  .proof-source {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-3);
+    margin-top: 4px;
+  }
+
+  /* ─── SA ESCALATION ─── */
+  .escalate-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .esc-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    padding: 7px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--bg-3);
+  }
+
+  .esc-icon {
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    display: grid;
+    place-items: center;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .esc-go   { background: var(--green-dim); border: 1px solid var(--green-mid); }
+  .esc-wait { background: var(--warn-dim);  border: 1px solid #3A2A10; }
+
+  .esc-text { flex: 1; }
+
+  .esc-trigger {
+    font-size: 0.78rem;
+    color: var(--text-1);
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  .esc-note {
+    font-size: 0.7rem;
+    color: var(--text-3);
+    margin-top: 1px;
+  }
+
+  /* ─── PRODUCT CARDS ─── */
+  .product-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .product-item {
+    background: var(--bg-3);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    padding: 12px;
+  }
+
+  .product-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .product-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6rem;
+    padding: 2px 7px;
+    border-radius: 100px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .tag-primary   { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-mid); }
+  .tag-secondary { background: var(--sa-blue-dim); color: var(--sa-blue); border: 1px solid #1A3050; }
+
+  .product-desc {
+    font-size: 0.77rem;
+    color: var(--text-2);
+    line-height: 1.45;
+    margin-bottom: 7px;
+  }
+
+  .product-when {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 3px;
+  }
+
+  .product-signals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .signal {
+    font-size: 0.68rem;
+    color: var(--text-2);
+    background: var(--bg-4);
+    border: 1px solid var(--border-2);
+    border-radius: 4px;
+    padding: 2px 7px;
+  }
+
+  /* ─── SECTION SPACER ─── */
+  .section-gap { margin-top: 14px; }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    margin-top: 28px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .footer-left {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: #ffffff;
+    line-height: 1.6;
+  }
+
+  .footer-badge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 14px;
+    background: var(--green-dim);
+    border: 1px solid var(--green-mid);
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--green);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── INLINE DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 6px 0;
+  }
+
+  /* ─── SMALL LABEL ─── */
+  .micro {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.62rem;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1000px) {
+    .row-3   { grid-template-columns: 1fr 1fr; }
+    .row-4   { grid-template-columns: 1fr 1fr; }
+    .row-2-1 { grid-template-columns: 1fr; }
+    .row-3-2 { grid-template-columns: 1fr; }
+    .row-2-3 { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 680px) {
+    .page { padding: 20px 14px 40px; }
+    .row-2   { grid-template-columns: 1fr; }
+    .row-3   { grid-template-columns: 1fr; }
+    .workload-cols { grid-template-columns: 1fr; }
+    .comp-grid { grid-template-columns: 1fr; }
+    .proof-grid { grid-template-columns: 1fr; }
+    .product-cols { grid-template-columns: 1fr; }
+  }
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ─── TOP BAR ─── -->
+  <div class="top-bar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="2" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="11" y="2" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="2" y="11" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="11" y="11" width="7" height="7" fill="#000" rx="1"/>
+        </svg>
+      </div>
+      <span class="brand-name">Nebius</span>
+    </div>
+    <div class="top-bar-right">
+      <span class="doc-label">AE Quick Reference · Confidential</span>
+      <div class="creator-pill">
+        <div class="creator-dot"></div>
+        <span class="creator-text">Portfolio by Rus Teston</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── HERO ─── -->
+  <div class="hero">
+    <div class="hero-eyebrow">Account Executive · Technical Cheat Sheet</div>
+    <h1>Selling <span>Nebius AI Cloud</span><br>Everything you need in one page.</h1>
+    <p class="hero-sub">GPU tiers, workload signals, discovery questions, objection responses, competitive one-liners, and proof points — so you walk into every call prepared.</p>
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       ROW A: Positioning + Product Portfolio
+  ═════════════════════════════════════════════ -->
+  <div class="grid row-2-3 section-gap">
+
+    <!-- Positioning Statement -->
+    <div class="card accent-green">
+      <div class="card-label"><span class="label-dot green-dot"></span> The One-Sentence Pitch</div>
+      <div class="position-statement">
+        Nebius is <em>the purpose-built AI cloud</em> — bare-metal NVIDIA GPU performance, available in hours, at the lowest total cost of ownership in the market, with dedicated Solution Architect support from day one.
+      </div>
+      <div class="position-proof">
+        <span class="proof-chip">NVIDIA Reference Platform Partner</span>
+        <span class="proof-chip">Nasdaq listed</span>
+        <span class="proof-chip">$700M raised</span>
+        <span class="proof-chip">SemiAnalysis Gold Medal TCO</span>
+        <span class="proof-chip">HIPAA · SOC 2 · GDPR · ISO 27001</span>
+      </div>
+    </div>
+
+    <!-- Product Portfolio -->
+    <div class="card accent-blue">
+      <div class="card-label"><span class="label-dot blue-dot"></span> Product Portfolio — What You're Selling</div>
+      <div class="product-cols">
+        <div class="product-item">
+          <div class="product-name" style="color: var(--green);">
+            AI Cloud
+            <span class="product-tag tag-primary">Core</span>
+          </div>
+          <div class="product-desc">GPU clusters + managed infrastructure for training, fine-tuning, and large-scale inference. Kubernetes, Slurm, storage, observability — all included.</div>
+          <div class="product-when">Sell when customer says...</div>
+          <div class="product-signals">
+            <span class="signal">training a model</span>
+            <span class="signal">need a GPU cluster</span>
+            <span class="signal">running workloads at scale</span>
+            <span class="signal">replacing AWS/GCP</span>
+          </div>
+        </div>
+        <div class="product-item">
+          <div class="product-name" style="color: var(--sa-blue);">
+            Token Factory
+            <span class="product-tag tag-secondary">API</span>
+          </div>
+          <div class="product-desc">Production-ready model inference API — call top open-source models (including DeepSeek R1 optimized by vLLM) with per-token pricing. No infrastructure to manage.</div>
+          <div class="product-when">Sell when customer says...</div>
+          <div class="product-signals">
+            <span class="signal">just need an API</span>
+            <span class="signal">building an app on top of LLMs</span>
+            <span class="signal">don't want to manage GPUs</span>
+            <span class="signal">per-call pricing preferred</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       ROW B: GPU Tiers + Workload Decoder
+  ═════════════════════════════════════════════ -->
+  <div class="grid row-2 section-gap">
+
+    <!-- GPU Tiers -->
+    <div class="card accent-green">
+      <div class="card-label"><span class="label-dot green-dot"></span> GPU Tier Quick Reference — Match Hardware to Workload</div>
+      <div class="gpu-tier">
+
+        <div class="gpu-row flagship">
+          <div class="gpu-name">GB300 NVL72</div>
+          <div class="gpu-badge badge-flagship">Flagship</div>
+          <div class="gpu-use">Highest throughput & TCO for the most demanding AI workloads — rack-scale, liquid-cooled. Contact sales for access.</div>
+        </div>
+
+        <div class="gpu-row flagship">
+          <div class="gpu-name">GB200 NVL72</div>
+          <div class="gpu-badge badge-flagship">Flagship</div>
+          <div class="gpu-use">Rack-scale Blackwell. Heavy foundation model training + ultra-low latency reasoning inference. Contact sales.</div>
+        </div>
+
+        <div class="gpu-row">
+          <div class="gpu-name">HGX B300</div>
+          <div class="gpu-badge badge-training">Training</div>
+          <div class="gpu-use">Next-gen accelerated computing for complex reasoning models and large-scale pre-training workloads.</div>
+        </div>
+
+        <div class="gpu-row">
+          <div class="gpu-name">HGX B200</div>
+          <div class="gpu-badge badge-balanced">Balanced</div>
+          <div class="gpu-use">Blackwell air-cooled. Ideal for reasoning LLMs, multi-modal models, and agentic AI. Self-service available.</div>
+        </div>
+
+        <div class="gpu-row">
+          <div class="gpu-name">HGX H200</div>
+          <div class="gpu-badge badge-inference">Extended Mem</div>
+          <div class="gpu-use">Extended GPU memory — predictable performance for LLM + multi-modal training and inference. Self-service.</div>
+        </div>
+
+        <div class="gpu-row">
+          <div class="gpu-name">HGX H100</div>
+          <div class="gpu-badge badge-entry">Cost-Effective</div>
+          <div class="gpu-use">Cost-effective and robust for building and serving foundation models at scale. Best entry point for new customers.</div>
+        </div>
+
+      </div>
+      <div style="margin-top:8px; font-family:'JetBrains Mono',monospace; font-size:0.62rem; color:var(--text-3);">
+        ★ All connected via NVIDIA InfiniBand / Quantum-X800 for distributed training · Hopper = H-series · Blackwell = B-series
+      </div>
+    </div>
+
+    <!-- Workload Decoder -->
+    <div class="card accent-orange">
+      <div class="card-label"><span class="label-dot orange-dot"></span> Workload Decoder — What They Say → What They Need</div>
+      <div class="workload-cols">
+
+        <div class="workload-col">
+          <div class="workload-title">🧠 Training</div>
+          <div class="workload-item">
+            <span class="workload-key">They say</span>
+            <span class="workload-val">"Building a model from scratch" / "Pre-training on our dataset" / "Foundation model"</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">They need</span>
+            <span class="workload-val">Large GPU cluster, high-bandwidth InfiniBand, fast shared storage, Kubernetes or Slurm orchestration</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">Pitch</span>
+            <span class="workload-val">AI Cloud — multi-node cluster, Soperator, 1 TB/s storage throughput</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">GPU rec.</span>
+            <span class="workload-val">GB300/GB200 NVL72 or H100/H200 cluster depending on scale</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">Key proof</span>
+            <span class="workload-val">Recraft trained 20B param model; Photoroom scaled training seamlessly</span>
+          </div>
+        </div>
+
+        <div class="workload-col">
+          <div class="workload-title">🔧 Fine-Tuning</div>
+          <div class="workload-item">
+            <span class="workload-key">They say</span>
+            <span class="workload-val">"Adapting an existing model" / "Domain-specific tuning" / "LoRA / QLoRA"</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">They need</span>
+            <span class="workload-val">Smaller GPU footprint, managed MLflow for experiment tracking, fast iteration cycles</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">Pitch</span>
+            <span class="workload-val">AI Cloud — on-demand GPU instances + Managed MLflow + PostgreSQL for metadata</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">GPU rec.</span>
+            <span class="workload-val">H100 or B200 on-demand; reserve when cycles are predictable</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">Key proof</span>
+            <span class="workload-val">Wubble — QLoRA adaptation + 1.8s time-to-first-token; Simulacra AI 90% faster compile</span>
+          </div>
+        </div>
+
+        <div class="workload-col">
+          <div class="workload-title">⚡ Inference</div>
+          <div class="workload-item">
+            <span class="workload-key">They say</span>
+            <span class="workload-val">"Serving a model in production" / "Low latency responses" / "Scaling an AI API"</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">They need</span>
+            <span class="workload-val">High throughput, low latency, autoscaling endpoints, cost-per-token efficiency</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">Pitch</span>
+            <span class="workload-val">Token Factory API (managed) or AI Cloud + vLLM (self-managed). Depends on control needs.</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">GPU rec.</span>
+            <span class="workload-val">H200 / B200 for large models; Token Factory if they want zero infra management</span>
+          </div>
+          <div class="workload-item">
+            <span class="workload-key">Key proof</span>
+            <span class="workload-val">Brave Search: 11M+ AI answers/day, ~100% GPU utilization on Nebius</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       ROW C: Discovery Questions + Objections
+  ═════════════════════════════════════════════ -->
+  <div class="grid row-2 section-gap">
+
+    <!-- Discovery Questions -->
+    <div class="card accent-green">
+      <div class="card-label"><span class="label-dot green-dot"></span> 6 Discovery Questions That Qualify Any AI Infrastructure Deal</div>
+      <div class="q-list">
+
+        <div class="q-item">
+          <div class="q-num">Q1</div>
+          <div class="q-text">
+            "What AI workloads are you running today — or planning to run in the next 6 months?"
+            <div class="q-why">→ Identifies training vs fine-tuning vs inference; reveals scale and urgency</div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-num">Q2</div>
+          <div class="q-text">
+            "What GPU infrastructure are you using right now, and what's frustrating you about it?"
+            <div class="q-why">→ Uncovers incumbent (AWS, GCP, on-prem) and the displacement opportunity</div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-num">Q3</div>
+          <div class="q-text">
+            "How quickly do you need GPU capacity available — and what happens if there's a delay?"
+            <div class="q-why">→ Availability speed is a Nebius differentiator (hours vs weeks); quantify the cost of waiting</div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-num">Q4</div>
+          <div class="q-text">
+            "What does your team look like on the infrastructure side — do you have DevOps managing this, or do your ML engineers handle it directly?"
+            <div class="q-why">→ Positions managed services and SA support; identifies complexity appetite</div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-num">Q5</div>
+          <div class="q-text">
+            "Are there any compliance or data residency requirements we need to factor in — HIPAA, GDPR, EU-only?"
+            <div class="q-why">→ Surfaces regulated industry angle; Nebius has EU DCs (Finland, France, Iceland) + full compliance stack</div>
+          </div>
+        </div>
+
+        <div class="q-item">
+          <div class="q-num">Q6</div>
+          <div class="q-text">
+            "Walk me through your current GPU spend — what's in budget, and what would it take to justify a switch?"
+            <div class="q-why">→ Opens TCO conversation; connects to SemiAnalysis study as a third-party anchor</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Objection Handler -->
+    <div class="card accent-red">
+      <div class="card-label"><span class="label-dot red-dot"></span> Top Objection Responses</div>
+      <div class="obj-list">
+
+        <div class="obj-item">
+          <div class="obj-q">
+            <span class="obj-flag flag-competitive">Competitive</span>
+            "We're already on AWS / GCP — why would we switch?"
+          </div>
+          <div class="obj-a">
+            <strong>Don't fight it — add to it.</strong> "Most of our customers start exactly there. The question is whether AWS/GCP is optimized for your AI workloads specifically — or whether you're paying hyperscaler tax for infrastructure that wasn't built for ML. SemiAnalysis modeled three real AI workloads and Nebius delivered the lowest TCO across all three. We can run that model against your actual workload in a 30-minute session with one of our Solution Architects."
+          </div>
+        </div>
+
+        <div class="obj-item">
+          <div class="obj-q">
+            <span class="obj-flag flag-commercial">Commercial</span>
+            "Your pricing seems higher / I need to see a TCO comparison."
+          </div>
+          <div class="obj-a">
+            <strong>Lead with the SemiAnalysis study.</strong> "Fair — and we commissioned SemiAnalysis to model exactly this. Across LLM pre-training, multimodal RL research, and production inference, Nebius had the lowest TCO of any provider modeled. The difference is we maximize GPU utilization — bare-metal performance, no hypervisor overhead. We can build your specific workload into the model."
+          </div>
+        </div>
+
+        <div class="obj-item">
+          <div class="obj-q">
+            <span class="obj-flag flag-trust">Trust</span>
+            "We've never heard of Nebius — are you a stable company?"
+          </div>
+          <div class="obj-a">
+            <strong>Three anchors: listing, funding, NVIDIA.</strong> "Nebius is publicly listed on Nasdaq, so our financials are fully transparent. We raised $700M led by NVIDIA and Accel — NVIDIA doesn't make that investment in a company they don't believe in. We're also an NVIDIA Reference Platform Cloud Partner — a designation held by very few providers globally. And our ISEG supercomputer ranked #19 in the world."
+          </div>
+        </div>
+
+        <div class="obj-item">
+          <div class="obj-q">
+            <span class="obj-flag flag-technical">Technical</span>
+            "We're worried about vendor lock-in with a smaller provider."
+          </div>
+          <div class="obj-a">
+            <strong>Openness is a feature, not a compromise.</strong> "We're built on open standards — Terraform, Kubernetes, Slurm, standard NVIDIA CUDA. Your workloads run the same way they'd run anywhere else. The Nebius Solution Library on GitHub has all our Terraform recipes publicly available. You're never locked into a proprietary runtime or toolchain."
+          </div>
+        </div>
+
+        <div class="obj-item">
+          <div class="obj-q">
+            <span class="obj-flag flag-trust">Trust</span>
+            "We need HIPAA / GDPR compliance — can you support that?"
+          </div>
+          <div class="obj-a">
+            <strong>Full compliance stack, EU data centers.</strong> "Yes — Nebius is HIPAA-, SOC 2-, GDPR-, and ISO 27001-compliant with privacy-by-default architecture and tenant-level isolation. For EU data residency specifically, we have data centers in Finland, France, and Iceland. Visit our Trust Center for the full documentation — it's built to answer security questionnaires directly."
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ════════════════════════════════════════════
+       ROW D: Competitive + Proof Points + SA Escalation
+  ═════════════════════════════════════════════ -->
+  <div class="grid row-3 section-gap">
+
+    <!-- Competitive One-Liners -->
+    <div class="card accent-red">
+      <div class="card-label"><span class="label-dot red-dot"></span> Competitive One-Liners</div>
+      <div class="comp-grid">
+
+        <div class="comp-card">
+          <div class="comp-name">vs AWS</div>
+          <div class="comp-line">AWS is built for general cloud. <strong>Nebius is built for AI.</strong> No hypervisor tax, no GPU availability queues, no DevOps overhead — just bare-metal performance available in hours, not weeks.</div>
+        </div>
+
+        <div class="comp-card">
+          <div class="comp-name">vs Google Cloud</div>
+          <div class="comp-line">GCP locks you into Google's proprietary TPU ecosystem. <strong>Nebius gives you the latest NVIDIA hardware</strong> on open-standard tooling — Kubernetes, Slurm, CUDA — no proprietary runtime lock-in.</div>
+        </div>
+
+        <div class="comp-card">
+          <div class="comp-name">vs Azure</div>
+          <div class="comp-line">Azure is optimized for Microsoft's enterprise stack, not ML-first workloads. <strong>Nebius maximizes Model FLOPS Utilization</strong> — performance on par with leading industry benchmarks at lower TCO.</div>
+        </div>
+
+        <div class="comp-card">
+          <div class="comp-name">vs CoreWeave</div>
+          <div class="comp-line">CoreWeave is GPU-only. <strong>Nebius is a full-stack AI cloud</strong> — compute plus managed MLOps (MLflow, Spark, PostgreSQL), storage, orchestration, and dedicated SA support included.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Proof Points -->
+    <div class="card accent-purple">
+      <div class="card-label"><span class="label-dot purple-dot"></span> Proof Points — Drop These in Deals</div>
+      <div class="proof-grid">
+
+        <div class="proof-item">
+          <div class="proof-stat">11M+</div>
+          <div class="proof-desc">AI-generated answers delivered daily by Brave Search on Nebius — at ~100% GPU utilization</div>
+          <div class="proof-source">Customer: Brave Search · Workload: Inference</div>
+        </div>
+
+        <div class="proof-item">
+          <div class="proof-stat">5x</div>
+          <div class="proof-desc">Lower costs compared to major providers, achieved by CentML on Nebius AI Cloud</div>
+          <div class="proof-source">Customer: CentML · Workload: Inference platform</div>
+        </div>
+
+        <div class="proof-item">
+          <div class="proof-stat">20B</div>
+          <div class="proof-desc">Model parameters trained by Recraft from scratch — comparable to DALL·E 3 with 49% preference on benchmarks</div>
+          <div class="proof-source">Customer: Recraft · Workload: GenAI training</div>
+        </div>
+
+        <div class="proof-item">
+          <div class="proof-stat">90%</div>
+          <div class="proof-desc">Faster model compilation for Simulacra AI — from 2+ hours to 10–20 minutes using Nebius H100/H200 fleet</div>
+          <div class="proof-source">Customer: Simulacra AI · Workload: Research training</div>
+        </div>
+
+        <div class="proof-item">
+          <div class="proof-stat">#19</div>
+          <div class="proof-desc">World ranking of ISEG — Nebius's own supercomputer built in Finland, demonstrating in-house infrastructure credibility</div>
+          <div class="proof-source">Source: TOP500 Supercomputer List</div>
+        </div>
+
+        <div class="proof-item">
+          <div class="proof-stat">🥇</div>
+          <div class="proof-desc">SemiAnalysis Gold Medal in GPU Cloud ClusterMAX™ Rating — lowest TCO across all three modeled AI workloads</div>
+          <div class="proof-source">Source: SemiAnalysis ClusterMAX study</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- SA Escalation Guide -->
+    <div class="card accent-blue">
+      <div class="card-label"><span class="label-dot blue-dot"></span> When to Bring in Your SA</div>
+      <div class="escalate-list">
+
+        <div class="esc-item">
+          <div class="esc-icon esc-go">🟢</div>
+          <div class="esc-text">
+            <div class="esc-trigger">Customer asks about multi-node cluster architecture</div>
+            <div class="esc-note">SA needed → involves InfiniBand topology, Kubernetes/Slurm config, fault tolerance design</div>
+          </div>
+        </div>
+
+        <div class="esc-item">
+          <div class="esc-icon esc-go">🟢</div>
+          <div class="esc-text">
+            <div class="esc-trigger">Technical evaluation / POC requested</div>
+            <div class="esc-note">SA needed → handles environment setup, benchmark design, and results validation</div>
+          </div>
+        </div>
+
+        <div class="esc-item">
+          <div class="esc-icon esc-go">🟢</div>
+          <div class="esc-text">
+            <div class="esc-trigger">Customer mentions GPU count > 8 nodes or 1000+ GPUs</div>
+            <div class="esc-note">SA + Sales Eng needed → large-scale cluster design and dedicated onboarding required</div>
+          </div>
+        </div>
+
+        <div class="esc-item">
+          <div class="esc-icon esc-go">🟢</div>
+          <div class="esc-text">
+            <div class="esc-trigger">Security review or compliance questionnaire</div>
+            <div class="esc-note">SA + Trust Center docs → SOC 2, HIPAA, GDPR documentation provided by SA</div>
+          </div>
+        </div>
+
+        <div class="esc-item">
+          <div class="esc-icon esc-go">🟢</div>
+          <div class="esc-text">
+            <div class="esc-trigger">Customer asks about storage throughput, WEKA, or VAST Data</div>
+            <div class="esc-note">SA needed → storage architecture is technical; AE sets the stage, SA closes the conversation</div>
+          </div>
+        </div>
+
+        <div class="esc-item">
+          <div class="esc-icon esc-wait">🟡</div>
+          <div class="esc-text">
+            <div class="esc-trigger">Customer asks "what GPU should I use?"</div>
+            <div class="esc-note">Use this cheat sheet first — if workload is unusual or scale is large, then loop in SA</div>
+          </div>
+        </div>
+
+        <div class="esc-item">
+          <div class="esc-icon esc-wait">🟡</div>
+          <div class="esc-text">
+            <div class="esc-trigger">Token Factory API questions</div>
+            <div class="esc-note">AE can handle pricing + basic use cases; SA only if custom integration or SLA requirements arise</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── FOOTER ─── -->
+  <div class="footer">
+    <div class="footer-left">
+      Portfolio Artifact #2 of 5 · Revenue Enablement · Prepared by Rus Teston<br>
+      Reference: nebius.com · docs.nebius.com · nebius.com/trust-center · nebius.com/nebius-partner-program
+    </div>
+    <div class="footer-badge">
+      ✦ Nebius AI Cloud · AE Enablement
+    </div>
+  </div>
+
+</div>
+
+<!-- ─── MODAL ─── -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('modal');
+  const modalBody = document.getElementById('modalBody');
+  const modalClose = document.getElementById('modalClose');
+
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      modalBody.innerHTML = card.innerHTML;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  modalClose.addEventListener('click', () => {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+</script>
+</body>
+</html>

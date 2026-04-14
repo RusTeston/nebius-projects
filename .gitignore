@@ -1,0 +1,10 @@
+*.docx
+*.pdf
+*.code-workspace
+badge-mockup.html
+acm-validation.json
+cloudfront-config.json
+bucket-policy.json
+route53-alias.json
+~$*
+.DS_Store

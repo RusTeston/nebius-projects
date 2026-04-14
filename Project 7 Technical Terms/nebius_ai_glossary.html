@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Infrastructure Glossary | Nebius</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0d0f14;
+    --ink-muted: #4a4e5c;
+    --ink-faint: #8b8fa0;
+    --bg: #f7f6f2;
+    --bg-warm: #eeeae0;
+    --bg-card: #ffffff;
+    --accent: #1a3cff;
+    --accent-2: #ff4d1c;
+    --accent-green: #00a36c;
+    --rule: #d8d4c8;
+    --tag-hw: #1a3cff;
+    --tag-ml: #7c3aed;
+    --tag-dist: #0891b2;
+    --tag-net: #dc2626;
+    --tag-infra: #d97706;
+    --tag-data: #059669;
+    --tag-devops: #4338ca;
+    --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--ink);
+    color: #fff;
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #fff;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .logo-dot {
+    width: 8px; height: 8px;
+    background: var(--accent-2);
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .header-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--ink);
+    color: #fff;
+    padding: 72px 48px 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -120px; right: -80px;
+    width: 480px; height: 480px;
+    background: radial-gradient(circle, rgba(26,60,255,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: 30%;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(255,77,28,0.10) 0%, transparent 65%);
+    pointer-events: none;
+  }
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin-bottom: 20px;
+  }
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(36px, 5vw, 62px);
+    line-height: 1.08;
+    font-weight: 400;
+    max-width: 720px;
+    margin-bottom: 20px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: rgba(255,255,255,0.5);
+  }
+  .hero-desc {
+    font-size: 15px;
+    color: rgba(255,255,255,0.55);
+    max-width: 540px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .stat-number {
+    font-family: 'DM Mono', monospace;
+    font-size: 26px;
+    font-weight: 500;
+    color: #fff;
+  }
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* ─── CONTROLS ─── */
+  .controls-bar {
+    background: var(--bg-warm);
+    border-bottom: 1px solid var(--rule);
+    padding: 18px 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 64px;
+    z-index: 90;
+  }
+  .search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 240px;
+    max-width: 380px;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-faint);
+  }
+  #searchInput {
+    width: 100%;
+    padding: 9px 12px 9px 36px;
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color var(--transition), box-shadow var(--transition);
+  }
+  #searchInput:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(26,60,255,0.08);
+  }
+  #searchInput::placeholder { color: var(--ink-faint); }
+
+  .filter-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--rule);
+    background: #fff;
+    font-size: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    color: var(--ink-muted);
+    cursor: pointer;
+    transition: all var(--transition);
+    letter-spacing: 0.02em;
+  }
+  .filter-btn:hover { border-color: var(--ink-muted); color: var(--ink); }
+  .filter-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .filter-btn[data-cat="hardware"].active { background: var(--tag-hw); border-color: var(--tag-hw); }
+  .filter-btn[data-cat="ml"].active { background: var(--tag-ml); border-color: var(--tag-ml); }
+  .filter-btn[data-cat="distributed"].active { background: var(--tag-dist); border-color: var(--tag-dist); }
+  .filter-btn[data-cat="networking"].active { background: var(--tag-net); border-color: var(--tag-net); }
+  .filter-btn[data-cat="infrastructure"].active { background: var(--tag-infra); border-color: var(--tag-infra); }
+  .filter-btn[data-cat="data"].active { background: var(--tag-data); border-color: var(--tag-data); }
+  .filter-btn[data-cat="devops"].active { background: var(--tag-devops); border-color: var(--tag-devops); }
+
+  .results-count {
+    margin-left: auto;
+    font-size: 12px;
+    color: var(--ink-faint);
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+
+  /* ─── MAIN CONTENT ─── */
+  main { padding: 48px 48px 80px; max-width: 1400px; margin: 0 auto; }
+
+  /* ─── SECTION ─── */
+  .glossary-section { margin-bottom: 64px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+  }
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+    color: #fff;
+  }
+  .section-count {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  /* ─── TABLE ─── */
+  .glossary-table-wrap {
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.04);
+  }
+
+  table.glossary-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--bg-card);
+  }
+
+  .glossary-table thead th {
+    background: #f0ede6;
+    padding: 11px 18px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+    font-weight: 500;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+
+  .glossary-table thead th:nth-child(1) { width: 14%; }
+  .glossary-table thead th:nth-child(2) { width: 34%; }
+  .glossary-table thead th:nth-child(3) { width: 24%; }
+  .glossary-table thead th:nth-child(4) { width: 28%; }
+
+  .glossary-table tbody tr {
+    border-bottom: 1px solid #f0ede6;
+    transition: background var(--transition);
+  }
+  .glossary-table tbody tr:last-child { border-bottom: none; }
+  .glossary-table tbody tr:hover { background: #faf9f5; }
+  .glossary-table tbody tr.hidden { display: none; }
+
+  .glossary-table td {
+    padding: 18px 18px;
+    vertical-align: top;
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+
+  /* Term cell */
+  .term-cell { white-space: nowrap; }
+  .term-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink);
+    display: block;
+    margin-bottom: 4px;
+  }
+  .term-badge {
+    display: inline-block;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 6px;
+    border-radius: 3px;
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+  }
+
+  /* Definition cell */
+  .def-cell { color: var(--ink); }
+
+  /* Analogy cell */
+  .analogy-cell {
+    color: var(--ink-muted);
+    font-style: italic;
+    font-size: 13px;
+    border-left: 2px solid #ede9df;
+    padding-left: 14px;
+  }
+  .analogy-label {
+    font-style: normal;
+    font-size: 9px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  /* Why it matters cell */
+  .matters-cell { font-size: 13px; color: var(--ink-muted); }
+  .matters-cell strong {
+    display: block;
+    color: var(--ink);
+    font-weight: 500;
+    margin-bottom: 4px;
+    font-size: 12.5px;
+  }
+  .learn-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    color: var(--accent);
+    text-decoration: none;
+    margin-top: 8px;
+    padding: 4px 8px;
+    border: 1px solid rgba(26,60,255,0.2);
+    border-radius: 4px;
+    transition: all var(--transition);
+  }
+  .learn-link:hover {
+    background: rgba(26,60,255,0.05);
+    border-color: var(--accent);
+  }
+
+  /* highlight */
+  mark {
+    background: rgba(255,200,0,0.35);
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+
+  /* ─── NO RESULTS ─── */
+  .no-results {
+    display: none;
+    text-align: center;
+    padding: 64px 32px;
+    color: var(--ink-faint);
+  }
+  .no-results.visible { display: block; }
+  .no-results-icon { font-size: 40px; margin-bottom: 16px; }
+  .no-results h3 { font-family: 'DM Serif Display', serif; font-size: 20px; font-weight: 400; margin-bottom: 8px; color: var(--ink-muted); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.35);
+    padding: 32px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+  }
+  footer a { color: rgba(255,255,255,0.5); text-decoration: none; }
+  footer a:hover { color: #fff; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    header, .controls-bar, main, .hero, footer { padding-left: 20px; padding-right: 20px; }
+    .glossary-table thead th:nth-child(3) { display: none; }
+    .glossary-table td:nth-child(3) { display: none; }
+    .hero-stats { gap: 24px; }
+  }
+  @media (max-width: 640px) {
+    .glossary-table thead th:nth-child(4) { display: none; }
+    .glossary-table td:nth-child(4) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="logo" href="#"><span class="logo-dot"></span>Nebius AI</a>
+  <span class="header-meta">Infrastructure Glossary &nbsp;·&nbsp; Technical Reference</span>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <p class="hero-eyebrow">Reference Documentation</p>
+  <h1>AI Infrastructure<br><em>Glossary</em></h1>
+  <p class="hero-desc">A comprehensive reference guide covering the terminology, concepts, and technologies powering modern AI systems — from GPU hardware to distributed training frameworks and cloud infrastructure.</p>
+  <div class="hero-stats">
+    <div class="stat"><span class="stat-number">50+</span><span class="stat-label">Terms Defined</span></div>
+    <div class="stat"><span class="stat-number">7</span><span class="stat-label">Domain Areas</span></div>
+    <div class="stat"><span class="stat-number">50+</span><span class="stat-label">Learn More Links</span></div>
+  </div>
+</section>
+
+<!-- CONTROLS -->
+<div class="controls-bar">
+  <div class="search-wrap">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Search terms, definitions…" autocomplete="off">
+  </div>
+  <div class="filter-group">
+    <button class="filter-btn active" data-cat="all">All</button>
+    <button class="filter-btn" data-cat="hardware">Hardware</button>
+    <button class="filter-btn" data-cat="ml">ML Core</button>
+    <button class="filter-btn" data-cat="distributed">Distributed</button>
+    <button class="filter-btn" data-cat="networking">Networking</button>
+    <button class="filter-btn" data-cat="infrastructure">Infrastructure</button>
+    <button class="filter-btn" data-cat="data">Data</button>
+    <button class="filter-btn" data-cat="devops">DevOps</button>
+  </div>
+  <span class="results-count" id="resultsCount"></span>
+</div>
+
+<!-- MAIN -->
+<main>
+
+<!-- ─── SECTION 1: Hardware & Compute ─── -->
+<section class="glossary-section" data-section="hardware">
+  <div class="section-header">
+    <h2 class="section-title">Hardware &amp; Compute</h2>
+    <span class="section-tag" style="background:var(--tag-hw)">Hardware</span>
+    <span class="section-count">5 terms</span>
+  </div>
+  <div class="glossary-table-wrap">
+    <table class="glossary-table">
+      <thead>
+        <tr>
+          <th>Term</th>
+          <th>Definition</th>
+          <th>Analogy</th>
+          <th>Why It Matters / Learn More</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cat="hardware" data-term="GPU Graphics Processing Unit">
+          <td class="term-cell"><span class="term-name">GPU</span><span class="term-badge" style="background:var(--tag-hw)">Hardware</span></td>
+          <td class="def-cell">A specialized processor engineered for massive parallelism — capable of running thousands of mathematical operations simultaneously. Originally designed for rendering graphics, GPUs are now the backbone of AI model training and inference due to their ability to handle the matrix math that neural networks require.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A chef who can only cook one dish at a time (CPU) versus a banquet kitchen with 5,000 cooks all working in parallel (GPU). The banquet kitchen produces far more meals in the same time window — that's the GPU advantage for AI workloads.</td>
+          <td class="matters-cell"><strong>Without GPUs, training modern AI models like large language models would take years instead of days. They are the fundamental unit of AI compute power.</strong><a class="learn-link" href="https://developer.nvidia.com/deep-learning" target="_blank">↗ developer.nvidia.com</a></td>
+        </tr>
+        <tr data-cat="hardware" data-term="CPU Central Processing Unit">
+          <td class="term-cell"><span class="term-name">CPU</span><span class="term-badge" style="background:var(--tag-hw)">Hardware</span></td>
+          <td class="def-cell">The primary general-purpose processor in a computer that handles sequential logic, operating system tasks, and orchestration. CPUs have fewer, more powerful cores optimized for complex decision-making rather than raw parallel throughput.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A master chef who can handle any recipe with expert judgment — but can only focus on one task at a time. Great for complex, sequential cooking; not ideal when you need 10,000 identical portions simultaneously.</td>
+          <td class="matters-cell"><strong>CPUs manage all the infrastructure around AI — scheduling jobs, handling API requests, running databases, and coordinating GPU workloads. They remain essential even in GPU-heavy environments.</strong><a class="learn-link" href="https://www.intel.com/content/www/us/en/products/docs/processors/what-is-a-processor.html" target="_blank">↗ intel.com</a></td>
+        </tr>
+        <tr data-cat="hardware" data-term="GPU Cluster">
+          <td class="term-cell"><span class="term-name">GPU Cluster</span><span class="term-badge" style="background:var(--tag-hw)">Hardware</span></td>
+          <td class="def-cell">A network of multiple machines, each containing multiple GPUs, interconnected with high-speed links to behave as a single unified compute resource. Clusters enable training models too large to fit on a single machine.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A single restaurant kitchen is a single GPU. A GPU cluster is a city block of restaurant kitchens all coordinated by one head chef, sharing ingredients and recipes in real time — massively scaling what's possible.</td>
+          <td class="matters-cell"><strong>The largest AI models (GPT-4, Gemini, Claude) require clusters with thousands of GPUs. No single machine could hold or train them alone.</strong><a class="learn-link" href="https://nebius.com/services/gpu-clusters" target="_blank">↗ nebius.com/services/gpu-clusters</a></td>
+        </tr>
+        <tr data-cat="hardware" data-term="Node">
+          <td class="term-cell"><span class="term-name">Node</span><span class="term-badge" style="background:var(--tag-hw)">Hardware</span></td>
+          <td class="def-cell">A single physical or virtual machine within a cluster. A node typically contains CPUs, RAM, storage, and one or more GPUs. Nodes are the building blocks that compose larger clusters.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>If a GPU cluster is a factory, a node is one assembly station. Each station has its own tools and workers; together they form the production line.</td>
+          <td class="matters-cell"><strong>Understanding nodes matters for capacity planning, fault isolation, and cost estimation. When one node fails, work can be redistributed to others without losing the entire cluster.</strong><a class="learn-link" href="https://kubernetes.io/docs/concepts/architecture/nodes/" target="_blank">↗ kubernetes.io</a></td>
+        </tr>
+        <tr data-cat="hardware" data-term="GPU Instance">
+          <td class="term-cell"><span class="term-name">GPU Instance</span><span class="term-badge" style="background:var(--tag-hw)">Hardware</span></td>
+          <td class="def-cell">A cloud-provisioned virtual or physical unit of GPU compute rented on demand. Instances come in different sizes (e.g., 1x A100, 8x H100) and can be started or stopped as needed.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>Renting a fully equipped recording studio by the hour instead of building one yourself. You get all the equipment, only pay for the time you use it, and hand the keys back when done.</td>
+          <td class="matters-cell"><strong>GPU instances eliminate the need to purchase expensive hardware upfront, letting teams experiment, scale, and only pay for actual compute consumed.</strong><a class="learn-link" href="https://nebius.com/services/gpu-cloud" target="_blank">↗ nebius.com/services/gpu-cloud</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─── SECTION 2: AI & ML Core ─── -->
+<section class="glossary-section" data-section="ml">
+  <div class="section-header">
+    <h2 class="section-title">AI &amp; Machine Learning Core</h2>
+    <span class="section-tag" style="background:var(--tag-ml)">ML Core</span>
+    <span class="section-count">16 terms</span>
+  </div>
+  <div class="glossary-table-wrap">
+    <table class="glossary-table">
+      <thead>
+        <tr>
+          <th>Term</th>
+          <th>Definition</th>
+          <th>Analogy</th>
+          <th>Why It Matters / Learn More</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cat="ml" data-term="Inference">
+          <td class="term-cell"><span class="term-name">Inference</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">The process of using a trained AI model to generate predictions, answers, or outputs on new, unseen data. Inference is what happens when an end-user interacts with an AI product — the model applies what it learned during training to respond.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A medical specialist who spent years in school (training) is now seeing patients (inference). Each consultation applies accumulated knowledge to a specific case without re-learning medicine from scratch.</td>
+          <td class="matters-cell"><strong>Inference is the customer-facing side of AI. Optimizing its speed (latency) and cost is critical to building scalable, affordable AI products.</strong><a class="learn-link" href="https://www.nvidia.com/en-us/glossary/model-inference/" target="_blank">↗ nvidia.com</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Training">
+          <td class="term-cell"><span class="term-name">Training</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">The computationally intensive process of exposing an AI model to large datasets and iteratively adjusting its internal parameters (weights) so it learns to make accurate predictions. Training can take days to months on large GPU clusters.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>Years of medical school and residency — the model is studying vast textbooks of examples, taking exams (evaluations), and refining its understanding until it reliably produces correct answers.</td>
+          <td class="matters-cell"><strong>Training is where the intelligence is created. It determines a model's quality, capabilities, and limitations. It is also the most expensive and energy-intensive phase of AI development.</strong><a class="learn-link" href="https://developers.google.com/machine-learning/crash-course/training-and-loss/training" target="_blank">↗ developers.google.com</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Fine-Tuning">
+          <td class="term-cell"><span class="term-name">Fine-Tuning</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">The practice of taking a pre-trained general-purpose model and continuing its training on a smaller, domain-specific dataset to adapt its behavior for a particular use case — such as legal document analysis, medical coding, or customer support.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A general practitioner who takes a 6-month fellowship in cardiology. Their foundational medical knowledge stays intact; they simply deepen expertise in one specialized area without re-attending medical school.</td>
+          <td class="matters-cell"><strong>Fine-tuning dramatically reduces the time and cost of building specialized AI. Rather than training a new model from scratch, teams can customize powerful base models for their industry in days.</strong><a class="learn-link" href="https://platform.openai.com/docs/guides/fine-tuning" target="_blank">↗ platform.openai.com</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="LLM Large Language Model">
+          <td class="term-cell"><span class="term-name">LLM</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">A deep learning model trained on massive text corpora (books, web pages, code, etc.) that learns statistical patterns in language. LLMs can generate, summarize, translate, and reason about text with human-level fluency.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>An extraordinarily well-read scholar who has absorbed millions of books, articles, and conversations. Ask them anything — they will not just quote sources, they will synthesize and reason about the topic.</td>
+          <td class="matters-cell"><strong>LLMs are the foundation of modern AI assistants, code generators, and document processors. Understanding them is essential for anyone building or procuring AI-powered enterprise software.</strong><a class="learn-link" href="https://www.ibm.com/topics/large-language-models" target="_blank">↗ ibm.com</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Transformer">
+          <td class="term-cell"><span class="term-name">Transformer</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">The neural network architecture introduced in the 2017 paper "Attention Is All You Need" that underlies virtually all modern LLMs. Transformers use a mechanism called self-attention to understand how words and concepts relate to each other across long contexts.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A sophisticated reading comprehension technique where the reader simultaneously considers every word in a document and calculates how relevant each word is to every other word — rather than reading linearly from left to right.</td>
+          <td class="matters-cell"><strong>Transformers are the reason modern AI can understand complex, nuanced language. Without this architecture, today's chatbots, code generators, and AI assistants would not exist.</strong><a class="learn-link" href="https://arxiv.org/abs/1706.03762" target="_blank">↗ arxiv.org</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Token">
+          <td class="term-cell"><span class="term-name">Token</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">The fundamental unit that LLMs process. Text is broken into tokens — roughly 3–4 characters or 0.75 words on average — before being fed into a model. Model pricing, context window limits, and speed are all measured in tokens.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>LEGO bricks. Words and sentences are the structures you build, but the model works at the brick level. "Unbelievable performance" might become 3 bricks: "un", "believ", "able performance".</td>
+          <td class="matters-cell"><strong>Tokens drive cost. API pricing is per-token. Understanding tokenization helps engineers estimate costs, optimize prompts, and respect context window limits.</strong><a class="learn-link" href="https://platform.openai.com/tokenizer" target="_blank">↗ platform.openai.com/tokenizer</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="RAG Retrieval-Augmented Generation">
+          <td class="term-cell"><span class="term-name">RAG</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">An architecture that enhances LLM responses by first retrieving relevant documents or data from an external knowledge base, then passing them as context to the model. This allows AI to answer questions about private or up-to-date information it was never trained on.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>An open-book exam strategy. Instead of relying purely on memorized knowledge, the student quickly pulls the most relevant textbook pages before writing an answer — yielding more accurate, up-to-date responses.</td>
+          <td class="matters-cell"><strong>RAG enables enterprises to build AI systems that reason over proprietary data (contracts, manuals, databases) without the cost and risk of baking that data permanently into model weights.</strong><a class="learn-link" href="https://aws.amazon.com/what-is/retrieval-augmented-generation/" target="_blank">↗ aws.amazon.com</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Epoch">
+          <td class="term-cell"><span class="term-name">Epoch</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">One complete pass of the entire training dataset through the model during training. Models typically train for multiple epochs, gradually refining their parameters with each pass.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>One full read-through of your study materials before an exam. Most students read their notes multiple times (multiple epochs), getting a deeper understanding with each review.</td>
+          <td class="matters-cell"><strong>The number of epochs is a key hyperparameter. Too few, and the model underlearns. Too many, and it memorizes the training data (overfitting) and loses the ability to generalize.</strong><a class="learn-link" href="https://developers.google.com/machine-learning/glossary#epoch" target="_blank">↗ developers.google.com</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Batch">
+          <td class="term-cell"><span class="term-name">Batch</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">A subset of the training dataset processed together in a single forward-backward pass during model training. Instead of updating model weights after every single example, batches allow efficient GPU utilization and more stable gradient estimates.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A teacher grading 30 papers at once and giving averaged feedback, rather than adjusting teaching style after each individual test. The aggregated feedback is more reliable and far more efficient.</td>
+          <td class="matters-cell"><strong>Batch size affects training speed, memory consumption, and model quality. Tuning it is one of the first steps in optimizing a training run.</strong><a class="learn-link" href="https://developers.google.com/machine-learning/glossary#batch" target="_blank">↗ developers.google.com</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Gradient">
+          <td class="term-cell"><span class="term-name">Gradient</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">A vector that points in the direction of steepest increase in the model's loss function. During training, gradients are computed via backpropagation and used (in reverse) to nudge model weights toward better predictions.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>GPS navigation feedback. When your route is wrong (high loss), the gradient is the arrow pointing which direction you drifted. The optimizer uses that signal to correct the path.</td>
+          <td class="matters-cell"><strong>Gradients are the core learning signal in neural networks. Without them, the model has no way to know how to improve. Understanding gradients helps diagnose training instability.</strong><a class="learn-link" href="https://developers.google.com/machine-learning/glossary#gradient" target="_blank">↗ developers.google.com</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Optimizer">
+          <td class="term-cell"><span class="term-name">Optimizer</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">The algorithm that uses gradient information to update model weights during training. Common optimizers include SGD, Adam, and AdamW. Each balances speed of learning against stability and generalization.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A personal trainer who interprets your performance data and designs your next workout. The optimizer decides not just what to change, but how much and how quickly — preventing both under-training and overexertion.</td>
+          <td class="matters-cell"><strong>The choice of optimizer dramatically affects training speed and final model quality. Adam has become the default for most LLM training runs due to its adaptive learning rates.</strong><a class="learn-link" href="https://pytorch.org/docs/stable/optim.html" target="_blank">↗ pytorch.org</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Hyperparameters">
+          <td class="term-cell"><span class="term-name">Hyperparameters</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">Configuration values set before training begins that control the learning process itself — such as learning rate, batch size, number of epochs, and model architecture choices. Unlike weights, hyperparameters are not learned from data.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>The training plan given to an athlete before a season: how many hours to practice, intensity level, rest days, and diet. These are not adjusted mid-workout by the body — they are set by the coach and shape everything that follows.</td>
+          <td class="matters-cell"><strong>Wrong hyperparameters can cause training to fail, waste millions in compute, or produce poor models. Hyperparameter optimization (HPO) is a discipline in its own right.</strong><a class="learn-link" href="https://developers.google.com/machine-learning/glossary#hyperparameter" target="_blank">↗ developers.google.com</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Checkpoint">
+          <td class="term-cell"><span class="term-name">Checkpoint</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">A saved snapshot of a model's weights and optimizer state at a specific point during training. Checkpoints allow training to resume after hardware failures and enable rollback to earlier versions of a model.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>The save-game feature in a video game. Before tackling a difficult boss fight (a challenging training phase), you save your progress. If you fail, you reload — not restart from the beginning.</td>
+          <td class="matters-cell"><strong>Training large models costs tens of thousands of dollars. Without checkpointing, a server failure at hour 47 of a 48-hour training run destroys all progress. Checkpointing is non-negotiable infrastructure.</strong><a class="learn-link" href="https://pytorch.org/tutorials/beginner/saving_loading_models.html" target="_blank">↗ pytorch.org</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Quantization">
+          <td class="term-cell"><span class="term-name">Quantization</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">A technique that reduces the numerical precision of model weights (e.g., from 32-bit floating point to 8-bit or 4-bit integers). This compresses the model, reducing memory footprint and inference latency with minimal accuracy loss.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>Converting a high-resolution 50MB photo to an optimized 3MB JPEG. The image looks nearly identical to the human eye, but it loads and transmits far faster — consuming a fraction of the storage.</td>
+          <td class="matters-cell"><strong>Quantization enables large models to run on smaller or cheaper hardware, reduces inference costs, and increases throughput. It is a critical step for deploying LLMs at enterprise scale.</strong><a class="learn-link" href="https://huggingface.co/docs/optimum/concept_guides/quantization" target="_blank">↗ huggingface.co</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="KV Cache Key-Value Cache">
+          <td class="term-cell"><span class="term-name">KV Cache</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">A memory optimization technique used during inference where intermediate attention computations from earlier tokens in a conversation are stored and reused rather than recomputed for each new token generated.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A court reporter who keeps a running transcript of everything said so far. When the judge asks what the witness said earlier, the reporter looks up the transcript instantly instead of asking everyone to repeat from the beginning.</td>
+          <td class="matters-cell"><strong>KV caching is what makes conversational AI feel fast. Without it, inference latency would grow exponentially with conversation length, making long-context AI applications impractical.</strong><a class="learn-link" href="https://www.nvidia.com/en-us/glossary/kv-cache/" target="_blank">↗ nvidia.com</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Tokenization">
+          <td class="term-cell"><span class="term-name">Tokenization</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">The preprocessing step that converts raw text into a sequence of tokens (numerical IDs) that a model can process. Each model uses a specific tokenizer vocabulary, and the same text may tokenize differently across models.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A translator converting a spoken sentence into Morse code before transmission. The meaning is preserved, but the format is transformed into a discrete signal the receiver (model) is designed to understand.</td>
+          <td class="matters-cell"><strong>Tokenization quality affects model comprehension of rare words, code, and non-English languages. It directly determines how efficiently text is represented within a model's context window.</strong><a class="learn-link" href="https://huggingface.co/docs/transformers/tokenizer_summary" target="_blank">↗ huggingface.co</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Dataset">
+          <td class="term-cell"><span class="term-name">Dataset</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">A structured, curated collection of examples (text, images, labels, etc.) used to train, validate, or test an AI model. Dataset quality, diversity, and size are among the most important determinants of model quality.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A comprehensive textbook series for a student. The breadth, accuracy, and diversity of the material directly determine how well-rounded and capable the graduate (model) becomes.</td>
+          <td class="matters-cell"><strong>Garbage in, garbage out. No amount of compute or architectural cleverness can compensate for a poor dataset. Enterprises building AI must treat dataset curation as a strategic asset.</strong><a class="learn-link" href="https://developers.google.com/machine-learning/glossary#dataset" target="_blank">↗ developers.google.com</a></td>
+        </tr>
+        <tr data-cat="ml" data-term="Benchmark">
+          <td class="term-cell"><span class="term-name">Benchmark</span><span class="term-badge" style="background:var(--tag-ml)">ML Core</span></td>
+          <td class="def-cell">A standardized test suite used to measure and compare AI model performance on defined tasks — such as reasoning, coding, math, or language understanding. Common examples include MMLU, HumanEval, and HELM.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>An athletic combine. Every prospect runs the same drills in controlled conditions so teams can make apples-to-apples comparisons. The benchmark is the combine; the score is the 40-yard dash time.</td>
+          <td class="matters-cell"><strong>Benchmarks allow objective comparison of models before committing to costly integration. They reveal where a model excels and where it may fail in production scenarios.</strong><a class="learn-link" href="https://huggingface.co/spaces/HuggingFaceH4/open_llm_leaderboard" target="_blank">↗ huggingface.co</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─── SECTION 3: Distributed Training & Frameworks ─── -->
+<section class="glossary-section" data-section="distributed">
+  <div class="section-header">
+    <h2 class="section-title">Distributed Training &amp; Frameworks</h2>
+    <span class="section-tag" style="background:var(--tag-dist)">Distributed</span>
+    <span class="section-count">6 terms</span>
+  </div>
+  <div class="glossary-table-wrap">
+    <table class="glossary-table">
+      <thead>
+        <tr>
+          <th>Term</th>
+          <th>Definition</th>
+          <th>Analogy</th>
+          <th>Why It Matters / Learn More</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cat="distributed" data-term="Distributed Training">
+          <td class="term-cell"><span class="term-name">Distributed Training</span><span class="term-badge" style="background:var(--tag-dist)">Distributed</span></td>
+          <td class="def-cell">A training strategy that splits a model or dataset across multiple GPUs and nodes so they train in parallel, sharing gradient updates to behave as if training on a single enormous machine. Techniques include data parallelism, model parallelism, and pipeline parallelism.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A research team where each member reads a different section of the literature and meets daily to share findings. Together they cover far more ground than any individual could — and they merge their notes into one unified understanding.</td>
+          <td class="matters-cell"><strong>The largest AI models have hundreds of billions of parameters — far too many to fit on a single GPU. Distributed training is the only viable path to frontier AI model development.</strong><a class="learn-link" href="https://pytorch.org/tutorials/beginner/dist_overview.html" target="_blank">↗ pytorch.org</a></td>
+        </tr>
+        <tr data-cat="distributed" data-term="PyTorch">
+          <td class="term-cell"><span class="term-name">PyTorch</span><span class="term-badge" style="background:var(--tag-dist)">Distributed</span></td>
+          <td class="def-cell">An open-source deep learning framework developed by Meta that provides a flexible, Pythonic interface for defining, training, and deploying neural networks. It uses dynamic computation graphs, making it particularly popular in research.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A versatile professional chef's knife kit — the go-to toolkit for experienced AI researchers who want precision, flexibility, and control over every aspect of their model development.</td>
+          <td class="matters-cell"><strong>PyTorch has become the dominant framework for AI research and increasingly for production. Most cutting-edge model architectures are first implemented in PyTorch.</strong><a class="learn-link" href="https://pytorch.org/tutorials/" target="_blank">↗ pytorch.org/tutorials</a></td>
+        </tr>
+        <tr data-cat="distributed" data-term="TensorFlow">
+          <td class="term-cell"><span class="term-name">TensorFlow</span><span class="term-badge" style="background:var(--tag-dist)">Distributed</span></td>
+          <td class="def-cell">An open-source machine learning framework developed by Google that emphasizes production deployment, scalability, and mobile/edge inference. TensorFlow uses static computation graphs and integrates tightly with Google's infrastructure.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>An industrial kitchen designed for high-volume, consistent production — excellent at reliably producing thousands of identical dishes for deployment at scale.</td>
+          <td class="matters-cell"><strong>TensorFlow powers many of Google's production AI systems and remains widely adopted in enterprise settings, particularly when deploying on Google Cloud or TensorFlow Serving.</strong><a class="learn-link" href="https://www.tensorflow.org/learn" target="_blank">↗ tensorflow.org/learn</a></td>
+        </tr>
+        <tr data-cat="distributed" data-term="JAX">
+          <td class="term-cell"><span class="term-name">JAX</span><span class="term-badge" style="background:var(--tag-dist)">Distributed</span></td>
+          <td class="def-cell">A high-performance numerical computing library from Google Research that combines NumPy-compatible syntax with GPU/TPU acceleration, automatic differentiation, and just-in-time (JIT) compilation. JAX is increasingly used for frontier model research.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A Formula 1 car compared to a standard vehicle. It requires a skilled driver (experienced researcher) and specialized tuning, but delivers extraordinary speed and performance that mainstream frameworks cannot match.</td>
+          <td class="matters-cell"><strong>JAX enables research-level optimizations that PyTorch and TensorFlow cannot easily achieve. Google's Gemini and many DeepMind models are built with JAX.</strong><a class="learn-link" href="https://jax.readthedocs.io/en/latest/" target="_blank">↗ jax.readthedocs.io</a></td>
+        </tr>
+        <tr data-cat="distributed" data-term="MLflow">
+          <td class="term-cell"><span class="term-name">MLflow</span><span class="term-badge" style="background:var(--tag-dist)">Distributed</span></td>
+          <td class="def-cell">An open-source platform for managing the machine learning lifecycle, including experiment tracking (logging metrics, parameters, and artifacts), model versioning, and model registry for production deployment.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A rigorous lab notebook for AI scientists. Every experiment is recorded: what parameters were tested, what results were observed, and which version of the model was used — enabling reproducibility and team collaboration.</td>
+          <td class="matters-cell"><strong>Without MLflow or an equivalent, AI teams quickly lose track of what worked and why. It transforms ad-hoc experimentation into a disciplined engineering practice.</strong><a class="learn-link" href="https://mlflow.org/docs/latest/index.html" target="_blank">↗ mlflow.org</a></td>
+        </tr>
+        <tr data-cat="distributed" data-term="JupyterLab">
+          <td class="term-cell"><span class="term-name">JupyterLab</span><span class="term-badge" style="background:var(--tag-dist)">Distributed</span></td>
+          <td class="def-cell">A web-based interactive development environment that allows data scientists to write and execute code in notebook cells, visualize results inline, and document their reasoning in markdown — all in a single interface.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A scientist's bench combined with a whiteboard and a journal. You can run experiments, observe results immediately, draw diagrams, and write notes — all without leaving the workspace.</td>
+          <td class="matters-cell"><strong>JupyterLab is the standard environment for AI prototyping, data exploration, and research communication. Understanding it is essential for collaborating with any AI or data science team.</strong><a class="learn-link" href="https://jupyterlab.readthedocs.io/en/stable/" target="_blank">↗ jupyterlab.readthedocs.io</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─── SECTION 4: Networking & Performance ─── -->
+<section class="glossary-section" data-section="networking">
+  <div class="section-header">
+    <h2 class="section-title">Networking &amp; Performance</h2>
+    <span class="section-tag" style="background:var(--tag-net)">Networking</span>
+    <span class="section-count">4 terms</span>
+  </div>
+  <div class="glossary-table-wrap">
+    <table class="glossary-table">
+      <thead>
+        <tr>
+          <th>Term</th>
+          <th>Definition</th>
+          <th>Analogy</th>
+          <th>Why It Matters / Learn More</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cat="networking" data-term="InfiniBand">
+          <td class="term-cell"><span class="term-name">InfiniBand</span><span class="term-badge" style="background:var(--tag-net)">Networking</span></td>
+          <td class="def-cell">A high-performance networking technology used to connect GPUs and nodes within AI clusters. InfiniBand delivers extremely low latency and high bandwidth, enabling the rapid gradient synchronization that distributed training requires.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A dedicated 10-lane express highway connecting every kitchen in the banquet facility, with zero traffic lights. Data moves instantly between stations — no bottlenecks, no waiting.</td>
+          <td class="matters-cell"><strong>InfiniBand is what makes large GPU clusters practical. Without it, inter-GPU communication would bottleneck training. NVIDIA's NVLink serves a similar role within a single node.</strong><a class="learn-link" href="https://www.nvidia.com/en-us/networking/products/infiniband/" target="_blank">↗ nvidia.com</a></td>
+        </tr>
+        <tr data-cat="networking" data-term="Latency">
+          <td class="term-cell"><span class="term-name">Latency</span><span class="term-badge" style="background:var(--tag-net)">Networking</span></td>
+          <td class="def-cell">The time elapsed between initiating a request and receiving the first response. In AI systems, latency is typically measured as Time to First Token (TTFT) — how quickly the model begins generating a response after receiving a prompt.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>The pause between asking your doctor a question and hearing the first word of their answer. Even if they ultimately give an excellent response, a 45-second pause feels broken.</td>
+          <td class="matters-cell"><strong>High latency destroys user experience. Real-time AI applications (chatbots, copilots, voice assistants) require sub-second response times. Latency is often the primary optimization target for inference infrastructure.</strong><a class="learn-link" href="https://www.cloudflare.com/learning/performance/glossary/what-is-latency/" target="_blank">↗ cloudflare.com</a></td>
+        </tr>
+        <tr data-cat="networking" data-term="Throughput">
+          <td class="term-cell"><span class="term-name">Throughput</span><span class="term-badge" style="background:var(--tag-net)">Networking</span></td>
+          <td class="def-cell">The rate at which a system processes work over a given time period. In AI inference, throughput is typically measured in tokens per second or requests per second — how many users or queries a deployment can handle simultaneously.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>The number of cars that pass through a toll plaza per hour. High throughput means more cars processed; increasing throughput (more lanes, faster transactions) reduces congestion for all users.</td>
+          <td class="matters-cell"><strong>Throughput determines how many users an AI deployment can serve. Optimizing throughput reduces cost-per-query and prevents systems from becoming overwhelmed during peak traffic.</strong><a class="learn-link" href="https://www.nvidia.com/en-us/glossary/throughput/" target="_blank">↗ nvidia.com</a></td>
+        </tr>
+        <tr data-cat="networking" data-term="Bandwidth">
+          <td class="term-cell"><span class="term-name">Bandwidth</span><span class="term-badge" style="background:var(--tag-net)">Networking</span></td>
+          <td class="def-cell">The maximum rate of data transfer across a network connection or memory bus, measured in GB/s or Tb/s. In AI systems, memory bandwidth is critical — the GPU must be able to feed data to its compute cores fast enough to keep them busy.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>The width of a highway determines how many lanes of traffic it can carry simultaneously. A narrow road creates a bottleneck regardless of how fast individual cars can travel.</td>
+          <td class="matters-cell"><strong>Memory bandwidth is frequently the binding constraint in LLM inference. A GPU with insufficient bandwidth will be compute-starved — expensive hardware sitting idle waiting for data.</strong><a class="learn-link" href="https://www.techtarget.com/searchnetworking/definition/bandwidth" target="_blank">↗ techtarget.com</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─── SECTION 5: Infrastructure & Cloud ─── -->
+<section class="glossary-section" data-section="infrastructure">
+  <div class="section-header">
+    <h2 class="section-title">Infrastructure &amp; Cloud</h2>
+    <span class="section-tag" style="background:var(--tag-infra)">Infrastructure</span>
+    <span class="section-count">8 terms</span>
+  </div>
+  <div class="glossary-table-wrap">
+    <table class="glossary-table">
+      <thead>
+        <tr>
+          <th>Term</th>
+          <th>Definition</th>
+          <th>Analogy</th>
+          <th>Why It Matters / Learn More</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cat="infrastructure" data-term="Kubernetes K8s">
+          <td class="term-cell"><span class="term-name">Kubernetes (K8s)</span><span class="term-badge" style="background:var(--tag-infra)">Infrastructure</span></td>
+          <td class="def-cell">An open-source container orchestration platform that automates the deployment, scaling, health monitoring, and lifecycle management of containerized applications across a cluster of machines.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>An air traffic control system for your applications. It knows where every plane (container) is, directs them to the right runway (node), handles emergencies (restarts failed apps), and optimizes the entire airspace (cluster) for maximum throughput.</td>
+          <td class="matters-cell"><strong>Kubernetes is the de facto standard for deploying AI inference services at scale. It enables zero-downtime deployments, auto-scaling to handle traffic spikes, and resilient self-healing infrastructure.</strong><a class="learn-link" href="https://kubernetes.io/docs/concepts/overview/" target="_blank">↗ kubernetes.io</a></td>
+        </tr>
+        <tr data-cat="infrastructure" data-term="Container">
+          <td class="term-cell"><span class="term-name">Container</span><span class="term-badge" style="background:var(--tag-infra)">Infrastructure</span></td>
+          <td class="def-cell">A lightweight, self-contained software package that bundles an application with all its dependencies (code, runtime, libraries, config) into a portable unit that runs consistently across any environment.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A sealed lunch box with everything inside: food, utensils, napkins, and reheating instructions. Hand it to anyone, anywhere — they open it and everything they need is already there.</td>
+          <td class="matters-cell"><strong>Containers solve the "works on my machine" problem. They guarantee AI models and applications behave identically in development, testing, and production — critical for reliable enterprise deployments.</strong><a class="learn-link" href="https://www.docker.com/resources/what-container/" target="_blank">↗ docker.com</a></td>
+        </tr>
+        <tr data-cat="infrastructure" data-term="Serverless">
+          <td class="term-cell"><span class="term-name">Serverless</span><span class="term-badge" style="background:var(--tag-infra)">Infrastructure</span></td>
+          <td class="def-cell">A cloud execution model where infrastructure management is entirely abstracted away. Code runs in stateless functions triggered by events — the cloud provider automatically provisions, scales, and bills only for execution time used.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>Using a restaurant delivery app instead of managing your own kitchen. You submit an order (trigger a function), receive the meal (result), and pay only for what you consumed. No kitchen staff, no maintenance, no idle time.</td>
+          <td class="matters-cell"><strong>Serverless is ideal for AI workloads with unpredictable or spiky traffic — pay only when the model is actually running. It eliminates idle GPU costs for low-volume use cases.</strong><a class="learn-link" href="https://www.cloudflare.com/learning/serverless/what-is-serverless/" target="_blank">↗ cloudflare.com</a></td>
+        </tr>
+        <tr data-cat="infrastructure" data-term="Terraform">
+          <td class="term-cell"><span class="term-name">Terraform</span><span class="term-badge" style="background:var(--tag-infra)">Infrastructure</span></td>
+          <td class="def-cell">An infrastructure-as-code (IaC) tool that allows engineers to define cloud resources (servers, networks, storage) in declarative configuration files and provision them automatically and reproducibly across any cloud provider.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>An architectural blueprint for your data center — but one that can also construct the building automatically. Write the specs once, and Terraform builds identical environments in AWS, GCP, or Nebius with a single command.</td>
+          <td class="matters-cell"><strong>Terraform eliminates manual cloud configuration, prevents environment drift, and enables version-controlled infrastructure. It is essential for managing AI training and inference infrastructure at scale.</strong><a class="learn-link" href="https://developer.hashicorp.com/terraform/intro" target="_blank">↗ developer.hashicorp.com</a></td>
+        </tr>
+        <tr data-cat="infrastructure" data-term="IAM Identity and Access Management">
+          <td class="term-cell"><span class="term-name">IAM</span><span class="term-badge" style="background:var(--tag-infra)">Infrastructure</span></td>
+          <td class="def-cell">A framework of policies and technologies that controls who (users, services, machines) can access which resources and what actions they are permitted to take. IAM enforces least-privilege access across cloud environments.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A building security system with role-based keycards. The intern can access the lobby; the engineer can access the server room; only the CISO can open the vault. Every door logs who entered and when.</td>
+          <td class="matters-cell"><strong>IAM is the first line of defense for AI infrastructure security. Misconfigured IAM is one of the leading causes of cloud data breaches. Proper IAM ensures training data and model weights remain protected.</strong><a class="learn-link" href="https://aws.amazon.com/iam/" target="_blank">↗ aws.amazon.com/iam</a></td>
+        </tr>
+        <tr data-cat="infrastructure" data-term="Autoscaling">
+          <td class="term-cell"><span class="term-name">Autoscaling</span><span class="term-badge" style="background:var(--tag-infra)">Infrastructure</span></td>
+          <td class="def-cell">The automated process of increasing or decreasing the number of compute instances (VMs, containers, GPU nodes) in response to real-time demand metrics, maintaining performance without manual intervention.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A staffing agency that monitors how busy your call center is in real time — automatically sending more agents when call volume spikes and recalling them when it drops, billing you only for hours worked.</td>
+          <td class="matters-cell"><strong>AI inference demand is highly variable. Autoscaling prevents over-provisioning (wasted cost) and under-provisioning (degraded performance), making it essential for cost-efficient production AI.</strong><a class="learn-link" href="https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/" target="_blank">↗ kubernetes.io</a></td>
+        </tr>
+        <tr data-cat="infrastructure" data-term="Cold Start">
+          <td class="term-cell"><span class="term-name">Cold Start</span><span class="term-badge" style="background:var(--tag-infra)">Infrastructure</span></td>
+          <td class="def-cell">The latency penalty incurred when a compute resource (container, serverless function, GPU instance) must be initialized from scratch before handling a request — including loading model weights into GPU memory.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>Starting a car that has been sitting in a cold garage all night. The engine takes longer to warm up and perform optimally than one that has been running. The longer it was off, the more pronounced the delay.</td>
+          <td class="matters-cell"><strong>Cold starts can add seconds of latency to the first request after a period of inactivity — unacceptable for real-time AI. Mitigation strategies include warm pools, pre-loading, and minimum instance counts.</strong><a class="learn-link" href="https://aws.amazon.com/lambda/resources/glossary/#Cold_Start" target="_blank">↗ aws.amazon.com</a></td>
+        </tr>
+        <tr data-cat="infrastructure" data-term="Provisioning">
+          <td class="term-cell"><span class="term-name">Provisioning</span><span class="term-badge" style="background:var(--tag-infra)">Infrastructure</span></td>
+          <td class="def-cell">The process of allocating, configuring, and making compute, storage, and network resources available for use. In AI contexts, provisioning a cluster involves selecting instance types, installing drivers, configuring networking, and mounting storage.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>Setting up a new employee's workstation before their first day — configuring the laptop, installing software, granting system access, and assigning a desk. The employee cannot start work until provisioning is complete.</td>
+          <td class="matters-cell"><strong>Slow or error-prone provisioning delays AI projects. Automation tools like Terraform reduce provisioning time from days to minutes, enabling faster iteration cycles.</strong><a class="learn-link" href="https://nebius.com/docs" target="_blank">↗ nebius.com/docs</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─── SECTION 6: Data & Storage ─── -->
+<section class="glossary-section" data-section="data">
+  <div class="section-header">
+    <h2 class="section-title">Data &amp; Storage</h2>
+    <span class="section-tag" style="background:var(--tag-data)">Data</span>
+    <span class="section-count">6 terms</span>
+  </div>
+  <div class="glossary-table-wrap">
+    <table class="glossary-table">
+      <thead>
+        <tr>
+          <th>Term</th>
+          <th>Definition</th>
+          <th>Analogy</th>
+          <th>Why It Matters / Learn More</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cat="data" data-term="Object Storage">
+          <td class="term-cell"><span class="term-name">Object Storage</span><span class="term-badge" style="background:var(--tag-data)">Data</span></td>
+          <td class="def-cell">A scalable storage architecture that manages data as discrete objects (files + metadata + unique IDs) rather than in a file hierarchy or block structure. It is designed for massive scale, high durability, and HTTP-based access.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A vast, climate-controlled warehouse where every item has a unique barcode, a detailed description tag, and can be retrieved from anywhere in the world via a URL. No physical filing cabinets — just infinite addressable space.</td>
+          <td class="matters-cell"><strong>Object storage is the standard home for AI training datasets, model checkpoints, and inference artifacts. Its durability, cost-efficiency, and cloud-native API make it the backbone of any AI data pipeline.</strong><a class="learn-link" href="https://aws.amazon.com/what-is/object-storage/" target="_blank">↗ aws.amazon.com</a></td>
+        </tr>
+        <tr data-cat="data" data-term="S3 Simple Storage Service">
+          <td class="term-cell"><span class="term-name">S3</span><span class="term-badge" style="background:var(--tag-data)">Data</span></td>
+          <td class="def-cell">Amazon's object storage service — and the API standard that has become the universal interface for cloud object storage. Most cloud providers (including Nebius) support the S3-compatible API, enabling portability across platforms.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>The shipping container standard for cloud data. Just as standardized shipping containers fit any port, crane, or truck, S3-compatible APIs mean your data tools work identically whether you are using AWS, GCP, or Nebius.</td>
+          <td class="matters-cell"><strong>S3 compatibility is now an industry expectation. AI teams building on any cloud should understand S3 semantics — buckets, keys, presigned URLs, and access policies — as this interface underpins all major data pipelines.</strong><a class="learn-link" href="https://aws.amazon.com/s3/" target="_blank">↗ aws.amazon.com/s3</a></td>
+        </tr>
+        <tr data-cat="data" data-term="PostgreSQL">
+          <td class="term-cell"><span class="term-name">PostgreSQL</span><span class="term-badge" style="background:var(--tag-data)">Data</span></td>
+          <td class="def-cell">A powerful, open-source relational database management system known for its reliability, SQL compliance, and rich feature set including JSON support, full-text search, and extensibility. It is widely used to store structured metadata in AI pipelines.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A meticulously organized filing cabinet with powerful cross-referencing. Need all experiments from the last 30 days where accuracy exceeded 92%? PostgreSQL can answer that query in milliseconds.</td>
+          <td class="matters-cell"><strong>AI teams use PostgreSQL to store experiment metadata, user data, application state, and structured outputs. Its JSONB support makes it well-suited for semi-structured AI telemetry data.</strong><a class="learn-link" href="https://www.postgresql.org/docs/" target="_blank">↗ postgresql.org/docs</a></td>
+        </tr>
+        <tr data-cat="data" data-term="Apache Spark">
+          <td class="term-cell"><span class="term-name">Apache Spark</span><span class="term-badge" style="background:var(--tag-data)">Data</span></td>
+          <td class="def-cell">A distributed data processing engine capable of handling petabyte-scale datasets across clusters. Spark provides APIs for batch processing, SQL queries, streaming, and machine learning on massive data at high speed.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A global assembly line with thousands of workers processing raw materials simultaneously. Each worker handles one chunk of the data in parallel — dramatically faster than processing the entire dataset sequentially on one machine.</td>
+          <td class="matters-cell"><strong>Preparing training data for LLMs often involves processing terabytes of text. Spark makes this tractable, enabling data cleaning, deduplication, tokenization, and feature extraction at AI-relevant scale.</strong><a class="learn-link" href="https://spark.apache.org/docs/latest/" target="_blank">↗ spark.apache.org</a></td>
+        </tr>
+        <tr data-cat="data" data-term="Data Pipeline">
+          <td class="term-cell"><span class="term-name">Data Pipeline</span><span class="term-badge" style="background:var(--tag-data)">Data</span></td>
+          <td class="def-cell">An automated series of processing steps that moves and transforms data from source systems (raw storage, databases, APIs) through cleaning, validation, and feature engineering to its final destination (model training, analytics, applications).</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A water treatment facility: raw water enters, passes through sequential filtration, purification, and quality testing stages, and emerges as clean, safe drinking water — reliably, on schedule, at scale.</td>
+          <td class="matters-cell"><strong>AI models are only as good as the data fed to them. A robust, monitored pipeline ensures high-quality, fresh data reaches training and inference systems without manual intervention.</strong><a class="learn-link" href="https://www.databricks.com/glossary/data-pipeline" target="_blank">↗ databricks.com</a></td>
+        </tr>
+        <tr data-cat="data" data-term="Storage Throughput">
+          <td class="term-cell"><span class="term-name">Storage Throughput</span><span class="term-badge" style="background:var(--tag-data)">Data</span></td>
+          <td class="def-cell">The rate at which data can be read from or written to a storage system, measured in MB/s or GB/s. During model training, storage throughput determines how fast data can be loaded into GPU memory between training steps.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>The speed of a loading dock at a warehouse. Even if the shelves are fully stocked, a slow loading dock starves the factory floor. Fast storage throughput keeps GPUs fed and productive.</td>
+          <td class="matters-cell"><strong>Insufficient storage throughput causes GPU underutilization — you are paying for expensive compute that sits idle waiting for data. High-performance distributed file systems address this bottleneck.</strong><a class="learn-link" href="https://nebius.com/docs" target="_blank">↗ nebius.com/docs</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ─── SECTION 7: DevOps & Operations ─── -->
+<section class="glossary-section" data-section="devops">
+  <div class="section-header">
+    <h2 class="section-title">DevOps &amp; Operations</h2>
+    <span class="section-tag" style="background:var(--tag-devops)">DevOps</span>
+    <span class="section-count">10 terms</span>
+  </div>
+  <div class="glossary-table-wrap">
+    <table class="glossary-table">
+      <thead>
+        <tr>
+          <th>Term</th>
+          <th>Definition</th>
+          <th>Analogy</th>
+          <th>Why It Matters / Learn More</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr data-cat="devops" data-term="Slurm">
+          <td class="term-cell"><span class="term-name">Slurm</span><span class="term-badge" style="background:var(--tag-devops)">DevOps</span></td>
+          <td class="def-cell">A widely used open-source workload manager and job scheduler for HPC (High-Performance Computing) clusters. Slurm queues, prioritizes, and dispatches training jobs across available GPU nodes, ensuring fair and efficient resource allocation.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>An air traffic controller for research computing. Multiple teams submit training jobs; Slurm knows which GPU nodes are available, assigns each job to the right resources, and manages the queue when demand exceeds capacity.</td>
+          <td class="matters-cell"><strong>In multi-tenant AI research environments, Slurm prevents resource conflicts, maximizes GPU utilization, and provides fair scheduling. It remains the dominant scheduler in academic and HPC AI clusters.</strong><a class="learn-link" href="https://slurm.schedmd.com/documentation.html" target="_blank">↗ slurm.schedmd.com</a></td>
+        </tr>
+        <tr data-cat="devops" data-term="API Application Programming Interface">
+          <td class="term-cell"><span class="term-name">API</span><span class="term-badge" style="background:var(--tag-devops)">DevOps</span></td>
+          <td class="def-cell">A defined set of protocols and endpoints that allow software systems to communicate with each other. AI APIs expose model capabilities (text generation, image analysis, embeddings) as HTTP endpoints that developers integrate into their applications.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A restaurant's ordering system. The customer (your application) does not need to know how the kitchen (AI model) works — they just submit an order (API call) via the menu (API spec) and receive a prepared dish (response).</td>
+          <td class="matters-cell"><strong>APIs are how enterprise AI is consumed. Understanding API design, authentication, rate limits, and versioning is essential for integrating AI capabilities into business applications.</strong><a class="learn-link" href="https://docs.anthropic.com/en/api/getting-started" target="_blank">↗ docs.anthropic.com</a></td>
+        </tr>
+        <tr data-cat="devops" data-term="CLI Command Line Interface">
+          <td class="term-cell"><span class="term-name">CLI</span><span class="term-badge" style="background:var(--tag-devops)">DevOps</span></td>
+          <td class="def-cell">A text-based interface for interacting with systems by typing commands rather than clicking through a graphical interface. CLIs provide precise control, scriptability, and speed for infrastructure management and AI development workflows.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>Speaking directly to the kitchen staff rather than using the customer app. It requires knowing the right words, but it is faster, more precise, and allows requests the menu does not list.</td>
+          <td class="matters-cell"><strong>Most cloud and AI infrastructure management happens via CLI tools. Teams that master CLI workflows are dramatically more productive than those relying on GUIs alone.</strong><a class="learn-link" href="https://docs.github.com/en/get-started/using-the-command-line/about-the-command-line" target="_blank">↗ docs.github.com</a></td>
+        </tr>
+        <tr data-cat="devops" data-term="Orchestration">
+          <td class="term-cell"><span class="term-name">Orchestration</span><span class="term-badge" style="background:var(--tag-devops)">DevOps</span></td>
+          <td class="def-cell">The automated coordination of multiple systems, services, and workflows to accomplish a complex task. In AI contexts, orchestration manages the sequencing of data ingestion, preprocessing, training, evaluation, and deployment steps.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A symphony conductor. Each musician (service) knows their part, but the conductor (orchestrator) ensures everyone plays at the right time, at the right tempo, in harmony — producing a coherent result no single musician could achieve alone.</td>
+          <td class="matters-cell"><strong>Modern AI systems are multi-component. Orchestration prevents errors caused by manual handoffs, enables parallel execution of independent tasks, and provides a single pane of glass for monitoring complex workflows.</strong><a class="learn-link" href="https://airflow.apache.org/docs/apache-airflow/stable/index.html" target="_blank">↗ airflow.apache.org</a></td>
+        </tr>
+        <tr data-cat="devops" data-term="Scheduling">
+          <td class="term-cell"><span class="term-name">Scheduling</span><span class="term-badge" style="background:var(--tag-devops)">DevOps</span></td>
+          <td class="def-cell">The process of determining when and on which resources specific compute jobs or tasks will run, given constraints such as GPU availability, job priority, deadlines, and dependencies.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>An operating room scheduler at a hospital. Multiple surgeons need the same rooms and equipment; the scheduler maximizes utilization, respects urgency, and ensures no conflicts — keeping the hospital running at peak efficiency.</td>
+          <td class="matters-cell"><strong>Efficient scheduling directly impacts GPU utilization (cost) and job turnaround time (productivity). Poor scheduling can leave expensive GPUs idle while teams wait days for their jobs to run.</strong><a class="learn-link" href="https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/" target="_blank">↗ kubernetes.io</a></td>
+        </tr>
+        <tr data-cat="devops" data-term="GPU Utilization">
+          <td class="term-cell"><span class="term-name">GPU Utilization</span><span class="term-badge" style="background:var(--tag-devops)">DevOps</span></td>
+          <td class="def-cell">The percentage of time a GPU's compute cores are actively performing useful work. Low utilization (e.g., 30%) means the GPU is frequently idle — waiting for data, CPU instructions, or memory transfers — representing wasted spend.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A surgeon's time in the operating room. If a highly paid specialist spends only 30% of their time actually operating (the rest waiting for instruments, paperwork, or patient prep), the hospital is wasting enormous resources.</td>
+          <td class="matters-cell"><strong>GPU compute is expensive. Tracking and optimizing GPU utilization is one of the highest-leverage activities for reducing AI infrastructure costs. Target utilization is typically above 80% for healthy training runs.</strong><a class="learn-link" href="https://developer.nvidia.com/dcgm" target="_blank">↗ developer.nvidia.com/dcgm</a></td>
+        </tr>
+        <tr data-cat="devops" data-term="Observability">
+          <td class="term-cell"><span class="term-name">Observability</span><span class="term-badge" style="background:var(--tag-devops)">DevOps</span></td>
+          <td class="def-cell">The ability to understand the internal state of a system by examining its external outputs — metrics, logs, and distributed traces. High observability means you can diagnose any system behavior by querying the telemetry data it produces.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A flight data recorder combined with real-time instrument panels in a cockpit. Pilots do not need to open the engine to know its status — the instruments tell the complete story, and the recorder preserves it for post-flight analysis.</td>
+          <td class="matters-cell"><strong>AI systems fail in complex, subtle ways (silent model degradation, data drift, hardware faults). Comprehensive observability is the difference between detecting a problem in minutes versus discovering it after weeks of bad results.</strong><a class="learn-link" href="https://opentelemetry.io/docs/concepts/observability-primer/" target="_blank">↗ opentelemetry.io</a></td>
+        </tr>
+        <tr data-cat="devops" data-term="Logging">
+          <td class="term-cell"><span class="term-name">Logging</span><span class="term-badge" style="background:var(--tag-devops)">DevOps</span></td>
+          <td class="def-cell">The systematic recording of events, errors, warnings, and state changes produced by a system over time. Logs are the raw material for debugging, auditing, performance analysis, and compliance.</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>A ship's log or captain's journal — a detailed, timestamped record of everything that happened during a voyage. When something goes wrong, the log tells you exactly what the system was doing and in what sequence.</td>
+          <td class="matters-cell"><strong>Without structured logging, debugging AI infrastructure issues becomes guesswork. Good logs with correlation IDs allow engineers to trace a failed training job or degraded inference request from start to finish.</strong><a class="learn-link" href="https://www.datadoghq.com/knowledge-center/structured-logging/" target="_blank">↗ datadoghq.com</a></td>
+        </tr>
+        <tr data-cat="devops" data-term="Benchmark">
+          <td class="term-cell"><span class="term-name">Benchmark</span><span class="term-badge" style="background:var(--tag-devops)">DevOps</span></td>
+          <td class="def-cell">A standardized test suite used to measure and compare AI model or system performance on defined tasks. Common examples include MMLU (language understanding), HumanEval (coding), and MLPerf (infrastructure throughput).</td>
+          <td class="analogy-cell"><span class="analogy-label">Analogy</span>An athletic combine. Every prospect runs the same drills in controlled conditions so teams can make apples-to-apples comparisons. The benchmark is the combine; the score is the 40-yard dash time.</td>
+          <td class="matters-cell"><strong>Benchmarks allow objective comparison of models and infrastructure before committing to costly integration. They reveal where a system excels and where it may fail in production scenarios.</strong><a class="learn-link" href="https://mlcommons.org/benchmarks/" target="_blank">↗ mlcommons.org</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- No Results -->
+<div class="no-results" id="noResults">
+  <div class="no-results-icon">⊘</div>
+  <h3>No matching terms found</h3>
+  <p>Try a different search query or clear your filters.</p>
+</div>
+
+</main>
+
+<footer>
+  <span>Nebius AI Infrastructure Glossary &nbsp;·&nbsp; Technical Reference v1.0</span>
+  <span>50+ terms &nbsp;·&nbsp; 7 domain areas &nbsp;·&nbsp; Built for practitioners</span>
+</footer>
+
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const rows = document.querySelectorAll('tbody tr');
+  const sections = document.querySelectorAll('.glossary-section');
+  const resultsCount = document.getElementById('resultsCount');
+  const noResults = document.getElementById('noResults');
+
+  let activeFilter = 'all';
+  let searchQuery = '';
+
+  function applyFilters() {
+    let visibleCount = 0;
+
+    rows.forEach(row => {
+      const cat = row.dataset.cat;
+      const term = (row.dataset.term || '').toLowerCase();
+      const text = row.textContent.toLowerCase();
+      const matchesCat = activeFilter === 'all' || cat === activeFilter;
+      const matchesSearch = !searchQuery || text.includes(searchQuery) || term.includes(searchQuery);
+
+      if (matchesCat && matchesSearch) {
+        row.classList.remove('hidden');
+        visibleCount++;
+
+        // Highlight search terms
+        if (searchQuery) {
+          row.querySelectorAll('td').forEach(td => {
+            td.innerHTML = td.innerHTML.replace(/<mark>/g, '').replace(/<\/mark>/g, '');
+          });
+          highlightText(row, searchQuery);
+        } else {
+          clearHighlights(row);
+        }
+      } else {
+        row.classList.add('hidden');
+      }
+    });
+
+    // Show/hide sections based on visible rows
+    sections.forEach(section => {
+      const cat = section.dataset.section;
+      const visibleRows = section.querySelectorAll('tbody tr:not(.hidden)');
+      section.style.display = (activeFilter === 'all' || cat === activeFilter) && visibleRows.length > 0 ? '' : 'none';
+    });
+
+    resultsCount.textContent = `${visibleCount} term${visibleCount !== 1 ? 's' : ''}`;
+    noResults.classList.toggle('visible', visibleCount === 0);
+  }
+
+  function highlightText(row, query) {
+    const walker = document.createTreeWalker(row, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node => {
+      if (!node.parentElement.closest('a') && node.textContent.toLowerCase().includes(query)) {
+        const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        const span = document.createElement('span');
+        span.innerHTML = node.textContent.replace(re, '<mark>$1</mark>');
+        node.parentNode.replaceChild(span, node);
+      }
+    });
+  }
+
+  function clearHighlights(row) {
+    row.querySelectorAll('mark').forEach(mark => {
+      mark.outerHTML = mark.textContent;
+    });
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.cat;
+      applyFilters();
+    });
+  });
+
+  searchInput.addEventListener('input', e => {
+    searchQuery = e.target.value.toLowerCase().trim();
+    applyFilters();
+  });
+
+  // Init count
+  resultsCount.textContent = `${rows.length} terms`;
+</script>
+</body>
+</html>

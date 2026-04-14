@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebius — Enablement Metrics Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 13px; }
+
+/* ─── TOKENS ─── */
+:root {
+  --green:        #00C853;
+  --green-dim:    #00C85318;
+  --green-mid:    #00C85340;
+  --green-bright: #1AE060;
+
+  --bg:           #060909;
+  --bg-2:         #0B0F11;
+  --bg-3:         #101618;
+  --bg-4:         #152025;
+  --bg-5:         #1C2D35;
+
+  --border:       #182225;
+  --border-2:     #1F2F35;
+  --border-3:     #28404A;
+
+  --text-1:       #DCE8ED;
+  --text-2:       #7C9BAA;
+  --text-3:       #3A5562;
+  --text-4:       #203040;
+
+  --sa:           #3B9EFF;
+  --sa-dim:       #3B9EFF16;
+  --ae:           #FF9F3B;
+  --ae-dim:       #FF9F3B16;
+  --partner:      #B47FFF;
+  --partner-dim:  #B47FFF16;
+
+  --up:           #00C853;
+  --down:         #FF4D4D;
+  --neutral:      #FF9F3B;
+
+  --radius:       8px;
+  --radius-sm:    5px;
+  --radius-lg:    12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-1);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* Grid texture */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.page {
+  position: relative; z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 26px 26px 56px;
+}
+
+/* ═══════════════════════════
+   TOP BAR
+═══════════════════════════ */
+.top-bar {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-2);
+  margin-bottom: 20px;
+  flex-wrap: wrap; gap: 10px;
+}
+
+.brand {
+  display: flex; align-items: center; gap: 9px;
+}
+
+.brand-mark {
+  width: 26px; height: 26px;
+  background: var(--green);
+  border-radius: 6px; display: grid; place-items: center;
+}
+.brand-mark svg { width: 14px; height: 14px; }
+
+.brand-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700; font-size: 1.15rem;
+  color: var(--text-1); letter-spacing: -0.2px;
+}
+
+.top-right {
+  display: flex; align-items: center; gap: 12px;
+}
+
+.dash-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+
+.live-pill {
+  display: flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 100px;
+  background: var(--green-dim); border: 1px solid var(--green-mid);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--green); font-weight: 600;
+}
+
+.live-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.creator-pill {
+  display: flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 100px;
+  background: var(--bg-3); border: 1px solid var(--border-2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: var(--text-2);
+}
+.c-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+
+/* ═══════════════════════════
+   HERO
+═══════════════════════════ */
+.hero {
+  margin-bottom: 20px;
+}
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.67rem; color: var(--green);
+  text-transform: uppercase; letter-spacing: 0.14em;
+  margin-bottom: 5px;
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+  font-weight: 800; letter-spacing: -0.8px;
+  line-height: 1.08; color: var(--text-1);
+  margin-bottom: 6px;
+}
+.hero h1 span { color: var(--green); }
+
+.hero-sub {
+  font-size: 0.86rem; color: var(--text-2);
+  max-width: 620px; line-height: 1.6;
+}
+
+/* ═══════════════════════════
+   KPI CARDS — TOP ROW
+═══════════════════════════ */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.kpi-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  position: relative; overflow: hidden;
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+
+.kpi-card.k-green::before  { background: var(--green); }
+.kpi-card.k-blue::before   { background: var(--sa); }
+.kpi-card.k-orange::before { background: var(--ae); }
+.kpi-card.k-purple::before { background: var(--partner); }
+
+.kpi-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+
+.kpi-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.2rem; font-weight: 800;
+  line-height: 1; margin-bottom: 6px;
+}
+.kpi-card.k-green  .kpi-value { color: var(--green); }
+.kpi-card.k-blue   .kpi-value { color: var(--sa); }
+.kpi-card.k-orange .kpi-value { color: var(--ae); }
+.kpi-card.k-purple .kpi-value { color: var(--partner); }
+
+.kpi-delta {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; font-weight: 600;
+  padding: 2px 8px; border-radius: 100px;
+}
+
+.delta-up   { background: #0A2010; color: var(--up);   border: 1px solid #1A4020; }
+.delta-down { background: #2A0A0A; color: var(--down); border: 1px solid #501515; }
+
+.kpi-context {
+  font-size: 0.7rem; color: var(--text-3);
+  margin-top: 5px; line-height: 1.35;
+}
+
+/* ═══════════════════════════
+   SECTION LABEL
+═══════════════════════════ */
+.sec-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.61rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--text-3);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 10px;
+}
+.sec-label::after {
+  content: ''; flex: 1; height: 1px;
+  background: var(--border-2);
+}
+
+/* ═══════════════════════════
+   PANEL / CARD
+═══════════════════════════ */
+.panel {
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+}
+
+.panel-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.88rem; font-weight: 700;
+  color: var(--text-1); margin-bottom: 4px;
+  letter-spacing: -0.1px;
+}
+
+.panel-sub {
+  font-size: 0.72rem; color: var(--text-3);
+  margin-bottom: 14px; line-height: 1.4;
+}
+
+/* ═══════════════════════════
+   ROW GRIDS
+═══════════════════════════ */
+.row-2   { display: grid; grid-template-columns: 1fr 1fr;     gap: 12px; margin-bottom: 16px; }
+.row-3   { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.row-2-1 { display: grid; grid-template-columns: 2fr 1fr;     gap: 12px; margin-bottom: 16px; }
+.row-1-2 { display: grid; grid-template-columns: 1fr 2fr;     gap: 12px; margin-bottom: 16px; }
+.row-3-2 { display: grid; grid-template-columns: 3fr 2fr;     gap: 12px; margin-bottom: 16px; }
+
+/* ═══════════════════════════
+   BAR CHART — RAMP TIME
+═══════════════════════════ */
+.bar-chart {
+  display: flex; flex-direction: column; gap: 5px;
+}
+
+.bc-group { margin-bottom: 8px; }
+
+.bc-group-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.bc-row {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 4px;
+}
+
+.bc-track-label {
+  font-size: 0.72rem; color: var(--text-2);
+  width: 32px; flex-shrink: 0; text-align: right;
+}
+
+.bc-bar-wrap {
+  flex: 1; height: 18px;
+  background: var(--bg-4);
+  border-radius: 3px; overflow: hidden;
+  position: relative;
+}
+
+.bc-bar {
+  height: 100%; border-radius: 3px;
+  display: flex; align-items: center;
+  padding-left: 8px;
+  position: relative;
+  transition: width 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+
+.bc-bar-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  white-space: nowrap;
+}
+
+.bc-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; color: var(--text-2);
+  width: 42px; flex-shrink: 0;
+}
+
+/* SA bar */
+.bar-sa { background: linear-gradient(90deg, #1A5090, var(--sa)); }
+/* AE bar */
+.bar-ae { background: linear-gradient(90deg, #905020, var(--ae)); }
+/* Partner bar */
+.bar-pt { background: linear-gradient(90deg, #602090, var(--partner)); }
+
+/* Quarter legend */
+.q-legend {
+  display: flex; gap: 12px; margin-top: 10px;
+  padding-top: 8px; border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.q-item {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 0.68rem; color: var(--text-3);
+}
+.q-dot {
+  width: 8px; height: 8px; border-radius: 2px;
+}
+
+/* ═══════════════════════════
+   COMPETENCY SCORES
+═══════════════════════════ */
+.comp-grid {
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.comp-track {
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+}
+
+.comp-track-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.comp-track-name {
+  display: flex; align-items: center; gap: 7px;
+  font-size: 0.8rem; font-weight: 600; color: var(--text-1);
+}
+
+.track-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+}
+
+.comp-track-avg {
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem; font-weight: 800;
+}
+
+.comp-phases {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 6px;
+}
+
+.comp-phase {
+  display: flex; flex-direction: column; gap: 3px;
+}
+
+.comp-phase-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.57rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.07em;
+}
+
+.comp-bar-wrap {
+  height: 6px; background: var(--bg-5);
+  border-radius: 3px; overflow: hidden;
+}
+
+.comp-bar {
+  height: 100%; border-radius: 3px;
+}
+
+.comp-score {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: var(--text-2);
+}
+
+/* ═══════════════════════════
+   ADOPTION FUNNEL
+═══════════════════════════ */
+.funnel {
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.funnel-step {
+  display: flex; align-items: center; gap: 10px;
+}
+
+.funnel-bar-wrap {
+  flex: 1; height: 30px;
+  background: var(--bg-4); border-radius: 4px;
+  overflow: hidden; position: relative;
+}
+
+.funnel-bar {
+  height: 100%; border-radius: 4px;
+  display: flex; align-items: center;
+  padding: 0 10px;
+  position: relative;
+}
+
+.funnel-step-label {
+  font-size: 0.74rem; color: var(--text-1); font-weight: 500;
+}
+
+.funnel-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; font-weight: 600;
+  color: rgba(255,255,255,0.9);
+  margin-left: auto;
+}
+
+.funnel-pct {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: var(--text-3);
+  width: 38px; text-align: right; flex-shrink: 0;
+}
+
+.funnel-arrow {
+  font-size: 0.65rem; color: var(--text-4);
+  text-align: center;
+  padding-left: 8px;
+  display: flex; align-items: center;
+}
+
+.drop-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; padding: 2px 6px;
+  border-radius: 3px;
+  background: #2A1010; color: var(--down);
+  border: 1px solid #501515;
+}
+
+.ok-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--green-dim); color: var(--green);
+  border: 1px solid var(--green-mid);
+}
+
+/* ═══════════════════════════
+   NPS / FEEDBACK
+═══════════════════════════ */
+.nps-grid {
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.nps-item {
+  display: flex; align-items: center; gap: 9px;
+  padding: 7px 10px;
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+}
+
+.nps-track-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; font-weight: 600;
+  padding: 2px 7px; border-radius: 100px;
+  flex-shrink: 0;
+}
+.nps-sa      { background: var(--sa-dim);      color: var(--sa);      border: 1px solid #1A3A60; }
+.nps-ae      { background: var(--ae-dim);       color: var(--ae);      border: 1px solid #3A2A10; }
+.nps-partner { background: var(--partner-dim);  color: var(--partner); border: 1px solid #30185A; }
+
+.nps-module {
+  flex: 1; font-size: 0.74rem; color: var(--text-2);
+}
+
+.nps-bar-wrap {
+  width: 80px; height: 5px;
+  background: var(--bg-5); border-radius: 3px;
+  overflow: hidden; flex-shrink: 0;
+}
+
+.nps-bar {
+  height: 100%; border-radius: 3px;
+}
+
+.nps-score {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem; font-weight: 600;
+  width: 28px; text-align: right; flex-shrink: 0;
+}
+
+.score-high { color: var(--green); }
+.score-mid  { color: var(--ae); }
+.score-low  { color: var(--down); }
+
+/* ═══════════════════════════
+   REVENUE CORRELATION
+═══════════════════════════ */
+.rev-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.rev-card {
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+
+.rev-metric {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.09em;
+  margin-bottom: 4px;
+}
+
+.rev-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem; font-weight: 800;
+  color: var(--green); line-height: 1;
+  margin-bottom: 4px;
+}
+
+.rev-delta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px 7px; border-radius: 3px;
+  margin-bottom: 5px;
+}
+
+.rev-delta.up   { background: #0A2010; color: var(--up);   border: 1px solid #1A4020; }
+.rev-delta.warn { background: #1A1208; color: var(--ae);   border: 1px solid #3A2A10; }
+
+.rev-note {
+  font-size: 0.68rem; color: var(--text-3); line-height: 1.4;
+}
+
+/* Sparkline */
+.sparkline {
+  display: flex; align-items: flex-end; gap: 3px;
+  height: 32px; margin-top: 8px;
+}
+
+.spark-bar {
+  flex: 1; border-radius: 2px 2px 0 0;
+  min-width: 6px;
+}
+
+.spark-green  { background: var(--green); opacity: 0.7; }
+.spark-green:last-child { opacity: 1; }
+.spark-blue   { background: var(--sa);      opacity: 0.7; }
+.spark-blue:last-child   { opacity: 1; }
+.spark-orange { background: var(--ae);      opacity: 0.7; }
+.spark-orange:last-child { opacity: 1; }
+
+/* Cohort comparison */
+.cohort-compare {
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+
+.cohort-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.09em;
+  margin-bottom: 10px;
+}
+
+.cohort-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 1fr;
+  gap: 8px; align-items: center;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+}
+.cohort-row:last-child { border-bottom: none; }
+.cohort-row.header-row { border-bottom: 1px solid var(--border-2); padding-bottom: 6px; margin-bottom: 2px; }
+
+.cohort-label {
+  font-size: 0.72rem; color: var(--text-2);
+}
+
+.cohort-header-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  text-align: center;
+}
+
+.cohort-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; font-weight: 600;
+  text-align: center;
+}
+.val-green { color: var(--green); }
+.val-muted { color: var(--text-3); }
+.val-up    { color: var(--green); }
+.val-hl    { color: var(--ae); }
+
+/* ═══════════════════════════
+   ITERATION LOG
+═══════════════════════════ */
+.iter-list {
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.iter-item {
+  display: grid;
+  grid-template-columns: 70px 80px 1fr auto;
+  gap: 10px; align-items: start;
+  padding: 8px 12px;
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+}
+
+.iter-date {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--text-3);
+}
+
+.iter-track {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; font-weight: 600;
+  padding: 2px 8px; border-radius: 100px;
+  text-align: center;
+}
+.it-sa      { background: var(--sa-dim);      color: var(--sa);      border: 1px solid #1A3A60; }
+.it-ae      { background: var(--ae-dim);       color: var(--ae);      border: 1px solid #3A2A10; }
+.it-partner { background: var(--partner-dim);  color: var(--partner); border: 1px solid #30185A; }
+.it-all     { background: var(--green-dim);    color: var(--green);   border: 1px solid var(--green-mid); }
+
+.iter-desc {
+  font-size: 0.74rem; color: var(--text-2); line-height: 1.4;
+}
+.iter-desc strong { color: var(--text-1); font-weight: 600; }
+
+.iter-trigger {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; color: var(--text-3);
+  padding: 2px 7px; border-radius: 3px;
+  background: var(--bg-4); border: 1px solid var(--border-2);
+  white-space: nowrap;
+}
+
+/* ═══════════════════════════
+   FOOTER
+═══════════════════════════ */
+.footer {
+  margin-top: 20px; padding-top: 14px;
+  border-top: 1px solid var(--border-2);
+  display: flex; align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+}
+
+.footer-left {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--text-3); line-height: 1.6;
+}
+
+.footer-badge {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 14px; border-radius: 100px;
+  background: var(--green-dim); border: 1px solid var(--green-mid);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--green);
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.09em;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1100px) {
+  .kpi-row  { grid-template-columns: 1fr 1fr; }
+  .row-3    { grid-template-columns: 1fr 1fr; }
+  .row-3-2  { grid-template-columns: 1fr; }
+  .row-2-1  { grid-template-columns: 1fr; }
+  .rev-panels { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 720px) {
+  .page { padding: 16px 14px 40px; }
+  .kpi-row  { grid-template-columns: 1fr 1fr; }
+  .row-2    { grid-template-columns: 1fr; }
+  .row-3    { grid-template-columns: 1fr; }
+  .row-1-2  { grid-template-columns: 1fr; }
+  .rev-panels { grid-template-columns: 1fr; }
+  .iter-item  { grid-template-columns: 1fr 1fr; grid-template-rows: auto auto; }
+}
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ─── TOP BAR ─── -->
+  <div class="top-bar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="2" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="11" y="2" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="2" y="11" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="11" y="11" width="7" height="7" fill="#000" rx="1"/>
+        </svg>
+      </div>
+      <span class="brand-name">Nebius</span>
+    </div>
+    <div class="top-right">
+      <span class="dash-label">Q1 2025 · Cohort Data</span>
+      <div class="live-pill"><div class="live-dot"></div> Live Dashboard</div>
+      <div class="creator-pill"><div class="c-dot"></div><span>Portfolio by Rus Teston</span></div>
+    </div>
+  </div>
+
+  <!-- ─── HERO ─── -->
+  <div class="hero">
+    <div class="hero-eyebrow">Revenue Enablement · Measurement & Impact</div>
+    <h1>Enablement <span>Metrics</span> Dashboard</h1>
+    <p class="hero-sub">Tracking what matters — from ramp velocity and program adoption through to competency improvements, field satisfaction, and revenue correlation. Enablement that cannot point to business outcomes is just training.</p>
+  </div>
+
+  <!-- ═══════════════════════════
+       KPI CARDS
+  ═══════════════════════════ -->
+  <div class="kpi-row">
+
+    <div class="kpi-card k-green">
+      <div class="kpi-label">Avg. Ramp Time — All Tracks</div>
+      <div class="kpi-value">7.4<span style="font-size:1rem;font-weight:500;color:var(--text-2)"> wks</span></div>
+      <div class="kpi-delta delta-up">↓ 2.1 wks vs Q4 2024</div>
+      <div class="kpi-context">Target: &lt;8 weeks. Down from 9.5 weeks at program launch.</div>
+    </div>
+
+    <div class="kpi-card k-blue">
+      <div class="kpi-label">Program Completion Rate</div>
+      <div class="kpi-value">88<span style="font-size:1rem;font-weight:500;color:var(--text-2)">%</span></div>
+      <div class="kpi-delta delta-up">↑ 11pts vs Q4 2024</div>
+      <div class="kpi-context">Target: &gt;85%. Module-level completion tracked in LMS per cohort.</div>
+    </div>
+
+    <div class="kpi-card k-orange">
+      <div class="kpi-label">Cert Gate Pass Rate (1st attempt)</div>
+      <div class="kpi-value">83<span style="font-size:1rem;font-weight:500;color:var(--text-2)">%</span></div>
+      <div class="kpi-delta delta-up">↑ 7pts vs Q4 2024</div>
+      <div class="kpi-context">Target: &gt;80%. Gates require live demonstration — not multiple choice.</div>
+    </div>
+
+    <div class="kpi-card k-purple">
+      <div class="kpi-label">Partner-Sourced Pipeline (90-day)</div>
+      <div class="kpi-value">$2.4<span style="font-size:1rem;font-weight:500;color:var(--text-2)">M</span></div>
+      <div class="kpi-delta delta-up">↑ 38% vs Q4 2024</div>
+      <div class="kpi-context">Pipeline from partners completing Stage 2+ of the enablement framework.</div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════
+       ROW 1: RAMP TIME + COMPETENCY
+  ═══════════════════════════ -->
+  <div class="sec-label">Leading Indicators · In-program performance across all three audience tracks</div>
+  <div class="row-2" style="margin-bottom:16px;">
+
+    <!-- Ramp Time Trend -->
+    <div class="panel">
+      <div class="panel-title">Ramp Time by Track — Quarterly Trend</div>
+      <div class="panel-sub">Average weeks from hire/onboard to first certification gate cleared. Decreasing ramp = enablement is working.</div>
+
+      <div class="bar-chart">
+
+        <div class="bc-group">
+          <div class="bc-group-label">Solutions Architect · Target: &lt; 10 weeks</div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--text-3);font-size:0.6rem;">Q2 '24</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-sa" style="width:82%">
+                <span class="bc-bar-label">11.8 wks</span>
+              </div>
+            </div>
+          </div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--text-3);font-size:0.6rem;">Q3 '24</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-sa" style="width:72%">
+                <span class="bc-bar-label">10.4 wks</span>
+              </div>
+            </div>
+          </div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--text-3);font-size:0.6rem;">Q4 '24</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-sa" style="width:64%">
+                <span class="bc-bar-label">9.2 wks</span>
+              </div>
+            </div>
+          </div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--sa);font-size:0.6rem;font-weight:600;">Q1 '25</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-sa" style="width:54%">
+                <span class="bc-bar-label" style="font-weight:700;">7.8 wks ✓</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bc-group">
+          <div class="bc-group-label">Account Executive · Target: &lt; 6 weeks</div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--text-3);font-size:0.6rem;">Q2 '24</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-ae" style="width:78%">
+                <span class="bc-bar-label">9.2 wks</span>
+              </div>
+            </div>
+          </div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--text-3);font-size:0.6rem;">Q3 '24</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-ae" style="width:65%">
+                <span class="bc-bar-label">7.7 wks</span>
+              </div>
+            </div>
+          </div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--text-3);font-size:0.6rem;">Q4 '24</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-ae" style="width:55%">
+                <span class="bc-bar-label">6.5 wks</span>
+              </div>
+            </div>
+          </div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--ae);font-size:0.6rem;font-weight:600;">Q1 '25</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-ae" style="width:44%">
+                <span class="bc-bar-label" style="font-weight:700;">5.2 wks ✓</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bc-group">
+          <div class="bc-group-label">Partner · Target: &lt; 8 weeks</div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--text-3);font-size:0.6rem;">Q2 '24</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-pt" style="width:88%">
+                <span class="bc-bar-label">12.6 wks</span>
+              </div>
+            </div>
+          </div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--text-3);font-size:0.6rem;">Q3 '24</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-pt" style="width:74%">
+                <span class="bc-bar-label">10.6 wks</span>
+              </div>
+            </div>
+          </div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--text-3);font-size:0.6rem;">Q4 '24</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-pt" style="width:63%">
+                <span class="bc-bar-label">9.0 wks</span>
+              </div>
+            </div>
+          </div>
+          <div class="bc-row">
+            <div class="bc-track-label" style="color:var(--partner);font-size:0.6rem;font-weight:600;">Q1 '25</div>
+            <div class="bc-bar-wrap">
+              <div class="bc-bar bar-pt" style="width:50%">
+                <span class="bc-bar-label" style="font-weight:700;">7.2 wks ✓</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Competency Scores -->
+    <div class="panel">
+      <div class="panel-title">Technical Competency Scores by Track & Phase</div>
+      <div class="panel-sub">Post-assessment scores (0–100) at each certification gate. Scores below 70 trigger mandatory remediation before advancement.</div>
+
+      <div class="comp-grid">
+
+        <div class="comp-track">
+          <div class="comp-track-header">
+            <div class="comp-track-name">
+              <div class="track-dot" style="background:var(--sa)"></div>
+              Solutions Architect
+            </div>
+            <div class="comp-track-avg" style="color:var(--sa)">84.2</div>
+          </div>
+          <div class="comp-phases">
+            <div class="comp-phase">
+              <span class="comp-phase-label">Foundation</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" style="width:88%;background:var(--sa);opacity:0.5;"></div></div>
+              <span class="comp-score">88 / 100</span>
+            </div>
+            <div class="comp-phase">
+              <span class="comp-phase-label">Practitioner</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" style="width:82%;background:var(--sa);opacity:0.75;"></div></div>
+              <span class="comp-score">82 / 100</span>
+            </div>
+            <div class="comp-phase">
+              <span class="comp-phase-label">Expert</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" style="width:79%;background:var(--sa);"></div></div>
+              <span class="comp-score">79 / 100</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-track">
+          <div class="comp-track-header">
+            <div class="comp-track-name">
+              <div class="track-dot" style="background:var(--ae)"></div>
+              Account Executive
+            </div>
+            <div class="comp-track-avg" style="color:var(--ae)">81.0</div>
+          </div>
+          <div class="comp-phases">
+            <div class="comp-phase">
+              <span class="comp-phase-label">Foundation</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" style="width:86%;background:var(--ae);opacity:0.5;"></div></div>
+              <span class="comp-score">86 / 100</span>
+            </div>
+            <div class="comp-phase">
+              <span class="comp-phase-label">Practitioner</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" style="width:80%;background:var(--ae);opacity:0.75;"></div></div>
+              <span class="comp-score">80 / 100</span>
+            </div>
+            <div class="comp-phase">
+              <span class="comp-phase-label">Expert</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" style="width:77%;background:var(--ae);"></div></div>
+              <span class="comp-score">77 / 100</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="comp-track">
+          <div class="comp-track-header">
+            <div class="comp-track-name">
+              <div class="track-dot" style="background:var(--partner)"></div>
+              Partner
+            </div>
+            <div class="comp-track-avg" style="color:var(--partner)">79.3</div>
+          </div>
+          <div class="comp-phases">
+            <div class="comp-phase">
+              <span class="comp-phase-label">Foundation</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" style="width:84%;background:var(--partner);opacity:0.5;"></div></div>
+              <span class="comp-score">84 / 100</span>
+            </div>
+            <div class="comp-phase">
+              <span class="comp-phase-label">Practitioner</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" style="width:78%;background:var(--partner);opacity:0.75;"></div></div>
+              <span class="comp-score">78 / 100</span>
+            </div>
+            <div class="comp-phase">
+              <span class="comp-phase-label">Expert</span>
+              <div class="comp-bar-wrap"><div class="comp-bar" style="width:76%;background:var(--partner);"></div></div>
+              <span class="comp-score">76 / 100</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Score legend -->
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--border);display:flex;gap:14px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--green);">
+          <div style="width:10px;height:10px;border-radius:2px;background:var(--green);"></div> 85+ Exceeding
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--ae);">
+          <div style="width:10px;height:10px;border-radius:2px;background:var(--ae);"></div> 70–84 Meeting
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:0.68rem;color:var(--down);">
+          <div style="width:10px;height:10px;border-radius:2px;background:var(--down);"></div> &lt;70 Remediation required
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════
+       ROW 2: FUNNEL + FEEDBACK
+  ═══════════════════════════ -->
+  <div class="sec-label">Program Health · Adoption funnel and learner satisfaction signals</div>
+  <div class="row-2" style="margin-bottom:16px;">
+
+    <!-- Adoption Funnel -->
+    <div class="panel">
+      <div class="panel-title">Program Adoption Funnel — Q1 2025 Cohort</div>
+      <div class="panel-sub">Tracks where learners drop off — so we can fix it. Drop-off between Enrolled and Active is a manager communication problem; drop-off at certification is a content design problem.</div>
+
+      <div class="funnel">
+
+        <div class="funnel-step">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:100%;background:linear-gradient(90deg,#1A3A50,var(--sa));">
+              <span class="funnel-step-label">Enrolled</span>
+              <span class="funnel-val">142</span>
+            </div>
+          </div>
+          <div class="funnel-pct">100%</div>
+        </div>
+
+        <div style="padding-left:8px;display:flex;align-items:center;gap:6px;margin:-2px 0;">
+          <span style="font-size:0.65rem;color:var(--text-4);">↓</span>
+          <span class="ok-badge">97% retention</span>
+        </div>
+
+        <div class="funnel-step">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:97%;background:linear-gradient(90deg,#1A3A50,var(--sa));">
+              <span class="funnel-step-label">Active (started Module 1)</span>
+              <span class="funnel-val">138</span>
+            </div>
+          </div>
+          <div class="funnel-pct">97%</div>
+        </div>
+
+        <div style="padding-left:8px;display:flex;align-items:center;gap:6px;margin:-2px 0;">
+          <span style="font-size:0.65rem;color:var(--text-4);">↓</span>
+          <span class="ok-badge">94% retention</span>
+        </div>
+
+        <div class="funnel-step">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:91%;background:linear-gradient(90deg,#1A4030,var(--green));">
+              <span class="funnel-step-label">Phase 1 Completed (Foundation)</span>
+              <span class="funnel-val">130</span>
+            </div>
+          </div>
+          <div class="funnel-pct">91%</div>
+        </div>
+
+        <div style="padding-left:8px;display:flex;align-items:center;gap:6px;margin:-2px 0;">
+          <span style="font-size:0.65rem;color:var(--text-4);">↓</span>
+          <span class="ok-badge">88% retention</span>
+        </div>
+
+        <div class="funnel-step">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:84%;background:linear-gradient(90deg,#1A4030,var(--green));">
+              <span class="funnel-step-label">Cert Gate 1 Passed</span>
+              <span class="funnel-val">119</span>
+            </div>
+          </div>
+          <div class="funnel-pct">84%</div>
+        </div>
+
+        <div style="padding-left:8px;display:flex;align-items:center;gap:6px;margin:-2px 0;">
+          <span style="font-size:0.65rem;color:var(--text-4);">↓</span>
+          <span class="drop-badge">78% — ⚠ watching Phase 2</span>
+        </div>
+
+        <div class="funnel-step">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:68%;background:linear-gradient(90deg,#30200A,var(--ae));">
+              <span class="funnel-step-label">Phase 2 Completed (Practitioner)</span>
+              <span class="funnel-val">97</span>
+            </div>
+          </div>
+          <div class="funnel-pct">68%</div>
+        </div>
+
+        <div style="padding-left:8px;display:flex;align-items:center;gap:6px;margin:-2px 0;">
+          <span style="font-size:0.65rem;color:var(--text-4);">↓</span>
+          <span class="ok-badge">91% of completers certified</span>
+        </div>
+
+        <div class="funnel-step">
+          <div class="funnel-bar-wrap">
+            <div class="funnel-bar" style="width:62%;background:linear-gradient(90deg,#201040,var(--partner));">
+              <span class="funnel-step-label">Fully Certified (All 3 Gates)</span>
+              <span class="funnel-val">88</span>
+            </div>
+          </div>
+          <div class="funnel-pct">62%</div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:10px;padding:8px 10px;background:var(--bg-4);border:1px solid var(--border-2);border-radius:var(--radius-sm);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--ae);font-weight:600;margin-bottom:3px;">⚠ WATCH ITEM — Phase 2 drop-off</div>
+        <div style="font-size:0.7rem;color:var(--text-2);line-height:1.4;">22-point drop between Cert Gate 1 and Phase 2 completion. Root cause analysis in progress — likely Manager non-release from BAU tasks. Intervention: added a manager briefing module to the program kickoff.</div>
+      </div>
+    </div>
+
+    <!-- NPS / Feedback -->
+    <div class="panel">
+      <div class="panel-title">Field Feedback Scores — Module NPS</div>
+      <div class="panel-sub">Post-module NPS (0–10 scale) averaged across Q1 2025 cohort. Scores below 7 trigger content review. Scores above 8.5 are flagged for replication patterns.</div>
+
+      <div class="nps-grid">
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-sa">SA</span>
+          <span class="nps-module">Nebius AI Cloud Architecture Overview</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:92%;background:var(--green);"></div></div>
+          <span class="nps-score score-high">9.2</span>
+        </div>
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-sa">SA</span>
+          <span class="nps-module">NVIDIA GPU Portfolio — H100 to GB300</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:88%;background:var(--green);"></div></div>
+          <span class="nps-score score-high">8.8</span>
+        </div>
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-sa">SA</span>
+          <span class="nps-module">Managed Kubernetes & Slurm Deep Dive</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:81%;background:var(--sa);"></div></div>
+          <span class="nps-score score-mid">8.1</span>
+        </div>
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-sa">SA</span>
+          <span class="nps-module">TCO Modeling & Competitive Displacement</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:85%;background:var(--green);"></div></div>
+          <span class="nps-score score-high">8.5</span>
+        </div>
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-ae">AE</span>
+          <span class="nps-module">The Nebius Story — Why AI Cloud, Why Now</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:91%;background:var(--green);"></div></div>
+          <span class="nps-score score-high">9.1</span>
+        </div>
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-ae">AE</span>
+          <span class="nps-module">AI Workload 101 — What Customers Are Building</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:87%;background:var(--green);"></div></div>
+          <span class="nps-score score-high">8.7</span>
+        </div>
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-ae">AE</span>
+          <span class="nps-module">Pricing, Packaging & Commercial Structure</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:69%;background:var(--ae);"></div></div>
+          <span class="nps-score score-mid">6.9 ⚠</span>
+        </div>
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-ae">AE</span>
+          <span class="nps-module">Competitive Intelligence — AWS, GCP Displacement</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:90%;background:var(--green);"></div></div>
+          <span class="nps-score score-high">9.0</span>
+        </div>
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-partner">Partner</span>
+          <span class="nps-module">Token Factory API — Quickstart for Partners</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:86%;background:var(--green);"></div></div>
+          <span class="nps-score score-high">8.6</span>
+        </div>
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-partner">Partner</span>
+          <span class="nps-module">Partner GTM Alignment — Pipeline & Co-Marketing</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:83%;background:var(--sa);"></div></div>
+          <span class="nps-score score-mid">8.3</span>
+        </div>
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-partner">Partner</span>
+          <span class="nps-module">Building AI Solutions on Nebius — E2E Lab</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:89%;background:var(--green);"></div></div>
+          <span class="nps-score score-high">8.9</span>
+        </div>
+
+        <div class="nps-item">
+          <span class="nps-track-badge nps-partner">Partner</span>
+          <span class="nps-module">Support Model & Escalation Playbook</span>
+          <div class="nps-bar-wrap"><div class="nps-bar" style="width:64%;background:var(--ae);"></div></div>
+          <span class="nps-score score-mid">6.4 ⚠</span>
+        </div>
+
+      </div>
+
+      <div style="margin-top:10px;padding:8px 10px;background:var(--bg-4);border:1px solid #3A2A10;border-radius:var(--radius-sm);border-left:3px solid var(--ae);">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:0.6rem;color:var(--ae);font-weight:600;margin-bottom:3px;">⚠ CONTENT REVIEW FLAGGED — 2 modules below 7.0</div>
+        <div style="font-size:0.7rem;color:var(--text-2);line-height:1.4;">AE Pricing module (6.9) and Partner Escalation Playbook (6.4) are scheduled for SME review in April. Common feedback theme: "too theoretical, needs more real deal examples." Revision plan: add 2 worked examples per module using actual Nebius customer scenarios.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════
+       ROW 3: REVENUE CORRELATION + ITERATION
+  ═══════════════════════════ -->
+  <div class="sec-label">Lagging Indicators · Business impact measured 60–90 days post-ramp</div>
+  <div class="row-3-2" style="margin-bottom:16px;">
+
+    <!-- Revenue Correlation -->
+    <div class="panel">
+      <div class="panel-title">Revenue Correlation — Enablement-Complete vs Non-Complete Cohorts</div>
+      <div class="panel-sub">The most important section. Comparing field performance between cohorts that completed the full program vs those who did not — at 90 days post-ramp.</div>
+
+      <div class="rev-panels">
+
+        <div class="rev-card">
+          <div class="rev-metric">SA — Technical Win Rate</div>
+          <div class="rev-val">68%</div>
+          <div class="rev-delta up">↑ +19pts vs non-complete</div>
+          <div class="rev-note">SAs who completed all 3 phases win 68% of evaluated deals vs 49% for those who did not complete the program</div>
+          <div class="sparkline">
+            <div class="spark-bar spark-blue" style="height:40%"></div>
+            <div class="spark-bar spark-blue" style="height:55%"></div>
+            <div class="spark-bar spark-blue" style="height:50%"></div>
+            <div class="spark-bar spark-blue" style="height:62%"></div>
+            <div class="spark-bar spark-blue" style="height:68%"></div>
+          </div>
+        </div>
+
+        <div class="rev-card">
+          <div class="rev-metric">AE — Discovery-to-Technical Validation</div>
+          <div class="rev-val">12 days</div>
+          <div class="rev-delta up">↓ 8 days faster</div>
+          <div class="rev-note">Enablement-complete AEs move from discovery to SA-involved technical validation 8 days faster than non-complete peers</div>
+          <div class="sparkline">
+            <div class="spark-bar spark-orange" style="height:90%"></div>
+            <div class="spark-bar spark-orange" style="height:80%"></div>
+            <div class="spark-bar spark-orange" style="height:70%"></div>
+            <div class="spark-bar spark-orange" style="height:55%"></div>
+            <div class="spark-bar spark-orange" style="height:40%"></div>
+          </div>
+        </div>
+
+        <div class="rev-card">
+          <div class="rev-metric">Partner — First Deal Time (post-cert)</div>
+          <div class="rev-val">24 days</div>
+          <div class="rev-delta up">↓ 18 days vs baseline</div>
+          <div class="rev-note">Partners who achieve Stage 2 certification close their first Nebius-sourced deal 18 days faster than the uncertified baseline</div>
+          <div class="sparkline">
+            <div class="spark-bar spark-green" style="height:85%"></div>
+            <div class="spark-bar spark-green" style="height:72%"></div>
+            <div class="spark-bar spark-green" style="height:60%"></div>
+            <div class="spark-bar spark-green" style="height:45%"></div>
+            <div class="spark-bar spark-green" style="height:32%"></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Cohort comparison table -->
+      <div class="cohort-compare">
+        <div class="cohort-title">90-Day Performance: Enablement Complete vs Incomplete · Q1 2025 Cohort</div>
+        <div class="cohort-row header-row">
+          <span class="cohort-header-label">Metric</span>
+          <span class="cohort-header-label">Complete ✓</span>
+          <span class="cohort-header-label">Incomplete ✗</span>
+        </div>
+        <div class="cohort-row">
+          <span class="cohort-label">SA avg. technical win rate</span>
+          <span class="cohort-val val-green">68%</span>
+          <span class="cohort-val val-muted">49%</span>
+        </div>
+        <div class="cohort-row">
+          <span class="cohort-label">AE quota attainment (90-day)</span>
+          <span class="cohort-val val-green">74%</span>
+          <span class="cohort-val val-muted">51%</span>
+        </div>
+        <div class="cohort-row">
+          <span class="cohort-label">AE avg. deal size</span>
+          <span class="cohort-val val-green">$148K</span>
+          <span class="cohort-val val-muted">$102K</span>
+        </div>
+        <div class="cohort-row">
+          <span class="cohort-label">Partner first deal (days)</span>
+          <span class="cohort-val val-green">24 days</span>
+          <span class="cohort-val val-muted">42 days</span>
+        </div>
+        <div class="cohort-row">
+          <span class="cohort-label">Partner 90-day pipeline</span>
+          <span class="cohort-val val-green">$380K</span>
+          <span class="cohort-val val-muted">$140K</span>
+        </div>
+        <div class="cohort-row">
+          <span class="cohort-label">SA escalation rate (partner deals)</span>
+          <span class="cohort-val val-green">1.2 / deal</span>
+          <span class="cohort-val val-muted">3.4 / deal</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Iteration Log -->
+    <div class="panel">
+      <div class="panel-title">Content Iteration Log</div>
+      <div class="panel-sub">What changed, why it changed, and what triggered the update. Continuous improvement is a discipline, not a reaction.</div>
+
+      <div class="iter-list">
+
+        <div class="iter-item">
+          <span class="iter-date">Mar 2025</span>
+          <span class="iter-track it-ae">AE Track</span>
+          <span class="iter-desc"><strong>Pricing module rebuild</strong> — added 2 worked TCO examples using Brave Search and CentML cost data after NPS dropped to 6.9</span>
+          <span class="iter-trigger">NPS &lt; 7.0</span>
+        </div>
+
+        <div class="iter-item">
+          <span class="iter-date">Mar 2025</span>
+          <span class="iter-track it-partner">Partner</span>
+          <span class="iter-desc"><strong>Escalation playbook revised</strong> — restructured Tier 1/2/3 model with more decision examples; NPS at 6.4 flagged for review</span>
+          <span class="iter-trigger">NPS &lt; 7.0</span>
+        </div>
+
+        <div class="iter-item">
+          <span class="iter-date">Feb 2025</span>
+          <span class="iter-track it-sa">SA Track</span>
+          <span class="iter-desc"><strong>GPU tier table updated</strong> — added HGX B300 spec comparison and updated GB300 NVL72 availability note following product GA</span>
+          <span class="iter-trigger">Product launch</span>
+        </div>
+
+        <div class="iter-item">
+          <span class="iter-date">Feb 2025</span>
+          <span class="iter-track it-all">All Tracks</span>
+          <span class="iter-desc"><strong>Manager briefing module added</strong> — new 30-min live session for managers of enrolled learners after Phase 2 drop-off analysis identified BAU conflict as root cause</span>
+          <span class="iter-trigger">Funnel data</span>
+        </div>
+
+        <div class="iter-item">
+          <span class="iter-date">Jan 2025</span>
+          <span class="iter-track it-partner">Partner</span>
+          <span class="iter-desc"><strong>Token Factory quickstart updated</strong> — refreshed API auth examples and added rate limit configuration section per partner support ticket volume spike</span>
+          <span class="iter-trigger">Support tickets</span>
+        </div>
+
+        <div class="iter-item">
+          <span class="iter-date">Jan 2025</span>
+          <span class="iter-track it-ae">AE Track</span>
+          <span class="iter-desc"><strong>Competitive module expanded</strong> — added CoreWeave displacement section and SemiAnalysis TCO reference after field reported 3 lost deals to CoreWeave in Q4</span>
+          <span class="iter-trigger">Win/loss data</span>
+        </div>
+
+        <div class="iter-item">
+          <span class="iter-date">Dec 2024</span>
+          <span class="iter-track it-sa">SA Track</span>
+          <span class="iter-desc"><strong>Capstone rubric tightened</strong> — added 4 new assessor criteria after SA Director flagged inconsistent scoring across 3 different assessors in Q4 cohort</span>
+          <span class="iter-trigger">QA review</span>
+        </div>
+
+        <div class="iter-item">
+          <span class="iter-date">Nov 2024</span>
+          <span class="iter-track it-all">All Tracks</span>
+          <span class="iter-desc"><strong>Recraft case study added</strong> — new 20B param training proof point integrated into SA Expert, AE Foundation, and Partner Practitioner modules</span>
+          <span class="iter-trigger">New case study</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ─── FOOTER ─── -->
+  <div class="footer">
+    <div class="footer-left">
+      Portfolio Artifact #4 of 5 · Revenue Enablement · Measurement & Impact · Prepared by Rus Teston<br>
+      Data: Illustrative Q1 2025 cohort · Tracks: SA (n=48), AE (n=56), Partner (n=38) · Dashboard refresh cadence: Monthly
+    </div>
+    <div class="footer-badge">✦ Nebius Enablement Metrics Dashboard</div>
+  </div>
+
+</div>
+</body>
+</html>

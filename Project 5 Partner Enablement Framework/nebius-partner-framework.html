@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebius — Partner Enablement Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Epilogue:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 13px; }
+
+/* ─── TOKENS ─── */
+:root {
+  --green:          #00C853;
+  --green-dim:      #00C85318;
+  --green-mid:      #00C85340;
+  --green-glow:     #00C85308;
+
+  --bg:             #0C1A3A;
+  --bg-2:           #10224A;
+  --bg-3:           #162C52;
+  --bg-4:           #1C3660;
+  --bg-5:           #224070;
+
+  --border:         #1E3A5C;
+  --border-2:       #2A4D70;
+  --border-3:       #356080;
+
+  --text-1:         #F0F6FF;
+  --text-2:         #B0CFEA;
+  --text-3:         #5A8AAE;
+  --text-4:         #3A6080;
+
+  /* Partner type colors */
+  --var:            #3B9EFF;
+  --var-dim:        #3B9EFF14;
+  --var-mid:        #3B9EFF35;
+
+  --isv:            #FF9F3B;
+  --isv-dim:        #FF9F3B14;
+  --isv-mid:        #FF9F3B35;
+
+  --alliance:       #B47FFF;
+  --alliance-dim:   #B47FFF14;
+  --alliance-mid:   #B47FFF35;
+
+  /* Stage colors */
+  --stage-1:        #3B9EFF;
+  --stage-2:        #00C853;
+  --stage-3:        #FF9F3B;
+  --stage-4:        #B47FFF;
+
+  --radius:         8px;
+  --radius-sm:      5px;
+  --radius-lg:      12px;
+}
+
+body {
+  background: linear-gradient(180deg, #0C1A3A 0%, #0A3050 40%, #0E3558 100%);
+  color: var(--text-1);
+  font-family: 'Epilogue', sans-serif;
+  line-height: 1.55;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── GRID TEXTURE ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ─── AMBIENT GLOW ─── */
+body::after {
+  content: '';
+  position: fixed;
+  top: -20%; left: 50%; transform: translateX(-50%);
+  width: 900px; height: 400px;
+  background: radial-gradient(ellipse, #00C85309 0%, transparent 68%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ─── PAGE SHELL ─── */
+.page {
+  position: relative; z-index: 1;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 28px 28px 56px;
+}
+
+/* ═══════════════════════════════════════
+   TOP BAR
+═══════════════════════════════════════ */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-2);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.brand {
+  display: flex; align-items: center; gap: 9px;
+}
+
+.brand-mark {
+  width: 26px; height: 26px;
+  background: var(--green);
+  border-radius: 6px;
+  display: grid; place-items: center;
+}
+
+.brand-mark svg { width: 14px; height: 14px; }
+
+.brand-name {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; font-size: 1.15rem;
+  color: var(--text-1); letter-spacing: -0.2px;
+}
+
+.top-right {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+
+.partner-pills {
+  display: flex; gap: 6px;
+}
+
+.p-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 3px 10px; border-radius: 100px;
+}
+.pill-var      { background: var(--var-dim);      color: var(--var);      border: 1px solid var(--var-mid); }
+.pill-isv      { background: var(--isv-dim);      color: var(--isv);      border: 1px solid var(--isv-mid); }
+.pill-alliance { background: var(--alliance-dim); color: var(--alliance); border: 1px solid var(--alliance-mid); }
+
+.creator-pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 11px; border-radius: 100px;
+  background: var(--bg-3); border: 1px solid var(--border-2);
+}
+.c-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+.creator-pill span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.67rem; color: var(--text-2);
+}
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 24px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.hero-left {}
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; color: var(--green);
+  text-transform: uppercase; letter-spacing: 0.15em;
+  margin-bottom: 6px;
+}
+
+.hero h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.7rem, 3.2vw, 2.8rem);
+  font-weight: 700; letter-spacing: -0.5px;
+  line-height: 1.1; color: var(--text-1);
+  margin-bottom: 10px;
+}
+
+.hero h1 span { color: var(--green); }
+
+.hero-sub {
+  font-size: 0.88rem; color: var(--text-2);
+  max-width: 600px; line-height: 1.65;
+}
+
+.hero-stats {
+  display: flex; gap: 0;
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.h-stat {
+  padding: 14px 22px;
+  border-right: 1px solid var(--border-2);
+  display: flex; flex-direction: column; gap: 2px;
+  min-width: 100px;
+}
+.h-stat:last-child { border-right: none; }
+
+.h-stat-val {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem; font-weight: 700;
+  color: var(--green); line-height: 1;
+}
+
+.h-stat-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+
+/* ═══════════════════════════════════════
+   SECTION LABEL
+═══════════════════════════════════════ */
+.sec-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem; font-weight: 600;
+  text-transform: none;
+  letter-spacing: -0.2px;
+  color: var(--text-1);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 12px;
+}
+.sec-label::after {
+  content: '';
+  flex: 1; height: 1px;
+  background: var(--border-2);
+}
+
+/* ═══════════════════════════════════════
+   SECTION WRAPPER
+═══════════════════════════════════════ */
+.section { margin-bottom: 20px; }
+
+/* ═══════════════════════════════════════
+   CARD BASE
+═══════════════════════════════════════ */
+.card {
+  background: var(--bg-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  position: relative; overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.card-top-bar {
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+}
+
+/* ═══════════════════════════════════════
+   LIFECYCLE BAR — THE DOMINANT ELEMENT
+═══════════════════════════════════════ */
+.lifecycle-wrap {
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-lg);
+  padding: 20px 22px;
+  position: relative; overflow: hidden;
+  margin-bottom: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.lifecycle-wrap:hover {
+  transform: scale(1.02);
+  border-color: var(--border-3);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+.lifecycle-wrap::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--stage-1), var(--stage-2), var(--stage-3), var(--stage-4));
+}
+
+.lc-header {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap; gap: 8px;
+}
+
+.lc-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem; font-weight: 600;
+  color: var(--text-1);
+}
+
+.lc-philosophy {
+  font-size: 0.76rem; color: var(--text-2);
+  font-style: italic;
+}
+
+/* The main stage grid */
+.stages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.stage {
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border-2);
+  display: flex; flex-direction: column;
+}
+
+.stage-head {
+  padding: 10px 13px 9px;
+  position: relative;
+}
+
+.stage-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--text-3); margin-bottom: 3px;
+}
+
+.stage-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem; font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.stage-sub {
+  font-size: 0.72rem; color: var(--text-2);
+  margin-top: 3px; line-height: 1.4;
+}
+
+.stage-body {
+  flex: 1; padding: 10px 13px;
+  background: var(--bg-3);
+  border-top: 1px solid var(--border-2);
+  display: flex; flex-direction: column; gap: 5px;
+}
+
+.stage-row {
+  display: flex; flex-direction: column; gap: 1px;
+}
+
+.stage-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--text-3);
+}
+
+.stage-val {
+  font-size: 0.74rem; color: var(--text-2);
+  line-height: 1.35;
+}
+
+.stage-divider {
+  height: 1px; background: var(--border);
+  margin: 2px 0;
+}
+
+.stage-gtm {
+  padding: 5px 8px;
+  border-radius: var(--radius-sm);
+  margin-top: 4px;
+}
+
+.stage-gtm-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.57rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin-bottom: 2px;
+}
+
+.stage-gtm-text {
+  font-size: 0.72rem; line-height: 1.35; font-weight: 500;
+}
+
+/* Stage color theming */
+.s1 .stage-head { background: linear-gradient(135deg, #0D1826 0%, var(--bg-3) 100%); }
+.s1 .stage-name { color: var(--stage-1); }
+.s1 .stage-gtm  { background: #0D1826; border: 1px solid #1A3050; }
+.s1 .stage-gtm-label { color: var(--stage-1); }
+.s1 .stage-gtm-text  { color: #5A8ABB; }
+
+.s2 .stage-head { background: linear-gradient(135deg, #091A0E 0%, var(--bg-3) 100%); }
+.s2 .stage-name { color: var(--stage-2); }
+.s2 .stage-gtm  { background: #091A0E; border: 1px solid var(--green-mid); }
+.s2 .stage-gtm-label { color: var(--stage-2); }
+.s2 .stage-gtm-text  { color: #3A9060; }
+
+.s3 .stage-head { background: linear-gradient(135deg, #1A1208 0%, var(--bg-3) 100%); }
+.s3 .stage-name { color: var(--stage-3); }
+.s3 .stage-gtm  { background: #1A1208; border: 1px solid #3A2A10; }
+.s3 .stage-gtm-label { color: var(--stage-3); }
+.s3 .stage-gtm-text  { color: #A07040; }
+
+.s4 .stage-head { background: linear-gradient(135deg, #140D26 0%, var(--bg-3) 100%); }
+.s4 .stage-name { color: var(--stage-4); }
+.s4 .stage-gtm  { background: #140D26; border: 1px solid #2A1A50; }
+.s4 .stage-gtm-label { color: var(--stage-4); }
+.s4 .stage-gtm-text  { color: #7A5AAA; }
+
+/* Arrow connectors between stages */
+.stage-arrows {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 0 2px;
+}
+
+.arrow-slot {
+  display: flex; align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+}
+.arrow-slot:last-child { visibility: hidden; }
+
+.arrow-line {
+  display: flex; align-items: center; gap: 0;
+  width: 100%;
+}
+
+.arrow-track {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-3));
+}
+
+.arrow-head {
+  width: 0; height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 6px solid var(--border-3);
+}
+
+/* ═══════════════════════════════════════
+   PARTNER TYPE MATRIX
+═══════════════════════════════════════ */
+.matrix-grid {
+  display: grid;
+  grid-template-columns: 160px 1fr 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.matrix-grid:hover {
+  transform: scale(1.01);
+  border-color: var(--border-3);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+/* Header row */
+.mx-header-blank {
+  background: var(--bg-4);
+  border-right: 1px solid var(--border-2);
+  border-bottom: 1px solid var(--border-2);
+  padding: 12px 14px;
+  display: flex; align-items: flex-end;
+}
+
+.mx-header-blank span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+
+.mx-col-header {
+  padding: 13px 16px;
+  border-right: 1px solid var(--border-2);
+  border-bottom: 1px solid var(--border-2);
+  display: flex; flex-direction: column; gap: 4px;
+}
+.mx-col-header:last-child { border-right: none; }
+
+.mx-type-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  padding: 3px 9px; border-radius: 100px;
+  width: fit-content;
+}
+.badge-var      { background: var(--var-dim);      color: var(--var);      border: 1px solid var(--var-mid); }
+.badge-isv      { background: var(--isv-dim);      color: var(--isv);      border: 1px solid var(--isv-mid); }
+.badge-alliance { background: var(--alliance-dim); color: var(--alliance); border: 1px solid var(--alliance-mid); }
+
+.mx-type-full {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+}
+.var-text      { color: var(--var); }
+.isv-text      { color: var(--isv); }
+.alliance-text { color: var(--alliance); }
+
+.mx-type-desc {
+  font-size: 0.72rem; color: var(--text-3);
+  line-height: 1.35;
+}
+
+/* Row label */
+.mx-row-label {
+  background: var(--bg-4);
+  border-right: 1px solid var(--border-2);
+  border-bottom: 1px solid var(--border-2);
+  padding: 13px 14px;
+  display: flex; flex-direction: column; gap: 3px;
+  justify-content: center;
+}
+
+.mx-row-label:last-child { border-bottom: none; }
+
+.row-label-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.09em;
+  color: var(--text-2);
+}
+
+.row-label-sub {
+  font-size: 0.68rem; color: var(--text-3);
+}
+
+/* Matrix cell */
+.mx-cell {
+  padding: 13px 16px;
+  border-right: 1px solid var(--border-2);
+  border-bottom: 1px solid var(--border-2);
+  background: var(--bg-2);
+  display: flex; flex-direction: column; gap: 5px;
+}
+.mx-cell:last-child { border-right: none; }
+.mx-row-last .mx-cell,
+.mx-row-last .mx-row-label { border-bottom: none; }
+
+.cell-item {
+  display: flex; align-items: flex-start; gap: 6px;
+}
+
+.cell-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 5px;
+}
+.dot-var      { background: var(--var); }
+.dot-isv      { background: var(--isv); }
+.dot-alliance { background: var(--alliance); }
+
+.cell-text {
+  font-size: 0.76rem; color: var(--text-2); line-height: 1.4;
+}
+
+.cell-text strong { font-weight: 600; color: var(--text-1); }
+
+.cell-cert {
+  margin-top: 4px;
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  padding: 3px 9px; border-radius: 100px;
+}
+.cert-var      { background: var(--var-dim);      color: var(--var);      border: 1px solid var(--var-mid); }
+.cert-isv      { background: var(--isv-dim);      color: var(--isv);      border: 1px solid var(--isv-mid); }
+.cert-alliance { background: var(--alliance-dim); color: var(--alliance); border: 1px solid var(--alliance-mid); }
+
+/* ═══════════════════════════════════════
+   BOTTOM ROW — 3 COLUMNS
+═══════════════════════════════════════ */
+.bottom-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+}
+
+/* ─── FOUR PILLARS ─── */
+.pillars-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.pillar {
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+  position: relative; overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.pillar:hover {
+  transform: scale(1.02);
+  border-color: var(--border-3);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+.pillar-accent {
+  position: absolute; top: 0; left: 0;
+  width: 3px; bottom: 0;
+}
+
+.pillar-icon {
+  font-size: 1.1rem; margin-bottom: 5px;
+  display: block;
+}
+
+.pillar-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.8rem; font-weight: 700;
+  color: var(--text-1); margin-bottom: 3px;
+  letter-spacing: -0.1px;
+}
+
+.pillar-desc {
+  font-size: 0.72rem; color: var(--text-2); line-height: 1.4;
+}
+
+.pillar-tags {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;
+}
+
+.pillar-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; padding: 2px 6px;
+  border-radius: 3px;
+  background: var(--bg-4); color: var(--text-3);
+  border: 1px solid var(--border-2);
+}
+
+/* ─── INDEPENDENCE METRICS ─── */
+.metrics-list {
+  display: flex; flex-direction: column; gap: 7px;
+}
+
+.metric-item {
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  display: flex; flex-direction: column; gap: 2px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.metric-item:hover {
+  transform: scale(1.02);
+  border-color: var(--border-3);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+.metric-top {
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 8px;
+}
+
+.metric-name {
+  font-size: 0.77rem; color: var(--text-1); font-weight: 500;
+}
+
+.metric-val {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.85rem; font-weight: 700;
+  color: var(--green); white-space: nowrap;
+}
+
+.metric-bar-wrap {
+  height: 3px; background: var(--bg-5);
+  border-radius: 2px; overflow: hidden; margin-top: 2px;
+}
+
+.metric-bar {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(90deg, var(--green-mid), var(--green));
+}
+
+.metric-note {
+  font-size: 0.67rem; color: var(--text-3); margin-top: 1px;
+}
+
+/* ─── KEY RESOURCES ─── */
+.resources-list {
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.resource-item {
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 9px 12px;
+  display: flex; align-items: flex-start; gap: 9px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.resource-item:hover {
+  transform: scale(1.02);
+  border-color: var(--border-3);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+.resource-icon {
+  width: 26px; height: 26px;
+  background: var(--green-dim);
+  border: 1px solid var(--green-mid);
+  border-radius: var(--radius-sm);
+  display: grid; place-items: center;
+  flex-shrink: 0; font-size: 0.75rem;
+}
+
+.resource-text { flex: 1; }
+
+.resource-name {
+  font-size: 0.78rem; font-weight: 600;
+  color: var(--text-1); margin-bottom: 1px;
+}
+
+.resource-url {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.63rem; color: var(--green);
+}
+
+.resource-desc {
+  font-size: 0.69rem; color: var(--text-3);
+  margin-top: 1px; line-height: 1.35;
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.footer {
+  margin-top: 22px; padding-top: 14px;
+  border-top: 1px solid var(--border-2);
+  display: flex; align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+}
+
+.footer-left {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: #ffffff; line-height: 1.6;
+}
+
+.footer-badge {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 14px; border-radius: 100px;
+  background: var(--green-dim);
+  border: 1px solid var(--green-mid);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--green);
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.09em;
+}
+
+/* ═══════════════════════════════════════
+   MODAL OVERLAY
+═══════════════════════════════════════ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 20, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: 12px;
+  padding: 40px 48px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  transform: scale(0.95) translateY(10px);
+  transition: transform 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.modal-overlay.active .modal-content {
+  transform: scale(1) translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: 8px;
+  color: var(--text-2);
+  font-size: 1.2rem;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: var(--bg-4);
+  color: var(--text-1);
+}
+
+/* Modal enlarged text */
+.modal-content .stage-name { font-size: 1.2rem; }
+.modal-content .stage-sub { font-size: 0.9rem; }
+.modal-content .stage-val { font-size: 0.95rem; line-height: 1.6; }
+.modal-content .stage-key { font-size: 0.75rem; }
+.modal-content .stage-gtm-label { font-size: 0.72rem; }
+.modal-content .stage-gtm-text { font-size: 0.9rem; line-height: 1.5; }
+.modal-content .lc-title { font-size: 1.15rem; line-height: 1.5; }
+.modal-content .lc-philosophy { font-size: 0.95rem; }
+.modal-content .pillar-name { font-size: 1.05rem; }
+.modal-content .pillar-desc { font-size: 0.9rem; line-height: 1.6; }
+.modal-content .pillar-tag { font-size: 0.72rem; }
+.modal-content .metric-name { font-size: 1rem; }
+.modal-content .metric-val { font-size: 1.1rem; }
+.modal-content .metric-note { font-size: 0.85rem; }
+.modal-content .resource-name { font-size: 1rem; }
+.modal-content .resource-url { font-size: 0.8rem; }
+.modal-content .resource-desc { font-size: 0.88rem; line-height: 1.5; }
+.modal-content .cell-text { font-size: 0.95rem; line-height: 1.6; }
+.modal-content .cell-cert { font-size: 0.75rem; }
+.modal-content .mx-type-full { font-size: 1.05rem; }
+.modal-content .mx-type-desc { font-size: 0.88rem; }
+.modal-content .row-label-text { font-size: 0.85rem; }
+.modal-content .row-label-sub { font-size: 0.82rem; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1100px) {
+  .stages { grid-template-columns: 1fr 1fr; }
+  .bottom-row { grid-template-columns: 1fr 1fr; }
+  .matrix-grid { grid-template-columns: 130px 1fr 1fr 1fr; }
+}
+
+@media (max-width: 780px) {
+  .page { padding: 18px 14px 40px; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-stats { display: none; }
+  .stages { grid-template-columns: 1fr; }
+  .bottom-row { grid-template-columns: 1fr; }
+  .matrix-grid { grid-template-columns: 1fr; }
+  .mx-col-header, .mx-header-blank { display: none; }
+  .pillars-grid { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ─── TOP BAR ─── -->
+  <div class="top-bar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="2" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="11" y="2" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="2" y="11" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="11" y="11" width="7" height="7" fill="#000" rx="1"/>
+        </svg>
+      </div>
+      <span class="brand-name">Nebius</span>
+    </div>
+    <div class="top-right">
+      <div class="partner-pills">
+        <span class="p-pill pill-var">VAR</span>
+        <span class="p-pill pill-isv">ISV / MSP</span>
+        <span class="p-pill pill-alliance">Alliance</span>
+      </div>
+      <div class="creator-pill">
+        <div class="c-dot"></div>
+        <span>Portfolio by Rus Teston</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── HERO ─── -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Partner Technical Enablement · Strategic Framework</div>
+      <h1>Partner <span>Enablement</span><br>Framework</h1>
+      <p class="hero-sub">A tiered, lifecycle-driven enablement system designed to move partners from onboarded to independently driving Nebius revenue — with GTM outcomes attached to every stage, and content designed differently for each partner type.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat">
+        <span class="h-stat-val">4</span>
+        <span class="h-stat-key">Maturity stages</span>
+      </div>
+      <div class="h-stat">
+        <span class="h-stat-val">3</span>
+        <span class="h-stat-key">Partner types</span>
+      </div>
+      <div class="h-stat">
+        <span class="h-stat-val">4</span>
+        <span class="h-stat-key">Core pillars</span>
+      </div>
+      <div class="h-stat">
+        <span class="h-stat-val">10wk</span>
+        <span class="h-stat-key">Full ramp</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 1: PARTNER LIFECYCLE
+  ═══════════════════════════════════════ -->
+  <div class="section">
+    <div class="sec-label">01 — Partner Maturity Lifecycle · Four stages, each with a GTM unlock</div>
+
+    <div class="lifecycle-wrap">
+      <div class="lc-header">
+        <span class="lc-title">Partner progression is earned, not assumed — each stage defines what a partner can <em>do</em>, not just what they know.</span>
+        <span class="lc-philosophy">Enablement exists to accelerate time-through-stage, not time-in-stage.</span>
+      </div>
+
+      <div class="stages">
+
+        <!-- Stage 1: Onboarded -->
+        <div class="stage s1">
+          <div class="stage-head">
+            <div class="stage-num">Stage 01</div>
+            <div class="stage-name">Onboarded · 100</div>
+            <div class="stage-sub">Partner is registered, credentialed, and understands the Nebius ecosystem</div>
+          </div>
+          <div class="stage-body">
+            <div class="stage-row">
+              <span class="stage-key">What they can do</span>
+              <span class="stage-val">Explain Nebius's product portfolio and partner program to a prospect</span>
+            </div>
+            <div class="stage-divider"></div>
+            <div class="stage-row">
+              <span class="stage-key">Enablement focus</span>
+              <span class="stage-val">Platform orientation, Token Factory API quickstart, partner portal access</span>
+            </div>
+            <div class="stage-divider"></div>
+            <div class="stage-row">
+              <span class="stage-key">Unlock criteria</span>
+              <span class="stage-val">Product knowledge assessment + live API integration demo passed</span>
+            </div>
+            <div class="stage-gtm">
+              <div class="stage-gtm-label">GTM Unlock</div>
+              <div class="stage-gtm-text">First qualified opportunity submitted to Nebius Partner Manager</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 2: Competent -->
+        <div class="stage s2">
+          <div class="stage-head">
+            <div class="stage-num">Stage 02</div>
+            <div class="stage-name">Competent · 200</div>
+            <div class="stage-sub">Partner can build and deliver Nebius-based solutions independently</div>
+          </div>
+          <div class="stage-body">
+            <div class="stage-row">
+              <span class="stage-key">What they can do</span>
+              <span class="stage-val">Deploy a customer solution on Nebius AI Cloud without Nebius SA involvement</span>
+            </div>
+            <div class="stage-divider"></div>
+            <div class="stage-row">
+              <span class="stage-key">Enablement focus</span>
+              <span class="stage-val">End-to-end solution lab, support escalation playbook, GTM alignment workshop</span>
+            </div>
+            <div class="stage-divider"></div>
+            <div class="stage-row">
+              <span class="stage-key">Unlock criteria</span>
+              <span class="stage-val">Joint GTM plan submitted + solution architecture validated by Nebius SA</span>
+            </div>
+            <div class="stage-gtm">
+              <div class="stage-gtm-label">GTM Unlock</div>
+              <div class="stage-gtm-text">First jointly registered deal in active pipeline with a close date</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 3: GTM-Ready -->
+        <div class="stage s3">
+          <div class="stage-head">
+            <div class="stage-num">Stage 03</div>
+            <div class="stage-name">GTM-Ready · 300</div>
+            <div class="stage-sub">Partner is actively co-selling and generating Nebius-sourced pipeline</div>
+          </div>
+          <div class="stage-body">
+            <div class="stage-row">
+              <span class="stage-key">What they can do</span>
+              <span class="stage-val">Run a full co-sell motion, close a partner-sourced deal, and expand the account</span>
+            </div>
+            <div class="stage-divider"></div>
+            <div class="stage-row">
+              <span class="stage-key">Enablement focus</span>
+              <span class="stage-val">Advanced solutions (RAG, Agentic AI), expansion selling, joint case study development</span>
+            </div>
+            <div class="stage-divider"></div>
+            <div class="stage-row">
+              <span class="stage-key">Unlock criteria</span>
+              <span class="stage-val">First customer win presented to Nebius Partner Manager with a documented replicable play</span>
+            </div>
+            <div class="stage-gtm">
+              <div class="stage-gtm-label">GTM Unlock</div>
+              <div class="stage-gtm-text">Joint demand generation campaign launched; joint case study in review</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stage 4: Expert -->
+        <div class="stage s4">
+          <div class="stage-head">
+            <div class="stage-num">Stage 04</div>
+            <div class="stage-name">Expert · 400</div>
+            <div class="stage-sub">Partner drives pipeline independently and expands the Nebius ecosystem</div>
+          </div>
+          <div class="stage-body">
+            <div class="stage-row">
+              <span class="stage-key">What they can do</span>
+              <span class="stage-val">Independently source, win, deliver, and expand Nebius accounts without Nebius support</span>
+            </div>
+            <div class="stage-divider"></div>
+            <div class="stage-row">
+              <span class="stage-key">Enablement focus</span>
+              <span class="stage-val">Thought leadership, Nebius Academy content contribution, sub-partner enablement</span>
+            </div>
+            <div class="stage-divider"></div>
+            <div class="stage-row">
+              <span class="stage-key">Unlock criteria</span>
+              <span class="stage-val">Published joint case study + 6-month pipeline commitment with measurable milestones</span>
+            </div>
+            <div class="stage-gtm">
+              <div class="stage-gtm-label">GTM Unlock</div>
+              <div class="stage-gtm-text">Certified Nebius Partner — advanced co-sell resources + revenue sharing unlocked</div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- end stages -->
+
+    </div><!-- end lifecycle-wrap -->
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 2: PARTNER TYPE MATRIX
+  ═══════════════════════════════════════ -->
+  <div class="section">
+    <div class="sec-label">02 — Enablement by Partner Type · Different partners need meaningfully different programs</div>
+
+    <div class="matrix-grid">
+
+      <!-- Header row -->
+      <div class="mx-header-blank"><span>Enablement dimension</span></div>
+
+      <div class="mx-col-header">
+        <span class="mx-type-badge badge-var">● VAR</span>
+        <span class="mx-type-full var-text">Value-Added Reseller</span>
+        <span class="mx-type-desc">Sells Nebius as part of a broader solution. Revenue motion: resell + margin. Primary skill gap: commercial fluency and positioning.</span>
+      </div>
+
+      <div class="mx-col-header">
+        <span class="mx-type-badge badge-isv">● ISV / MSP</span>
+        <span class="mx-type-full isv-text">Managed Service / Software Provider</span>
+        <span class="mx-type-desc">Builds on or manages Nebius for customers. Revenue motion: services + recurring. Primary skill gap: technical depth and independence.</span>
+      </div>
+
+      <div class="mx-col-header">
+        <span class="mx-type-badge badge-alliance">● Alliance</span>
+        <span class="mx-type-full alliance-text">Alliance / Technology Partner</span>
+        <span class="mx-type-desc">Integrates their product with Nebius. Revenue motion: co-sell + joint GTM. Primary skill gap: GTM alignment and joint pipeline.</span>
+      </div>
+
+      <!-- Row 1: Foundation enablement -->
+      <div class="mx-row-label">
+        <span class="row-label-text">Foundation Enablement</span>
+        <span class="row-label-sub">Stages 1–2 · Onboarded → Competent</span>
+      </div>
+
+      <div class="mx-cell">
+        <div class="cell-item">
+          <div class="cell-dot dot-var"></div>
+          <span class="cell-text"><strong>Nebius pitch narrative</strong> — how to position AI Cloud vs hyperscalers in a sales conversation</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-var"></div>
+          <span class="cell-text"><strong>Commercial structure</strong> — pricing mechanics, margin model, deal registration process</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-var"></div>
+          <span class="cell-text"><strong>Workload decoder</strong> — translate customer AI workloads into Nebius solutions</span>
+        </div>
+        <div class="cell-cert cert-var">✦ VAR Sales Ready Badge</div>
+      </div>
+
+      <div class="mx-cell">
+        <div class="cell-item">
+          <div class="cell-dot dot-isv"></div>
+          <span class="cell-text"><strong>Token Factory API quickstart</strong> — authenticate, invoke, integrate, monitor in production</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-isv"></div>
+          <span class="cell-text"><strong>AI Cloud fundamentals lab</strong> — GPU provisioning via Terraform, Kubernetes basics</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-isv"></div>
+          <span class="cell-text"><strong>Solution Library walkthrough</strong> — GitHub Terraform recipes and deployment patterns</span>
+        </div>
+        <div class="cell-cert cert-isv">✦ ISV Technical Foundation Badge</div>
+      </div>
+
+      <div class="mx-cell">
+        <div class="cell-item">
+          <div class="cell-dot dot-alliance"></div>
+          <span class="cell-text"><strong>Partner program orientation</strong> — ecosystem structure, partnership model, benefit activation</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-alliance"></div>
+          <span class="cell-text"><strong>Integration quickstart</strong> — how Alliance products connect to Nebius AI Cloud or Token Factory</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-alliance"></div>
+          <span class="cell-text"><strong>Joint value narrative</strong> — combined solution story for the field and for customers</span>
+        </div>
+        <div class="cell-cert cert-alliance">✦ Alliance Partner Onboarded Badge</div>
+      </div>
+
+      <!-- Row 2: GTM Enablement -->
+      <div class="mx-row-label">
+        <span class="row-label-text">GTM Enablement</span>
+        <span class="row-label-sub">Stage 3 · GTM-Ready</span>
+      </div>
+
+      <div class="mx-cell">
+        <div class="cell-item">
+          <div class="cell-dot dot-var"></div>
+          <span class="cell-text"><strong>Competitive displacement workshop</strong> — displacing AWS/GCP in a VAR's existing customer base</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-var"></div>
+          <span class="cell-text"><strong>Expansion selling motion</strong> — land on one workload, grow to multi-cluster deployments</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-var"></div>
+          <span class="cell-text"><strong>Executive selling</strong> — translating Nebius TCO into a CFO-ready business case</span>
+        </div>
+        <div class="cell-cert cert-var">✦ VAR GTM Qualified Badge</div>
+      </div>
+
+      <div class="mx-cell">
+        <div class="cell-item">
+          <div class="cell-dot dot-isv"></div>
+          <span class="cell-text"><strong>End-to-end build lab</strong> — RAG pipeline, fine-tuning with QLoRA, inference endpoint autoscaling on Nebius</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-isv"></div>
+          <span class="cell-text"><strong>Support escalation playbook</strong> — Tier 1/2/3 model for ISVs managing Nebius on behalf of customers</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-isv"></div>
+          <span class="cell-text"><strong>Customer handoff documentation</strong> — repeatable deployment guide for ISV customer onboarding</span>
+        </div>
+        <div class="cell-cert cert-isv">✦ ISV Solution Builder Badge</div>
+      </div>
+
+      <div class="mx-cell">
+        <div class="cell-item">
+          <div class="cell-dot dot-alliance"></div>
+          <span class="cell-text"><strong>90-day joint GTM plan</strong> — pipeline targets, co-marketing calendar, and SA engagement model</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-alliance"></div>
+          <span class="cell-text"><strong>Co-marketing activation</strong> — Nebius brand guidelines, joint webinar playbook, case study template</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-alliance"></div>
+          <span class="cell-text"><strong>Deal registration and rewards</strong> — how to submit, track, and claim partner program incentives</span>
+        </div>
+        <div class="cell-cert cert-alliance">✦ Alliance GTM-Ready Badge</div>
+      </div>
+
+      <!-- Row 3: Expert Enablement -->
+      <div class="mx-row-label mx-row-last">
+        <span class="row-label-text">Expert Enablement</span>
+        <span class="row-label-sub">Stage 4 · Expert</span>
+      </div>
+
+      <div class="mx-cell mx-row-last">
+        <div class="cell-item">
+          <div class="cell-dot dot-var"></div>
+          <span class="cell-text"><strong>Deal simulation capstone</strong> — full discovery-to-close lifecycle reviewed by Nebius Sales Director</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-var"></div>
+          <span class="cell-text"><strong>Vertical specialization</strong> — Life Sciences, Media, or Physical AI deep-dive for VAR's target market</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-var"></div>
+          <span class="cell-text"><strong>Replicable play development</strong> — document the first win into a scalable deal pattern for the VAR's team</span>
+        </div>
+        <div class="cell-cert cert-var">✦ Certified Nebius VAR Partner</div>
+      </div>
+
+      <div class="mx-cell mx-row-last">
+        <div class="cell-item">
+          <div class="cell-dot dot-isv"></div>
+          <span class="cell-text"><strong>Agentic AI & RAG at scale</strong> — advanced architecture for production agentic search and enterprise RAG</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-isv"></div>
+          <span class="cell-text"><strong>Joint case study</strong> — co-authored with Nebius PM, published on nebius.com and ISV channels</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-isv"></div>
+          <span class="cell-text"><strong>Nebius Academy contribution</strong> — ISV SME authors a module or tutorial in the Nebius learning ecosystem</span>
+        </div>
+        <div class="cell-cert cert-isv">✦ Certified Nebius ISV/MSP Partner</div>
+      </div>
+
+      <div class="mx-cell mx-row-last">
+        <div class="cell-item">
+          <div class="cell-dot dot-alliance"></div>
+          <span class="cell-text"><strong>First joint customer win review</strong> — deal debrief + documented replicable co-sell play</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-alliance"></div>
+          <span class="cell-text"><strong>Thought leadership publishing</strong> — joint white paper or blog on nebius.com demonstrating combined solution value</span>
+        </div>
+        <div class="cell-item">
+          <div class="cell-dot dot-alliance"></div>
+          <span class="cell-text"><strong>6-month pipeline commitment</strong> — formalized with Nebius Partner Manager as condition of Expert certification</span>
+        </div>
+        <div class="cell-cert cert-alliance">✦ Certified Nebius Alliance Partner</div>
+      </div>
+
+    </div><!-- end matrix-grid -->
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       SECTION 3: BOTTOM ROW
+  ═══════════════════════════════════════ -->
+  <div class="bottom-row">
+
+    <!-- PILLAR 1: Four Core Pillars -->
+    <div>
+      <div class="sec-label">03 — Four Enablement Pillars · Run across every stage and partner type</div>
+      <div class="pillars-grid">
+
+        <div class="pillar">
+          <div class="pillar-accent" style="background: var(--var);"></div>
+          <span class="pillar-icon">🏗️</span>
+          <div class="pillar-name">Technical Competency</div>
+          <div class="pillar-desc">Partners can architect, deploy, and support Nebius solutions without Nebius involvement. Measured by independence, not training hours.</div>
+          <div class="pillar-tags">
+            <span class="pillar-tag">AI Cloud</span>
+            <span class="pillar-tag">Token Factory</span>
+            <span class="pillar-tag">Terraform</span>
+            <span class="pillar-tag">K8s / Slurm</span>
+          </div>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-accent" style="background: var(--isv);"></div>
+          <span class="pillar-icon">💬</span>
+          <div class="pillar-name">Commercial Fluency</div>
+          <div class="pillar-desc">Partners can position Nebius competitively, handle objections, and build a customer TCO case using the SemiAnalysis framework.</div>
+          <div class="pillar-tags">
+            <span class="pillar-tag">Positioning</span>
+            <span class="pillar-tag">TCO modeling</span>
+            <span class="pillar-tag">Competitive</span>
+            <span class="pillar-tag">Pricing</span>
+          </div>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-accent" style="background: var(--green);"></div>
+          <span class="pillar-icon">🗺️</span>
+          <div class="pillar-name">GTM Alignment</div>
+          <div class="pillar-desc">Enablement is always connected to a go-to-market outcome — pipeline target, deal registered, campaign launched, or account expanded.</div>
+          <div class="pillar-tags">
+            <span class="pillar-tag">Joint GTM plan</span>
+            <span class="pillar-tag">Co-marketing</span>
+            <span class="pillar-tag">Pipeline</span>
+            <span class="pillar-tag">Deal reg.</span>
+          </div>
+        </div>
+
+        <div class="pillar">
+          <div class="pillar-accent" style="background: var(--alliance);"></div>
+          <span class="pillar-icon">🔓</span>
+          <div class="pillar-name">Independence Building</div>
+          <div class="pillar-desc">The goal of every enablement interaction is to reduce partner dependency on Nebius SA time — not to create it. Partners own their customers.</div>
+          <div class="pillar-tags">
+            <span class="pillar-tag">Self-serve docs</span>
+            <span class="pillar-tag">Escalation model</span>
+            <span class="pillar-tag">Replicable plays</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PILLAR 2: Independence Metrics -->
+    <div>
+      <div class="sec-label">04 — Measuring Independence · GTM outcomes, not just completion rates</div>
+      <div class="metrics-list">
+
+        <div class="metric-item">
+          <div class="metric-top">
+            <span class="metric-name">Time to first qualified opportunity</span>
+            <span class="metric-val">&lt; 30 days</span>
+          </div>
+          <div class="metric-bar-wrap"><div class="metric-bar" style="width: 85%"></div></div>
+          <div class="metric-note">Measured from partner portal activation to first deal registration — leading ramp indicator</div>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-top">
+            <span class="metric-name">Partner-sourced pipeline (90-day)</span>
+            <span class="metric-val">vs target</span>
+          </div>
+          <div class="metric-bar-wrap"><div class="metric-bar" style="width: 70%"></div></div>
+          <div class="metric-note">Tracked against 90-day GTM plan commitment submitted at Stage 2 unlock</div>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-top">
+            <span class="metric-name">SA escalations per partner deal</span>
+            <span class="metric-val">↓ over time</span>
+          </div>
+          <div class="metric-bar-wrap"><div class="metric-bar" style="width: 60%"></div></div>
+          <div class="metric-note">Decreasing SA escalation rate signals growing technical independence — key independence metric</div>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-top">
+            <span class="metric-name">Certification gate pass rate</span>
+            <span class="metric-val">&gt; 80%</span>
+          </div>
+          <div class="metric-bar-wrap"><div class="metric-bar" style="width: 80%"></div></div>
+          <div class="metric-note">First-attempt pass rate across all three certification gates per cohort</div>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-top">
+            <span class="metric-name">Time to Expert stage</span>
+            <span class="metric-val">&lt; 10 wks</span>
+          </div>
+          <div class="metric-bar-wrap"><div class="metric-bar" style="width: 65%"></div></div>
+          <div class="metric-note">Full lifecycle from Onboarded through Expert certification — program efficiency metric</div>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-top">
+            <span class="metric-name">Joint case studies published</span>
+            <span class="metric-val">per quarter</span>
+          </div>
+          <div class="metric-bar-wrap"><div class="metric-bar" style="width: 45%"></div></div>
+          <div class="metric-note">Tracks thought leadership maturity and Nebius ecosystem content contribution at Expert stage</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PILLAR 3: Key Resources -->
+    <div>
+      <div class="sec-label">05 — Nebius Partner Resources · What partners use to build and sell</div>
+      <div class="resources-list">
+
+        <div class="resource-item">
+          <div class="resource-icon">📘</div>
+          <div class="resource-text">
+            <div class="resource-name">AI Cloud Documentation</div>
+            <div class="resource-url">docs.nebius.com</div>
+            <div class="resource-desc">Full technical reference for AI Cloud — GPU provisioning, Kubernetes, Slurm, storage, networking, API reference</div>
+          </div>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">⚡</div>
+          <div class="resource-text">
+            <div class="resource-name">Token Factory Quickstart</div>
+            <div class="resource-url">docs.tokenfactory.nebius.com/quickstart</div>
+            <div class="resource-desc">Partner-first API integration guide — authentication, model invocation, production configuration, pricing</div>
+          </div>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">🔧</div>
+          <div class="resource-text">
+            <div class="resource-name">Nebius Solution Library</div>
+            <div class="resource-url">github.com/nebius/nebius-solution-library</div>
+            <div class="resource-desc">Pre-built Terraform recipes, tutorials, and deployment patterns — fastest path to a repeatable partner delivery</div>
+          </div>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">🔒</div>
+          <div class="resource-text">
+            <div class="resource-name">Trust Center</div>
+            <div class="resource-url">nebius.com/trust-center</div>
+            <div class="resource-desc">SOC 2, HIPAA, GDPR, ISO 27001 documentation — enables partners to answer customer security questionnaires independently</div>
+          </div>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">🤝</div>
+          <div class="resource-text">
+            <div class="resource-name">Partner Program Portal</div>
+            <div class="resource-url">nebius.com/nebius-partner-program</div>
+            <div class="resource-desc">Deal registration, co-marketing resources, partner tier management, and dedicated Partner Manager access</div>
+          </div>
+        </div>
+
+        <div class="resource-item">
+          <div class="resource-icon">🎓</div>
+          <div class="resource-text">
+            <div class="resource-name">Nebius Academy</div>
+            <div class="resource-url">academy.nebius.com</div>
+            <div class="resource-desc">Structured learning for partners seeking deeper technical certification — Expert-stage partners contribute content here</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- end bottom-row -->
+
+  <!-- ─── FOOTER ─── -->
+  <div class="footer">
+    <div class="footer-left">
+      Portfolio Artifact #5 of 5 · Partner Technical Enablement · Prepared by Rus Teston<br>
+      Reference: nebius.com · docs.nebius.com · nebius.com/nebius-partner-program · academy.nebius.com
+    </div>
+    <div class="footer-badge">✦ Nebius Partner Enablement Framework</div>
+  </div>
+
+</div><!-- end page -->
+
+<!-- ─── MODAL ─── -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('modal');
+  const modalBody = document.getElementById('modalBody');
+  const modalClose = document.getElementById('modalClose');
+
+  const clickTargets = '.lifecycle-wrap, .matrix-grid, .pillar, .metric-item, .resource-item';
+
+  document.querySelectorAll(clickTargets).forEach(el => {
+    el.addEventListener('click', () => {
+      modalBody.innerHTML = el.innerHTML;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  modalClose.addEventListener('click', () => {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+</script>
+</body>
+</html>

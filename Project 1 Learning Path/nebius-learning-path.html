@@ -1,0 +1,1933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebius AI Cloud — Role-Based Enablement Learning Paths</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --nebius-green: #00C853;
+    --nebius-green-dim: #00C85322;
+    --nebius-green-mid: #00C85355;
+    --bg-base: #080B0D;
+    --bg-surface: #0E1316;
+    --bg-card: #141920;
+    --bg-card-hover: #1C2430;
+    --bg-expanded: #111820;
+    --border-subtle: #1E2A32;
+    --border-mid: #243040;
+    --border-accent: #00C85340;
+    --text-primary: #E8EDF2;
+    --text-secondary: #7A909E;
+    --text-muted: #3D5060;
+    --text-green: #00C853;
+    --sa-color: #3B9EFF;
+    --sa-dim: #3B9EFF18;
+    --sa-mid: #3B9EFF35;
+    --ae-color: #FF7B3B;
+    --ae-dim: #FF7B3B18;
+    --ae-mid: #FF7B3B35;
+    --partner-color: #B47FFF;
+    --partner-dim: #B47FFF18;
+    --partner-mid: #B47FFF35;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg-base);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── BACKGROUND GRID ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border-subtle) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border-subtle) 1px, transparent 1px);
+    background-size: 48px 48px;
+    opacity: 0.35;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -30%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 500px;
+    background: radial-gradient(ellipse at center, #00C85310 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    padding: 40px 0 48px;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 40px;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+  }
+
+  .nebius-wordmark {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nebius-logo-mark {
+    width: 32px;
+    height: 32px;
+    background: var(--nebius-green);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .nebius-logo-mark svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .nebius-name {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+  }
+
+  .header-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+
+  .creator-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .creator-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--nebius-green);
+  }
+
+  .header-body h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+  }
+
+  .header-body h1 span {
+    color: var(--nebius-green);
+  }
+
+  .header-body p {
+    font-size: 15px;
+    color: var(--text-secondary);
+    max-width: 640px;
+    line-height: 1.65;
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 32px;
+    margin-top: 32px;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .stat-value {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--nebius-green);
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .stat-divider {
+    width: 1px;
+    background: var(--border-subtle);
+    align-self: stretch;
+  }
+
+  /* ─── FILTER BAR ─── */
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 36px;
+  }
+
+  .filter-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-right: 4px;
+  }
+
+  .filter-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-secondary);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .filter-btn:hover {
+    border-color: var(--border-mid);
+    color: var(--text-primary);
+  }
+
+  .filter-btn.active {
+    background: var(--nebius-green-dim);
+    border-color: var(--nebius-green);
+    color: var(--nebius-green);
+  }
+
+  .filter-btn:not(.active):not(.active-sa):not(.active-ae):not(.active-partner):hover {
+    border-color: var(--nebius-green);
+    color: var(--nebius-green);
+    background: var(--nebius-green-dim);
+  }
+
+  .filter-btn.active-sa {
+    background: var(--sa-dim);
+    border-color: var(--sa-color);
+    color: var(--sa-color);
+  }
+
+  .filter-btn.active-ae {
+    background: var(--ae-dim);
+    border-color: var(--ae-color);
+    color: var(--ae-color);
+  }
+
+  .filter-btn.active-partner {
+    background: var(--partner-dim);
+    border-color: var(--partner-color);
+    color: var(--partner-color);
+  }
+
+  .filter-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  /* ─── TRACK GRID ─── */
+  .tracks-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+
+  .track-column {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    transition: var(--transition);
+  }
+
+  .track-column.hidden {
+    display: none;
+  }
+
+  /* ─── TRACK HEADER ─── */
+  .track-header {
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    padding: 22px 24px 20px;
+    border: 1px solid var(--border-subtle);
+    border-bottom: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .track-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+
+  .track-sa .track-header { background: linear-gradient(135deg, #0D1826 0%, #0E1316 100%); }
+  .track-sa .track-header::before { background: var(--sa-color); }
+  .track-ae .track-header { background: linear-gradient(135deg, #1A1008 0%, #0E1316 100%); }
+  .track-ae .track-header::before { background: var(--ae-color); }
+  .track-partner .track-header { background: linear-gradient(135deg, #140D26 0%, #0E1316 100%); }
+  .track-partner .track-header::before { background: var(--partner-color); }
+
+  .track-role-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin-bottom: 12px;
+  }
+
+  .track-sa .track-role-badge { background: var(--sa-dim); color: var(--sa-color); border: 1px solid var(--sa-mid); }
+  .track-ae .track-role-badge { background: var(--ae-dim); color: var(--ae-color); border: 1px solid var(--ae-mid); }
+  .track-partner .track-role-badge { background: var(--partner-dim); color: var(--partner-color); border: 1px solid var(--partner-mid); }
+
+  .track-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+
+  .track-subtitle {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  .track-meta {
+    display: flex;
+    gap: 16px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .track-meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .track-meta-val {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .track-sa .track-meta-val { color: var(--sa-color); }
+  .track-ae .track-meta-val { color: var(--ae-color); }
+  .track-partner .track-meta-val { color: var(--partner-color); }
+
+  .track-meta-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  /* ─── TRACK BODY ─── */
+  .track-body {
+    border: 1px solid var(--border-subtle);
+    border-top: none;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    background: var(--bg-surface);
+    padding: 20px 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ─── PHASE SECTION ─── */
+  .phase-section {
+    margin-bottom: 8px;
+  }
+
+  .phase-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 0 4px;
+  }
+
+  .phase-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .phase-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+
+  .phase-weeks {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  .phase-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border-subtle);
+  }
+
+  /* ─── CERT GATE ─── */
+  .cert-gate {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    margin: 4px 0 12px;
+    background: var(--nebius-green-dim);
+    border: 1px solid var(--nebius-green-mid);
+    border-radius: var(--radius-sm);
+    position: relative;
+  }
+
+  .cert-gate-icon {
+    width: 24px;
+    height: 24px;
+    background: var(--nebius-green);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .cert-gate-icon svg {
+    width: 12px;
+    height: 12px;
+    fill: #000;
+  }
+
+  .cert-gate-text {
+    flex: 1;
+  }
+
+  .cert-gate-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--nebius-green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .cert-gate-sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 1px;
+  }
+
+  /* ─── MODULE CARD ─── */
+  .module-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    margin-bottom: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .module-card:hover {
+    border-color: var(--border-mid);
+    background: var(--bg-card-hover);
+    transform: translateY(-1px);
+  }
+
+  .module-card.expanded {
+    border-color: var(--border-accent);
+  }
+
+  .track-sa .module-card.expanded { border-color: var(--sa-color); border-left: 3px solid var(--sa-color); }
+  .track-ae .module-card.expanded { border-color: var(--ae-color); border-left: 3px solid var(--ae-color); }
+  .track-partner .module-card.expanded { border-color: var(--partner-color); border-left: 3px solid var(--partner-color); }
+
+  .module-header {
+    padding: 12px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .module-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+    margin-top: 1px;
+  }
+
+  .track-sa .module-icon { background: var(--sa-dim); }
+  .track-ae .module-icon { background: var(--ae-dim); }
+  .track-partner .module-icon { background: var(--partner-dim); }
+
+  .module-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .module-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.35;
+    margin-bottom: 5px;
+  }
+
+  .module-tags {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 100px;
+    font-weight: 500;
+  }
+
+  .tag-format {
+    background: #1C2730;
+    color: var(--text-secondary);
+    border: 1px solid var(--border-subtle);
+  }
+
+  .tag-duration {
+    background: #101A10;
+    color: #4CAF50;
+    border: 1px solid #1A3A1A;
+  }
+
+  .tag-product {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+  }
+
+  .track-sa .tag-product { background: var(--sa-dim); color: var(--sa-color); border: 1px solid var(--sa-mid); }
+  .track-ae .tag-product { background: var(--ae-dim); color: var(--ae-color); border: 1px solid var(--ae-mid); }
+  .track-partner .tag-product { background: var(--partner-dim); color: var(--partner-color); border: 1px solid var(--partner-mid); }
+
+  .module-chevron {
+    width: 18px;
+    height: 18px;
+    color: var(--nebius-green);
+    flex-shrink: 0;
+    transition: transform 0.22s ease;
+    margin-top: 5px;
+  }
+
+  .module-card.expanded .module-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* ─── MODULE EXPANDED ─── */
+  .module-body {
+    display: none;
+    padding: 0 14px 14px;
+    border-top: 1px solid var(--border-subtle);
+    margin-top: 0;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .module-card.expanded .module-body {
+    display: block;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .module-body-inner {
+    padding-top: 12px;
+  }
+
+  .objectives-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .objectives-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+
+  .objectives-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+
+  .objectives-list li::before {
+    content: '›';
+    font-size: 14px;
+    line-height: 1.2;
+    flex-shrink: 0;
+  }
+
+  .track-sa .objectives-list li::before { color: var(--sa-color); }
+  .track-ae .objectives-list li::before { color: var(--ae-color); }
+  .track-partner .objectives-list li::before { color: var(--partner-color); }
+
+  .competency-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: var(--radius-sm);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+  }
+
+  .track-sa .competency-badge { background: var(--sa-dim); color: var(--sa-color); border: 1px solid var(--sa-mid); }
+  .track-ae .competency-badge { background: var(--ae-dim); color: var(--ae-color); border: 1px solid var(--ae-mid); }
+  .track-partner .competency-badge { background: var(--partner-dim); color: var(--partner-color); border: 1px solid var(--partner-mid); }
+
+  .competency-badge svg {
+    width: 11px;
+    height: 11px;
+    fill: currentColor;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .footer-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .footer-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .footer-note {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .footer-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--nebius-green-dim);
+    border: 1px solid var(--nebius-green-mid);
+    border-radius: 100px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--nebius-green);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1100px) {
+    .tracks-grid { grid-template-columns: repeat(2, 1fr); }
+    .track-column:last-child { grid-column: 1 / -1; }
+  }
+
+  @media (max-width: 700px) {
+    .page-wrap { padding: 0 16px 60px; }
+    .tracks-grid { grid-template-columns: 1fr; }
+    .track-column:last-child { grid-column: auto; }
+    .header-stats { gap: 20px; }
+    footer { flex-direction: column; gap: 20px; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- ─── HEADER ─── -->
+  <header>
+    <div class="header-top">
+      <div class="nebius-wordmark">
+        <div class="nebius-logo-mark">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" fill="#000" opacity="0.9"/>
+          </svg>
+        </div>
+        <span class="nebius-name">Nebius</span>
+      </div>
+      <div class="header-meta">
+        <span class="creator-label">Portfolio artifact by</span>
+        <span class="creator-name">Rus Teston</span>
+      </div>
+    </div>
+
+    <div class="header-body">
+      <h1>Role-Based <span>Enablement</span><br>Learning Paths</h1>
+      <p>A structured, multi-audience enablement program designed to ramp Solutions Architects, Account Executives, and Partners on Nebius AI Cloud — from foundational concepts through certified expertise.</p>
+    </div>
+
+    <div class="header-stats">
+      <div class="stat-item">
+        <span class="stat-value">3</span>
+        <span class="stat-label">Audience tracks</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value">27</span>
+        <span class="stat-label">Modules total</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value">12</span>
+        <span class="stat-label">Week ramp target</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value">3</span>
+        <span class="stat-label">Cert gates</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── FILTER BAR ─── -->
+  <div class="filter-bar">
+    <span class="filter-label">View</span>
+    <button class="filter-btn active-sa" data-filter="sa" onclick="setFilter('sa', this)">
+      <span class="filter-dot" style="background:var(--sa-color)"></span> Solutions Architect
+    </button>
+    <button class="filter-btn" data-filter="ae" onclick="setFilter('ae', this)">
+      <span class="filter-dot" style="background:var(--ae-color)"></span> Account Executive
+    </button>
+    <button class="filter-btn" data-filter="partner" onclick="setFilter('partner', this)">
+      <span class="filter-dot" style="background:var(--partner-color)"></span> Partner
+    </button>
+    <button class="filter-btn" data-filter="all" onclick="setFilter('all', this)">
+      <span class="filter-dot" style="background:var(--text-secondary)"></span> All Tracks
+    </button>
+  </div>
+
+  <!-- ─── TRACKS ─── -->
+  <div class="tracks-grid" style="grid-template-columns: 1fr;">
+
+    <!-- ════════════ SA TRACK ════════════ -->
+    <div class="track-column track-sa" data-track="sa">
+      <div class="track-header">
+        <div class="track-role-badge">
+          <span>●</span> Solutions Architect
+        </div>
+        <div class="track-title">Technical Mastery Track</div>
+        <div class="track-subtitle">Deep technical fluency in Nebius AI Cloud infrastructure, enabling SAs to architect, demo, and defend solutions against complex customer requirements.</div>
+        <div class="track-meta">
+          <div class="track-meta-item">
+            <span class="track-meta-val">12 wks</span>
+            <span class="track-meta-key">Full ramp</span>
+          </div>
+          <div class="track-meta-item">
+            <span class="track-meta-val">9 modules</span>
+            <span class="track-meta-key">Total</span>
+          </div>
+          <div class="track-meta-item">
+            <span class="track-meta-val">~52 hrs</span>
+            <span class="track-meta-key">Seat time</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="track-body">
+
+        <!-- Phase 1 -->
+        <div class="phase-section">
+          <div class="phase-label">
+            <span class="phase-number">Phase 01</span>
+            <span class="phase-line"></span>
+            <span class="phase-name">Foundation</span>
+            <span class="phase-weeks">Weeks 1–2</span>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🏗️</div>
+              <div class="module-info">
+                <div class="module-name">Nebius AI Cloud Architecture Overview</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Live Session</span>
+                  <span class="tag tag-duration">⏱ 3 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Articulate Nebius's full-stack AI cloud architecture and its differentiation from hyperscalers</li>
+                  <li>Map the Nebius product portfolio (AI Cloud, Token Factory, Managed Services) to customer use cases</li>
+                  <li>Understand data center topology across US, Finland, France, and Iceland regions</li>
+                  <li>Navigate the Nebius console and core IAM concepts</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Platform Awareness
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">⚡</div>
+              <div class="module-info">
+                <div class="module-name">NVIDIA GPU Portfolio on Nebius — H100 to GB300</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Self-Paced Lab</span>
+                  <span class="tag tag-duration">⏱ 4 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Compare GPU tiers: HGX H100, H200, B200, GB200 NVL72, and GB300 NVL72 — specs, memory, and use case fit</li>
+                  <li>Explain NVIDIA Blackwell vs Hopper architecture benefits relevant to customer workloads</li>
+                  <li>Match GPU selection to training, fine-tuning, and inference scenarios</li>
+                  <li>Perform hands-on GPU instance provisioning via Nebius console and CLI</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: GPU Infrastructure Fluency
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🔒</div>
+              <div class="module-info">
+                <div class="module-name">Security, Compliance & Trust Center</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Self-Paced</span>
+                  <span class="tag tag-duration">⏱ 2 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Navigate Nebius's compliance posture: SOC 2, HIPAA, GDPR, ISO 27001</li>
+                  <li>Explain tenant-level isolation architecture and privacy-by-design principles</li>
+                  <li>Address regulated industry objections (healthcare, finance, EU data residency)</li>
+                  <li>Use the Trust Center to answer security questionnaires in customer engagements</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Security Positioning
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert Gate 1 -->
+        <div class="cert-gate">
+          <div class="cert-gate-icon">
+            <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div class="cert-gate-text">
+            <div class="cert-gate-title">✦ Certification Gate — Nebius Foundation Badge</div>
+            <div class="cert-gate-sub">Technical assessment + 30-min architecture walkthrough with SA lead</div>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="phase-section">
+          <div class="phase-label">
+            <span class="phase-number">Phase 02</span>
+            <span class="phase-line"></span>
+            <span class="phase-name">Practitioner</span>
+            <span class="phase-weeks">Weeks 3–6</span>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">☸️</div>
+              <div class="module-info">
+                <div class="module-name">Managed Kubernetes & Slurm (Soperator) Deep Dive</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Workshop + Lab</span>
+                  <span class="tag tag-duration">⏱ 6 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Architect multi-node training clusters using Managed Kubernetes with topology-aware scheduling</li>
+                  <li>Configure and operate Soperator for Slurm-based HPC workloads at scale</li>
+                  <li>Implement fault-tolerant job recovery with node health monitoring and auto-repair</li>
+                  <li>Demonstrate hands-on cluster provisioning and workload launch in under 60 minutes</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Orchestration Architecture
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🌐</div>
+              <div class="module-info">
+                <div class="module-name">InfiniBand Networking & High-Performance Storage</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Technical Lab</span>
+                  <span class="tag tag-duration">⏱ 4 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Explain NVIDIA Quantum-X800 InfiniBand fabric and its role in enabling large-scale distributed training</li>
+                  <li>Configure high-performance storage: up to 1 TB/s read throughput for shared filesystems</li>
+                  <li>Compare Nebius storage options: in-house solutions vs WEKA and VAST Data integrations</li>
+                  <li>Design storage architecture for data-parallel and model-parallel training workloads</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Network & Storage Design
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🔬</div>
+              <div class="module-info">
+                <div class="module-name">MLOps Stack — MLflow, Spark & Managed Services</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Workshop</span>
+                  <span class="tag tag-duration">⏱ 5 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Deploy and configure Managed MLflow for experiment tracking and model registry on Nebius</li>
+                  <li>Architect an end-to-end data pipeline using Apache Spark on Nebius Managed Services</li>
+                  <li>Integrate PostgreSQL for model metadata persistence in production ML systems</li>
+                  <li>Demonstrate zero-maintenance managed service deployment to customer stakeholders</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: MLOps Architecture
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert Gate 2 -->
+        <div class="cert-gate">
+          <div class="cert-gate-icon">
+            <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div class="cert-gate-text">
+            <div class="cert-gate-title">✦ Certification Gate — Nebius Practitioner Badge</div>
+            <div class="cert-gate-sub">Live architecture demo to a mock customer panel + written solution design</div>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="phase-section">
+          <div class="phase-label">
+            <span class="phase-number">Phase 03</span>
+            <span class="phase-line"></span>
+            <span class="phase-name">Expert</span>
+            <span class="phase-weeks">Weeks 7–12</span>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🤖</div>
+              <div class="module-info">
+                <div class="module-name">Token Factory API — Production Inference Architecture</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Technical Lab</span>
+                  <span class="tag tag-duration">⏱ 5 hrs</span>
+                  <span class="tag tag-product">Token Factory</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Architect production inference systems using Token Factory's model API with vLLM-optimized throughput</li>
+                  <li>Design latency-optimized serving stacks for reasoning models (DeepSeek R1, multi-modal)</li>
+                  <li>Configure autoscaling inference endpoints for variable production traffic patterns</li>
+                  <li>Position Token Factory vs self-managed inference clusters for different customer personas</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Inference Systems Expert
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">📊</div>
+              <div class="module-info">
+                <div class="module-name">TCO Modeling & Competitive Displacement</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Workshop</span>
+                  <span class="tag tag-duration">⏱ 4 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Use the SemiAnalysis TCO framework to model LLM pre-training, RL research, and production inference cost scenarios</li>
+                  <li>Build a side-by-side TCO comparison vs AWS, GCP, Azure, and CoreWeave for target workloads</li>
+                  <li>Articulate Nebius MFU advantages and bare-metal performance differentiation to technical buyers</li>
+                  <li>Develop a value narrative that connects infrastructure efficiency to customer business outcomes</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Competitive & Commercial Expert
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🎯</div>
+              <div class="module-info">
+                <div class="module-name">Customer Solution Design — Capstone Lab</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Capstone Project</span>
+                  <span class="tag tag-duration">⏱ 8 hrs</span>
+                  <span class="tag tag-product">AI Cloud · Token Factory</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Respond to a realistic RFP scenario covering model training, fine-tuning, and inference requirements</li>
+                  <li>Produce a complete solution design document including architecture diagram, GPU selection rationale, and TCO model</li>
+                  <li>Deliver a 30-minute solution presentation to a panel of cross-functional reviewers</li>
+                  <li>Receive structured feedback and iterate — simulating the real SA customer engagement cycle</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Certified Nebius SA — Expert
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- end SA -->
+
+
+    <!-- ════════════ AE TRACK ════════════ -->
+    <div class="track-column track-ae hidden" data-track="ae">
+      <div class="track-header">
+        <div class="track-role-badge">
+          <span>●</span> Account Executive
+        </div>
+        <div class="track-title">Sales Fluency Track</div>
+        <div class="track-subtitle">Practical technical enablement to help AEs confidently position Nebius AI Cloud, lead discovery conversations, and accelerate deal velocity without becoming engineers.</div>
+        <div class="track-meta">
+          <div class="track-meta-item">
+            <span class="track-meta-val">8 wks</span>
+            <span class="track-meta-key">Full ramp</span>
+          </div>
+          <div class="track-meta-item">
+            <span class="track-meta-val">9 modules</span>
+            <span class="track-meta-key">Total</span>
+          </div>
+          <div class="track-meta-item">
+            <span class="track-meta-val">~34 hrs</span>
+            <span class="track-meta-key">Seat time</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="track-body">
+
+        <!-- Phase 1 -->
+        <div class="phase-section">
+          <div class="phase-label">
+            <span class="phase-number">Phase 01</span>
+            <span class="phase-line"></span>
+            <span class="phase-name">Foundation</span>
+            <span class="phase-weeks">Weeks 1–2</span>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🚀</div>
+              <div class="module-info">
+                <div class="module-name">The Nebius Story — Why AI Cloud, Why Now</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Live Session</span>
+                  <span class="tag tag-duration">⏱ 2 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Deliver Nebius's core company narrative: NVIDIA Reference Platform Cloud Partner, Nasdaq-listed, $700M investment led by NVIDIA and Accel</li>
+                  <li>Explain the "ultimate cloud for AI innovators" positioning against hyperscalers and GPU-cloud competitors</li>
+                  <li>Identify the three key customer pain points Nebius solves: performance, cost, and time-to-cluster</li>
+                  <li>Pass the 2-minute Nebius elevator pitch assessment with confidence</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Nebius Narrative & Positioning
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">💡</div>
+              <div class="module-info">
+                <div class="module-name">AI Workload 101 — What Customers Are Actually Building</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Self-Paced</span>
+                  <span class="tag tag-duration">⏱ 3 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Distinguish between training, fine-tuning, and inference — and why each requires different infrastructure</li>
+                  <li>Recognize AI workload signals in discovery calls (model size, dataset scale, latency requirements)</li>
+                  <li>Map workload types to the correct Nebius solution (AI Cloud clusters vs Token Factory API)</li>
+                  <li>Use real Nebius customer examples (Brave Search, Recraft, Wubble) to anchor conversations</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Technical Discovery Fluency
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🏷️</div>
+              <div class="module-info">
+                <div class="module-name">Pricing, Packaging & Commercial Structure</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Live Session</span>
+                  <span class="tag tag-duration">⏱ 2 hrs</span>
+                  <span class="tag tag-product">AI Cloud · Token Factory</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Understand GPU on-demand vs reserved cluster pricing mechanics and when to recommend each</li>
+                  <li>Navigate the Token Factory pricing model and explain per-token economics to customers</li>
+                  <li>Conduct a basic TCO conversation using the SemiAnalysis framework as a credible reference</li>
+                  <li>Identify upsell paths: from on-demand GPU → reserved cluster → dedicated large-scale deployment</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Commercial Confidence
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert Gate -->
+        <div class="cert-gate">
+          <div class="cert-gate-icon">
+            <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div class="cert-gate-text">
+            <div class="cert-gate-title">✦ Certification Gate — Nebius Sales Ready Badge</div>
+            <div class="cert-gate-sub">Mock discovery call + pitch assessment with Sales manager</div>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="phase-section">
+          <div class="phase-label">
+            <span class="phase-number">Phase 02</span>
+            <span class="phase-line"></span>
+            <span class="phase-name">Practitioner</span>
+            <span class="phase-weeks">Weeks 3–5</span>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">⚔️</div>
+              <div class="module-info">
+                <div class="module-name">Competitive Intelligence — Displacing AWS, GCP & CoreWeave</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Workshop</span>
+                  <span class="tag tag-duration">⏱ 3 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Map Nebius's key differentiators vs hyperscalers: availability speed, MFU performance, bare-metal pricing, AI-native support</li>
+                  <li>Handle "we already use AWS/GCP" objections with a structured displacement conversation</li>
+                  <li>Position Nebius's SemiAnalysis Gold Medal TCO rating as a third-party proof point</li>
+                  <li>Identify competitive vulnerability signals in active deals and adjust the sales motion accordingly</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Competitive Displacement
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🏭</div>
+              <div class="module-info">
+                <div class="module-name">Industry Verticals — Life Sciences, Media & Physical AI</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Self-Paced</span>
+                  <span class="tag tag-duration">⏱ 3 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Apply Nebius's solution portfolio to Life Sciences (drug discovery, genomics), Media & Entertainment (GenAI content), and Physical AI/Robotics use cases</li>
+                  <li>Use Nebius customer success stories (CRISPR-GPT, Simulacra AI, Recraft) as proof-point anchors in vertical conversations</li>
+                  <li>Tailor the Nebius compliance story (HIPAA, GDPR) for regulated industry prospects</li>
+                  <li>Build a vertical-specific discovery question set for each industry</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Vertical Sales Fluency
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🤝</div>
+              <div class="module-info">
+                <div class="module-name">Partner Co-Sell Motions with Nebius Partners</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Live Session</span>
+                  <span class="tag tag-duration">⏱ 2 hrs</span>
+                  <span class="tag tag-product">Partner Program</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Understand the three Nebius partner types (VAR, ISV/MSP, Alliance) and how each creates AE deal opportunities</li>
+                  <li>Execute a co-sell motion alongside a Nebius partner — roles, handoffs, and joint account planning</li>
+                  <li>Leverage Nebius partner ecosystem (Trainy, Outerbounds, CentML, Shadeform) for expanded deal coverage</li>
+                  <li>Navigate partner-sourced vs AE-sourced deal compensation structures</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Partner Co-Sell Execution
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert Gate 2 -->
+        <div class="cert-gate">
+          <div class="cert-gate-icon">
+            <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div class="cert-gate-text">
+            <div class="cert-gate-title">✦ Certification Gate — Nebius AE Qualified Badge</div>
+            <div class="cert-gate-sub">Full discovery role-play + deal strategy review with Sales Director</div>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="phase-section">
+          <div class="phase-label">
+            <span class="phase-number">Phase 03</span>
+            <span class="phase-line"></span>
+            <span class="phase-name">Expert</span>
+            <span class="phase-weeks">Weeks 6–8</span>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">📈</div>
+              <div class="module-info">
+                <div class="module-name">Expansion Selling — Land, Adopt & Grow on Nebius</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Workshop</span>
+                  <span class="tag tag-duration">⏱ 3 hrs</span>
+                  <span class="tag tag-product">AI Cloud · Token Factory</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Design a land-and-expand account strategy starting with a single GPU workload through to multi-cluster deployment</li>
+                  <li>Identify expansion triggers: model scale-up, new use cases (RAG, agentic search), partner growth</li>
+                  <li>Build a 6-month account plan with measurable consumption milestones</li>
+                  <li>Use Nebius usage data and observability signals to drive proactive expansion conversations</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Expansion Revenue Strategy
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🎓</div>
+              <div class="module-info">
+                <div class="module-name">Executive Selling — Navigating the C-Suite Conversation</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Live Workshop</span>
+                  <span class="tag tag-duration">⏱ 3 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Translate Nebius's technical differentiation into a CFO-ready business case and CTO-ready architecture story</li>
+                  <li>Handle executive objections around vendor lock-in, long-term Nebius viability, and enterprise SLAs</li>
+                  <li>Leverage Nebius's Nasdaq listing, $700M funding, and NVIDIA partnership as enterprise credibility proof points</li>
+                  <li>Lead a multi-stakeholder executive briefing with confidence and clarity</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Executive Sales Mastery
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🏆</div>
+              <div class="module-info">
+                <div class="module-name">AE Capstone — Live Deal Simulation</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Capstone</span>
+                  <span class="tag tag-duration">⏱ 4 hrs</span>
+                  <span class="tag tag-product">AI Cloud · Token Factory</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Navigate a full simulated deal lifecycle: discovery → qualification → technical validation → commercial negotiation → close</li>
+                  <li>Coordinate with a mock SA to deliver a joint customer proposal and technical validation session</li>
+                  <li>Handle a competitive late-stage challenge from a mock AWS team and defend the Nebius selection</li>
+                  <li>Present a closed deal retrospective — what worked, what to replicate, and how to expand the account</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Certified Nebius AE — Expert
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- end AE -->
+
+
+    <!-- ════════════ PARTNER TRACK ════════════ -->
+    <div class="track-column track-partner hidden" data-track="partner">
+      <div class="track-header">
+        <div class="track-role-badge">
+          <span>●</span> Partner
+        </div>
+        <div class="track-title">Partner Competency Track</div>
+        <div class="track-subtitle">Build partner independence across the Nebius ecosystem — from initial onboarding through GTM-aligned technical competency and joint go-to-market execution.</div>
+        <div class="track-meta">
+          <div class="track-meta-item">
+            <span class="track-meta-val">10 wks</span>
+            <span class="track-meta-key">Full ramp</span>
+          </div>
+          <div class="track-meta-item">
+            <span class="track-meta-val">9 modules</span>
+            <span class="track-meta-key">Total</span>
+          </div>
+          <div class="track-meta-item">
+            <span class="track-meta-val">~38 hrs</span>
+            <span class="track-meta-key">Seat time</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="track-body">
+
+        <!-- Phase 1 -->
+        <div class="phase-section">
+          <div class="phase-label">
+            <span class="phase-number">Phase 01</span>
+            <span class="phase-line"></span>
+            <span class="phase-name">Foundation</span>
+            <span class="phase-weeks">Weeks 1–3</span>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🌍</div>
+              <div class="module-info">
+                <div class="module-name">Nebius Partner Program — Ecosystem & Opportunity</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Live Onboarding</span>
+                  <span class="tag tag-duration">⏱ 3 hrs</span>
+                  <span class="tag tag-product">Partner Program</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Navigate the three Nebius partner models: VAR (Sales), ISV/MSP (Implementation), and Alliance (Development) — and identify your partnership type's revenue motion</li>
+                  <li>Understand partner benefits: dedicated SA support, co-marketing programs, flexible pricing, and instant compute access</li>
+                  <li>Complete onboarding checklist: portal access, partner tier registration, and first SA introduction</li>
+                  <li>Map your customers' AI workloads to the correct Nebius solution for initial pipeline qualification</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Partner Program Proficiency
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🔌</div>
+              <div class="module-info">
+                <div class="module-name">Token Factory API — Quickstart for Partner Builders</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Self-Paced Lab</span>
+                  <span class="tag tag-duration">⏱ 4 hrs</span>
+                  <span class="tag tag-product">Token Factory</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Complete the Token Factory API quickstart: authenticate, invoke a production model endpoint, and parse responses</li>
+                  <li>Integrate Token Factory into a sample partner application using the documented SDK and REST API</li>
+                  <li>Understand token pricing mechanics and how to pass costs through to end customers profitably</li>
+                  <li>Configure rate limits, monitoring, and logging for a production partner deployment</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Token Factory Integration
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">☁️</div>
+              <div class="module-info">
+                <div class="module-name">Nebius AI Cloud Fundamentals for Partners</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Self-Paced</span>
+                  <span class="tag tag-duration">⏱ 3 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Understand Nebius AI Cloud core components at a level sufficient to resell and position to end customers</li>
+                  <li>Provision a GPU instance via Terraform — the infrastructure-as-code pattern preferred by partner deployments</li>
+                  <li>Use the Nebius Solution Library on GitHub to accelerate customer deployment with pre-built Terraform recipes</li>
+                  <li>Identify when to escalate to Nebius SA support vs handle independently</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Partner-Level Cloud Fluency
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert Gate 1 -->
+        <div class="cert-gate">
+          <div class="cert-gate-icon">
+            <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div class="cert-gate-text">
+            <div class="cert-gate-title">✦ Certification Gate — Nebius Partner Onboarded Badge</div>
+            <div class="cert-gate-sub">Product knowledge assessment + live API integration demo</div>
+          </div>
+        </div>
+
+        <!-- Phase 2 -->
+        <div class="phase-section">
+          <div class="phase-label">
+            <span class="phase-number">Phase 02</span>
+            <span class="phase-line"></span>
+            <span class="phase-name">Practitioner</span>
+            <span class="phase-weeks">Weeks 4–7</span>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🔧</div>
+              <div class="module-info">
+                <div class="module-name">Building AI Solutions on Nebius — End-to-End Lab</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Technical Lab</span>
+                  <span class="tag tag-duration">⏱ 6 hrs</span>
+                  <span class="tag tag-product">AI Cloud · Token Factory</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Build a complete RAG pipeline on Nebius AI Cloud: data ingestion, embedding, vector storage, and retrieval-augmented generation via Token Factory</li>
+                  <li>Deploy a fine-tuned model using QLoRA on an H100 instance and serve it via a managed inference endpoint</li>
+                  <li>Implement Kubernetes-based autoscaling for a partner SaaS application backed by Nebius GPU compute</li>
+                  <li>Document the architecture and produce a repeatable deployment guide for customer handoff</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Solution Build Competency
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🗺️</div>
+              <div class="module-info">
+                <div class="module-name">Partner GTM Alignment — Pipeline & Co-Marketing</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Live Workshop</span>
+                  <span class="tag tag-duration">⏱ 3 hrs</span>
+                  <span class="tag tag-product">Partner Program</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Build a 90-day joint GTM plan with your Nebius Partner Manager including pipeline targets, co-marketing activities, and enablement milestones</li>
+                  <li>Access and activate Nebius co-marketing resources: joint case studies, white papers, and event sponsorship programs</li>
+                  <li>Submit and track deal registrations, and understand the Nebius partner rewards structure</li>
+                  <li>Launch a first joint demand generation campaign using Nebius-approved messaging and creative assets</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: GTM Execution Readiness
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">📋</div>
+              <div class="module-info">
+                <div class="module-name">Partner Support Model & Escalation Playbook</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Self-Paced</span>
+                  <span class="tag tag-duration">⏱ 2 hrs</span>
+                  <span class="tag tag-product">AI Cloud</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Understand Nebius's 24/7 expert support model and how partners access dedicated SA assistance for multi-node customer cases</li>
+                  <li>Use the escalation playbook to triage customer issues: Tier 1 (self-serve docs) → Tier 2 (partner support) → Tier 3 (Nebius SA engagement)</li>
+                  <li>Set customer SLA expectations aligned with Nebius's enterprise support commitments</li>
+                  <li>Navigate the Nebius Status page and incident communication protocols for partner-managed customers</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Partner Support Independence
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cert Gate 2 -->
+        <div class="cert-gate">
+          <div class="cert-gate-icon">
+            <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          </div>
+          <div class="cert-gate-text">
+            <div class="cert-gate-title">✦ Certification Gate — Nebius Partner Competent Badge</div>
+            <div class="cert-gate-sub">Joint GTM plan review + solution architecture validation</div>
+          </div>
+        </div>
+
+        <!-- Phase 3 -->
+        <div class="phase-section">
+          <div class="phase-label">
+            <span class="phase-number">Phase 03</span>
+            <span class="phase-line"></span>
+            <span class="phase-name">Expert</span>
+            <span class="phase-weeks">Weeks 8–10</span>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🏅</div>
+              <div class="module-info">
+                <div class="module-name">Advanced Nebius Solutions — Agentic AI & RAG at Scale</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Technical Workshop</span>
+                  <span class="tag tag-duration">⏱ 5 hrs</span>
+                  <span class="tag tag-product">AI Cloud · Token Factory</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Architect a production-grade agentic search system using Nebius AI Cloud compute and Token Factory inference</li>
+                  <li>Scale a RAG pipeline from prototype to production: chunking strategies, embedding model selection, and retrieval optimization on Nebius</li>
+                  <li>Position Nebius's Agentic Search solution to enterprise customers building internal knowledge systems</li>
+                  <li>Benchmark solution performance and present results as a customer proof of concept</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Advanced Solutions Architect
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">📰</div>
+              <div class="module-info">
+                <div class="module-name">Joint Case Study Development & Thought Leadership</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Collaborative Project</span>
+                  <span class="tag tag-duration">⏱ 3 hrs</span>
+                  <span class="tag tag-product">Partner Program</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Co-author a joint Nebius + partner customer success story using the Nebius case study framework</li>
+                  <li>Produce a jointly-branded technical white paper or blog post demonstrating partner solution value on Nebius</li>
+                  <li>Submit content for publication on nebius.com and partner channels — following Nebius brand and editorial guidelines</li>
+                  <li>Present the case study at a Nebius partner event or joint webinar</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Partner Thought Leadership
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-card" onclick="toggleModule(this)">
+            <div class="module-header">
+              <div class="module-icon">🚩</div>
+              <div class="module-info">
+                <div class="module-name">Partner Capstone — First Joint Customer Win Review</div>
+                <div class="module-tags">
+                  <span class="tag tag-format">Capstone Review</span>
+                  <span class="tag tag-duration">⏱ 2 hrs</span>
+                  <span class="tag tag-product">AI Cloud · Token Factory</span>
+                </div>
+              </div>
+              <svg class="module-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+            </div>
+            <div class="module-body">
+              <div class="module-body-inner">
+                <div class="objectives-title">Learning Objectives</div>
+                <ul class="objectives-list">
+                  <li>Present a closed or advanced-stage partner-sourced deal to the Nebius Partner Manager — detailing discovery, technical validation, and commercial structure</li>
+                  <li>Document a replicable play: how this win pattern can be scaled across the partner's customer base</li>
+                  <li>Receive formal graduation to Nebius Certified Partner status and access advanced co-selling resources</li>
+                  <li>Establish a 6-month pipeline and GTM commitment for the next program phase</li>
+                </ul>
+                <div class="competency-badge">
+                  <svg viewBox="0 0 20 20"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  Competency: Certified Nebius Partner — Expert
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- end Partner -->
+
+  </div><!-- end tracks-grid -->
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="footer-left">
+      <span class="footer-label">Portfolio artifact · Revenue Enablement</span>
+      <span class="footer-note">Designed by Rus Teston</span>
+    </div>
+    <div class="footer-badge">
+      <span>✦</span> Nebius AI Cloud Enablement Program
+    </div>
+  </footer>
+
+</div><!-- end page-wrap -->
+
+<script>
+  function toggleModule(card) {
+    const isExpanded = card.classList.contains('expanded');
+    card.classList.toggle('expanded', !isExpanded);
+  }
+
+  function setFilter(filter, btn) {
+    // Update button states
+    document.querySelectorAll('.filter-btn').forEach(b => {
+      b.classList.remove('active', 'active-sa', 'active-ae', 'active-partner');
+    });
+
+    if (filter === 'all') {
+      btn.classList.add('active');
+    } else if (filter === 'sa') {
+      btn.classList.add('active-sa');
+    } else if (filter === 'ae') {
+      btn.classList.add('active-ae');
+    } else if (filter === 'partner') {
+      btn.classList.add('active-partner');
+    }
+
+    // Show/hide columns
+    document.querySelectorAll('.track-column').forEach(col => {
+      if (filter === 'all') {
+        col.classList.remove('hidden');
+        // Reset grid to 3 columns
+        document.querySelector('.tracks-grid').style.gridTemplateColumns = 'repeat(3, 1fr)';
+      } else {
+        const match = col.getAttribute('data-track') === filter;
+        col.classList.toggle('hidden', !match);
+        if (match) {
+          document.querySelector('.tracks-grid').style.gridTemplateColumns = '1fr';
+        }
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,2200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebius — SA 90-Day Onboarding Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Epilogue:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ─── RESET ─── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 13px; }
+
+/* ─── TOKENS ─── */
+:root {
+  --green:          #00C853;
+  --green-dim:      #00C85318;
+  --green-mid:      #00C85340;
+  --green-glow:     #00C85308;
+
+  --bg:             #0C1A3A;
+  --bg-2:           #10224A;
+  --bg-3:           #162C52;
+  --bg-4:           #1C3660;
+  --bg-5:           #224070;
+
+  --border:         #1E3A5C;
+  --border-2:       #2A4D70;
+  --border-3:       #356080;
+
+  --text-1:         #F0F6FF;
+  --text-2:         #B0CFEA;
+  --text-3:         #5A8AAE;
+  --text-4:         #3A6080;
+
+  /* Phase colors */
+  --p1:             #3B9EFF;
+  --p1-dim:         #3B9EFF14;
+  --p1-mid:         #3B9EFF35;
+  --p1-bg:          #0C1E3A;
+
+  --p2:             #FF9F3B;
+  --p2-dim:         #FF9F3B14;
+  --p2-mid:         #FF9F3B35;
+  --p2-bg:          #1A2040;
+
+  --p3:             #B47FFF;
+  --p3-dim:         #B47FFF14;
+  --p3-mid:         #B47FFF35;
+  --p3-bg:          #161840;
+
+  --radius:         8px;
+  --radius-sm:      5px;
+  --radius-lg:      14px;
+}
+
+body {
+  background: linear-gradient(180deg, #0C1A3A 0%, #0A3050 40%, #0E3558 100%);
+  color: var(--text-1);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 1rem;
+  line-height: 1.55;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── GRID TEXTURE ─── */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 44px 44px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ─── AMBIENT GLOW ─── */
+.glow-orb {
+  position: fixed;
+  top: -15%; left: 50%; transform: translateX(-50%);
+  width: 1000px; height: 400px;
+  background: radial-gradient(ellipse, #00C85307 0%, transparent 68%);
+  pointer-events: none; z-index: 0;
+}
+
+/* ─── PAGE SHELL ─── */
+.page {
+  position: relative; z-index: 1;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 28px 28px 72px;
+}
+
+/* ═══════════════════════════════════════
+   TOP BAR
+═══════════════════════════════════════ */
+.top-bar {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-2);
+  margin-bottom: 26px;
+  flex-wrap: wrap; gap: 10px;
+}
+
+.brand {
+  display: flex; align-items: center; gap: 9px;
+}
+
+.brand-mark {
+  width: 28px; height: 28px;
+  background: var(--green);
+  border-radius: 6px; display: grid; place-items: center;
+}
+
+.brand-mark svg { width: 15px; height: 15px; }
+
+.brand-name {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700; font-size: 1.2rem;
+  color: var(--text-1); letter-spacing: -0.2px;
+}
+
+.top-right {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+}
+
+.doc-type {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+
+.creator-pill {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 100px;
+  background: var(--bg-3); border: 1px solid var(--border-2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.67rem; color: var(--text-2);
+}
+
+.c-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 28px;
+  margin-bottom: 32px;
+}
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; color: var(--green);
+  text-transform: uppercase; letter-spacing: 0.15em;
+  margin-bottom: 7px;
+}
+
+.hero h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  font-weight: 700; letter-spacing: -1px;
+  line-height: 1.02; color: var(--text-1);
+  margin-bottom: 12px;
+}
+
+.hero h1 span { color: var(--green); }
+
+.hero-sub {
+  font-size: 0.88rem; color: var(--text-2);
+  max-width: 600px; line-height: 1.65;
+}
+
+/* Hero stat block */
+.hero-stats {
+  display: flex; gap: 0;
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  overflow: hidden; flex-shrink: 0;
+}
+
+.h-stat {
+  padding: 14px 20px;
+  border-right: 1px solid var(--border-2);
+  display: flex; flex-direction: column; gap: 2px;
+}
+.h-stat:last-child { border-right: none; }
+
+.h-val {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.6rem; font-weight: 700;
+  color: var(--green); line-height: 1;
+}
+
+.h-key {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+
+/* ═══════════════════════════════════════
+   SECTION LABEL
+═══════════════════════════════════════ */
+.sec-label {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem; font-weight: 600;
+  text-transform: none; letter-spacing: -0.2px;
+  color: var(--text-1);
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 14px;
+}
+
+.sec-label::after {
+  content: ''; flex: 1; height: 1px;
+  background: var(--border-2);
+}
+
+/* ═══════════════════════════════════════
+   PHASE FILTER BAR
+═══════════════════════════════════════ */
+.filter-bar {
+  display: flex; align-items: center;
+  gap: 8px; margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.filter-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-right: 4px;
+}
+
+.f-btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 7px 16px; border-radius: 100px;
+  border: 1px solid var(--border-2);
+  background: var(--bg-3);
+  color: var(--text-2);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 0.78rem; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.f-btn:hover { border-color: var(--border-3); color: var(--text-1); }
+
+.f-btn.active-all   { background: var(--green-dim); border-color: var(--green);  color: var(--green); }
+.f-btn.active-p1    { background: var(--p1-dim);    border-color: var(--p1);     color: var(--p1); }
+.f-btn.active-p2    { background: var(--p2-dim);    border-color: var(--p2);     color: var(--p2); }
+.f-btn.active-p3    { background: var(--p3-dim);    border-color: var(--p3);     color: var(--p3); }
+
+.f-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ═══════════════════════════════════════
+   TIMELINE SPINE
+═══════════════════════════════════════ */
+.timeline-section { margin-bottom: 36px; }
+
+.timeline-wrap {
+  position: relative;
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-lg);
+  padding: 24px 24px 20px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.timeline-wrap:hover {
+  transform: scale(1.01);
+  border-color: var(--border-3);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+/* Phase gradient top bar */
+.timeline-wrap::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg,
+    var(--p1) 0%, var(--p1) 16.6%,
+    var(--p2) 16.6%, var(--p2) 50%,
+    var(--p3) 50%, var(--p3) 100%);
+}
+
+/* Phase header row */
+.phase-headers {
+  display: grid;
+  grid-template-columns: 1fr 2fr 3fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.phase-header {
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  border: 1px solid;
+  display: flex; flex-direction: column; gap: 3px;
+}
+
+.ph-1 { background: var(--p1-bg); border-color: var(--p1-mid); }
+.ph-2 { background: var(--p2-bg); border-color: var(--p2-mid); }
+.ph-3 { background: var(--p3-bg); border-color: var(--p3-mid); }
+
+.phase-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text-3);
+}
+
+.phase-name {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem; font-weight: 700;
+}
+
+.ph-1 .phase-name { color: var(--p1); }
+.ph-2 .phase-name { color: var(--p2); }
+.ph-3 .phase-name { color: var(--p3); }
+
+.phase-weeks {
+  font-size: 0.72rem; color: var(--text-3);
+}
+
+.phase-goal {
+  font-size: 0.72rem; line-height: 1.4;
+  margin-top: 3px;
+}
+
+.ph-1 .phase-goal { color: #5A8ABB; }
+.ph-2 .phase-goal { color: #AA7040; }
+.ph-3 .phase-goal { color: #8A60CC; }
+
+/* Week grid */
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 5px;
+}
+
+.week-dot-row {
+  display: contents;
+}
+
+.week-node {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 5px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.week-node:hover { transform: translateY(-2px); }
+
+.week-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; color: var(--text-3);
+  text-align: center;
+}
+
+.week-bubble {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  border: 2px solid;
+  transition: all 0.18s ease;
+  position: relative;
+}
+
+.week-bubble .wk-inner {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; font-weight: 600;
+}
+
+/* Phase-colored bubbles */
+.wk-p1 { background: var(--p1-dim); border-color: var(--p1-mid); }
+.wk-p1 .wk-inner { color: var(--p1); }
+.wk-p1:hover, .wk-p1.active { background: var(--p1); border-color: var(--p1); }
+.wk-p1.active .wk-inner { color: #000; }
+
+.wk-p2 { background: var(--p2-dim); border-color: var(--p2-mid); }
+.wk-p2 .wk-inner { color: var(--p2); }
+.wk-p2:hover, .wk-p2.active { background: var(--p2); border-color: var(--p2); }
+.wk-p2.active .wk-inner { color: #000; }
+
+.wk-p3 { background: var(--p3-dim); border-color: var(--p3-mid); }
+.wk-p3 .wk-inner { color: var(--p3); }
+.wk-p3:hover, .wk-p3.active { background: var(--p3); border-color: var(--p3); }
+.wk-p3.active .wk-inner { color: #fff; }
+
+/* Milestone star */
+.milestone-star {
+  position: absolute;
+  top: -6px; right: -6px;
+  width: 14px; height: 14px;
+  background: var(--green);
+  border-radius: 50%;
+  border: 2px solid var(--bg-2);
+  display: grid; place-items: center;
+  font-size: 0.45rem;
+}
+
+.week-focus {
+  font-size: 0.6rem; color: var(--text-3);
+  text-align: center; line-height: 1.3;
+  max-width: 68px;
+}
+
+/* Connector line between weeks */
+.timeline-connector {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 5px;
+  margin: -14px 0 -6px;
+  padding: 0 18px;
+  position: relative;
+  z-index: 0;
+}
+
+.tc-segment {
+  height: 2px;
+  margin: 0 -2px;
+}
+
+.tc-p1 { background: var(--p1-mid); }
+.tc-p2 { background: var(--p2-mid); }
+.tc-p3 { background: var(--p3-mid); }
+
+/* ═══════════════════════════════════════
+   MAIN CONTENT — TWO COLUMN LAYOUT
+═══════════════════════════════════════ */
+.main-cols {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 18px;
+  align-items: start;
+}
+
+/* ═══════════════════════════════════════
+   WEEK DETAIL PANEL
+═══════════════════════════════════════ */
+.week-detail-section {
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.week-card {
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.week-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+.week-card.wc-p1 { border-left: 3px solid var(--p1); }
+.week-card.wc-p2 { border-left: 3px solid var(--p2); }
+.week-card.wc-p3 { border-left: 3px solid var(--p3); }
+
+.week-card.hidden { display: none; }
+
+/* Card header — always visible */
+.wc-header {
+  display: flex; align-items: center;
+  gap: 12px; padding: 13px 16px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.wc-week-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; font-weight: 600;
+  padding: 3px 9px; border-radius: 100px;
+  flex-shrink: 0;
+}
+
+.badge-p1 { background: var(--p1-dim); color: var(--p1); border: 1px solid var(--p1-mid); }
+.badge-p2 { background: var(--p2-dim); color: var(--p2); border: 1px solid var(--p2-mid); }
+.badge-p3 { background: var(--p3-dim); color: var(--p3); border: 1px solid var(--p3-mid); }
+
+.wc-title {
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem; font-weight: 700;
+  color: var(--text-1); letter-spacing: -0.1px;
+}
+
+.wc-focus {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--text-3);
+  flex-shrink: 0;
+}
+
+.wc-milestone {
+  display: flex; align-items: center; gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--green);
+  font-weight: 600;
+  padding: 2px 8px; border-radius: 100px;
+  background: var(--green-dim);
+  border: 1px solid var(--green-mid);
+  flex-shrink: 0;
+}
+
+.wc-chevron {
+  width: 16px; height: 16px;
+  color: var(--text-3);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.week-card.expanded .wc-chevron {
+  transform: rotate(180deg);
+}
+
+/* Card body — expandable */
+.wc-body {
+  display: none;
+  border-top: 1px solid var(--border);
+  padding: 16px;
+  animation: slideDown 0.2s ease;
+}
+
+.week-card.expanded .wc-body { display: block; }
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Body grid */
+.wc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.wc-col-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.09em;
+  margin-bottom: 6px;
+}
+
+.wc-item {
+  display: flex; align-items: flex-start;
+  gap: 7px; margin-bottom: 5px;
+}
+
+.wc-item-dot {
+  width: 4px; height: 4px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 6px;
+}
+
+.dot-p1 { background: var(--p1); }
+.dot-p2 { background: var(--p2); }
+.dot-p3 { background: var(--p3); }
+.dot-green { background: var(--green); }
+
+.wc-item-text {
+  font-size: 0.78rem; color: var(--text-2); line-height: 1.4;
+}
+
+.wc-item-text strong { color: var(--text-1); font-weight: 600; }
+
+/* Deliverable tags */
+.wc-deliverables {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  margin-bottom: 12px;
+}
+
+.deliverable-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; font-weight: 500;
+  padding: 3px 9px; border-radius: 4px;
+  background: var(--bg-4); color: var(--text-2);
+  border: 1px solid var(--border-2);
+}
+
+.deliverable-tag.d-green {
+  background: var(--green-dim); color: var(--green);
+  border-color: var(--green-mid);
+}
+
+/* Manager coaching strip */
+.manager-strip {
+  background: var(--bg-4);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+
+.manager-icon {
+  width: 24px; height: 24px;
+  background: var(--green-dim);
+  border: 1px solid var(--green-mid);
+  border-radius: 5px;
+  display: grid; place-items: center;
+  flex-shrink: 0; font-size: 0.75rem;
+}
+
+.manager-content { flex: 1; }
+
+.manager-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; color: var(--green);
+  font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; margin-bottom: 3px;
+}
+
+.manager-text {
+  font-size: 0.74rem; color: var(--text-2); line-height: 1.4;
+}
+
+.manager-text strong { color: var(--text-1); font-weight: 600; }
+
+/* What they can do by end of week */
+.eow-box {
+  margin-top: 10px;
+  background: linear-gradient(135deg, var(--bg-5), var(--bg-4));
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  border: 1px solid var(--border-2);
+}
+
+.eow-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.09em;
+  margin-bottom: 4px;
+}
+
+.eow-text {
+  font-size: 0.78rem; color: var(--text-1);
+  font-weight: 500; line-height: 1.4;
+}
+
+/* ═══════════════════════════════════════
+   RIGHT SIDEBAR
+═══════════════════════════════════════ */
+.sidebar { display: flex; flex-direction: column; gap: 14px; }
+
+/* Panel base */
+.panel {
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  position: relative; overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  cursor: pointer;
+}
+
+.panel:hover {
+  transform: scale(1.02);
+  border-color: var(--border-3);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+  z-index: 2;
+}
+
+.panel-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem; font-weight: 700;
+  color: var(--text-1); margin-bottom: 4px;
+  letter-spacing: -0.1px;
+}
+
+.panel-sub {
+  font-size: 0.71rem; color: var(--text-3);
+  margin-bottom: 13px; line-height: 1.4;
+}
+
+/* ─── MILESTONE TRACKER ─── */
+.milestone-list { display: flex; flex-direction: column; gap: 0; }
+
+.milestone-item {
+  display: flex; align-items: flex-start;
+  gap: 10px; padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.milestone-item:last-child { border-bottom: none; }
+
+.ms-line {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 0; flex-shrink: 0;
+}
+
+.ms-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  border: 2px solid; flex-shrink: 0;
+  display: grid; place-items: center;
+}
+
+.ms-dot.cert {
+  background: var(--green);
+  border-color: var(--green);
+}
+
+.ms-dot.cert::after {
+  content: '';
+  width: 4px; height: 4px;
+  background: #000; border-radius: 50%;
+}
+
+.ms-dot.wk { border-color: var(--border-3); background: var(--bg-4); }
+
+.ms-connector {
+  width: 1px; height: 100%;
+  min-height: 16px;
+  background: var(--border-2);
+  margin: 0 auto;
+}
+
+.ms-content { flex: 1; }
+
+.ms-week {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; color: var(--text-3);
+  text-transform: uppercase; letter-spacing: 0.08em;
+}
+
+.ms-name {
+  font-size: 0.77rem; color: var(--text-1);
+  font-weight: 500; margin: 1px 0;
+  line-height: 1.3;
+}
+
+.ms-desc {
+  font-size: 0.68rem; color: var(--text-3);
+  line-height: 1.35;
+}
+
+.ms-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem; font-weight: 600;
+  padding: 2px 7px; border-radius: 100px;
+  margin-top: 3px; display: inline-flex;
+}
+
+.badge-cert { background: var(--green-dim); color: var(--green); border: 1px solid var(--green-mid); }
+.badge-p1b  { background: var(--p1-dim);    color: var(--p1);    border: 1px solid var(--p1-mid); }
+.badge-p2b  { background: var(--p2-dim);    color: var(--p2);    border: 1px solid var(--p2-mid); }
+.badge-p3b  { background: var(--p3-dim);    color: var(--p3);    border: 1px solid var(--p3-mid); }
+
+/* ─── STAKEHOLDER MAP ─── */
+.stakeholder-list { display: flex; flex-direction: column; gap: 7px; }
+
+.sh-item {
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  padding: 9px 11px;
+  display: flex; gap: 9px; align-items: flex-start;
+}
+
+.sh-avatar {
+  width: 28px; height: 28px; border-radius: 6px;
+  display: grid; place-items: center;
+  font-size: 0.7rem; flex-shrink: 0;
+  font-weight: 600;
+}
+
+.av-green  { background: var(--green-dim); border: 1px solid var(--green-mid); color: var(--green); }
+.av-blue   { background: var(--p1-dim);    border: 1px solid var(--p1-mid);    color: var(--p1); }
+.av-orange { background: var(--p2-dim);    border: 1px solid var(--p2-mid);    color: var(--p2); }
+.av-purple { background: var(--p3-dim);    border: 1px solid var(--p3-mid);    color: var(--p3); }
+
+.sh-info { flex: 1; }
+
+.sh-role {
+  font-size: 0.74rem; font-weight: 600;
+  color: var(--text-1); margin-bottom: 1px;
+}
+
+.sh-purpose {
+  font-size: 0.67rem; color: var(--text-3); line-height: 1.35;
+}
+
+.sh-week {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem; color: var(--text-3);
+  flex-shrink: 0; margin-top: 2px;
+}
+
+/* ─── DELIVERABLES CHECKLIST ─── */
+.checklist { display: flex; flex-direction: column; gap: 5px; }
+
+.cl-item {
+  display: flex; align-items: flex-start;
+  gap: 8px; padding: 7px 9px;
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+}
+
+.cl-check {
+  width: 14px; height: 14px;
+  border-radius: 3px;
+  border: 1px solid var(--border-3);
+  flex-shrink: 0; margin-top: 2px;
+  background: var(--bg-4);
+}
+
+.cl-text { flex: 1; }
+
+.cl-name {
+  font-size: 0.74rem; color: var(--text-1);
+  font-weight: 500; margin-bottom: 1px;
+}
+
+.cl-due {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text-3);
+}
+
+/* ─── SETUP GUIDE ─── */
+.setup-list { display: flex; flex-direction: column; gap: 6px; }
+
+.setup-item {
+  display: flex; align-items: flex-start;
+  gap: 8px; padding: 7px 10px;
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+}
+
+.setup-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem; font-weight: 600;
+  color: var(--green);
+  background: var(--green-dim);
+  border: 1px solid var(--green-mid);
+  border-radius: 4px;
+  padding: 1px 6px;
+  flex-shrink: 0; margin-top: 1px;
+}
+
+.setup-text { flex: 1; }
+
+.setup-name {
+  font-size: 0.75rem; color: var(--text-1);
+  font-weight: 500; margin-bottom: 1px;
+}
+
+.setup-desc {
+  font-size: 0.67rem; color: var(--text-3); line-height: 1.35;
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+.footer {
+  margin-top: 32px; padding-top: 16px;
+  border-top: 1px solid var(--border-2);
+  display: flex; align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; gap: 10px;
+}
+
+.footer-left {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: #ffffff; line-height: 1.6;
+}
+
+.footer-badge {
+  display: flex; align-items: center; gap: 7px;
+  padding: 5px 14px; border-radius: 100px;
+  background: var(--green-dim); border: 1px solid var(--green-mid);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem; color: var(--green);
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.09em;
+}
+
+/* ─── MODAL OVERLAY ─── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 8, 20, 0.85);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background: var(--bg-2);
+  border: 1px solid var(--border-2);
+  border-radius: 12px;
+  padding: 40px 48px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  transform: scale(0.95) translateY(10px);
+  transition: transform 0.3s ease;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.modal-overlay.active .modal-content {
+  transform: scale(1) translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  background: var(--bg-3);
+  border: 1px solid var(--border-2);
+  border-radius: 8px;
+  color: var(--text-2);
+  font-size: 1.2rem;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+  background: var(--bg-4);
+  color: var(--text-1);
+}
+
+/* Modal enlarged text */
+.modal-content .panel-title { font-size: 1.15rem; }
+.modal-content .panel-sub { font-size: 0.9rem; line-height: 1.6; }
+.modal-content .wc-title { font-size: 1.1rem; }
+.modal-content .wc-item-text { font-size: 0.95rem; line-height: 1.6; }
+.modal-content .manager-text { font-size: 0.92rem; line-height: 1.6; }
+.modal-content .eow-text { font-size: 0.95rem; }
+.modal-content .eow-label { font-size: 0.72rem; }
+.modal-content .deliverable-tag { font-size: 0.75rem; }
+.modal-content .ms-name { font-size: 0.95rem; }
+.modal-content .ms-desc { font-size: 0.82rem; }
+.modal-content .sh-role { font-size: 0.92rem; }
+.modal-content .sh-purpose { font-size: 0.82rem; }
+.modal-content .cl-name { font-size: 0.92rem; }
+.modal-content .cl-due { font-size: 0.75rem; }
+.modal-content .setup-name { font-size: 0.92rem; }
+.modal-content .setup-desc { font-size: 0.82rem; }
+.modal-content .phase-name { font-size: 1.1rem; }
+.modal-content .phase-goal { font-size: 0.88rem; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width: 1100px) {
+  .main-cols { grid-template-columns: 1fr; }
+  .sidebar { display: grid; grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 720px) {
+  .page { padding: 18px 14px 48px; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-stats { display: none; }
+  .phase-headers { grid-template-columns: 1fr; }
+  .week-grid { grid-template-columns: repeat(6, 1fr); }
+  .wc-grid { grid-template-columns: 1fr; }
+  .sidebar { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+<div class="glow-orb"></div>
+<div class="page">
+
+  <!-- ─── TOP BAR ─── -->
+  <div class="top-bar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="2" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="11" y="2" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="2" y="11" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="11" y="11" width="7" height="7" fill="#000" rx="1"/>
+        </svg>
+      </div>
+      <span class="brand-name">Nebius</span>
+    </div>
+    <div class="top-right">
+      <span class="doc-type">Solutions Architect · Onboarding Program</span>
+      <div class="creator-pill">
+        <div class="c-dot"></div>
+        <span>Portfolio by Rus Teston</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── HERO ─── -->
+  <div class="hero">
+    <div class="hero-left">
+      <div class="hero-eyebrow">SA Enablement · Structured Onboarding</div>
+      <h1>90-Day SA<br><span>Onboarding</span> Blueprint</h1>
+      <p class="hero-sub">A week-by-week program designed to take a new Nebius Solutions Architect from Day 1 orientation through certified customer-ready status — with technical depth, measurable milestones, and a built-in manager coaching guide at every phase.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat">
+        <span class="h-val">12</span>
+        <span class="h-key">Weeks total</span>
+      </div>
+      <div class="h-stat">
+        <span class="h-val">3</span>
+        <span class="h-key">Phases</span>
+      </div>
+      <div class="h-stat">
+        <span class="h-val">3</span>
+        <span class="h-key">Cert gates</span>
+      </div>
+      <div class="h-stat">
+        <span class="h-val">~52h</span>
+        <span class="h-key">Seat time</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       TIMELINE
+  ═══════════════════════════════════════ -->
+  <div class="timeline-section">
+    <div class="sec-label">Program Timeline · Click any week to jump to that week's detail card</div>
+    <div class="timeline-wrap">
+
+      <!-- Phase headers -->
+      <div class="phase-headers">
+        <div class="phase-header ph-1">
+          <span class="phase-num">Phase 01</span>
+          <span class="phase-name">Foundation</span>
+          <span class="phase-weeks">Weeks 1–2 · ~12 hrs</span>
+          <span class="phase-goal">Platform orientation, product portfolio, people and systems access. By end of Phase 1, the SA can explain Nebius AI Cloud to a colleague with confidence.</span>
+        </div>
+        <div class="phase-header ph-2">
+          <span class="phase-num">Phase 02</span>
+          <span class="phase-name">Practitioner</span>
+          <span class="phase-weeks">Weeks 3–6 · ~24 hrs</span>
+          <span class="phase-goal">Deep technical build — GPU clusters, orchestration, storage, MLOps, competitive positioning, and TCO modeling. By end of Phase 2, the SA can architect and defend a Nebius solution independently.</span>
+        </div>
+        <div class="phase-header ph-3">
+          <span class="phase-num">Phase 03</span>
+          <span class="phase-name">Expert</span>
+          <span class="phase-weeks">Weeks 7–12 · ~16 hrs</span>
+          <span class="phase-goal">Live deal involvement, customer-facing demos, Token Factory inference architecture, capstone design, and final certification. By end of Phase 3, the SA is independently customer-ready.</span>
+        </div>
+      </div>
+
+      <!-- Week bubbles -->
+      <div class="week-grid">
+        <div class="week-node" onclick="jumpToWeek(1)">
+          <span class="week-num">Wk 1</span>
+          <div class="week-bubble wk-p1" id="bubble-1">
+            <span class="wk-inner">01</span>
+          </div>
+          <span class="week-focus">Orientation &amp; access</span>
+        </div>
+        <div class="week-node" onclick="jumpToWeek(2)">
+          <span class="week-num">Wk 2</span>
+          <div class="week-bubble wk-p1" id="bubble-2">
+            <span class="wk-inner">02</span>
+            <div class="milestone-star">✦</div>
+          </div>
+          <span class="week-focus">Platform overview</span>
+        </div>
+        <div class="week-node" onclick="jumpToWeek(3)">
+          <span class="week-num">Wk 3</span>
+          <div class="week-bubble wk-p2" id="bubble-3">
+            <span class="wk-inner">03</span>
+          </div>
+          <span class="week-focus">GPU deep dive</span>
+        </div>
+        <div class="week-node" onclick="jumpToWeek(4)">
+          <span class="week-num">Wk 4</span>
+          <div class="week-bubble wk-p2" id="bubble-4">
+            <span class="wk-inner">04</span>
+          </div>
+          <span class="week-focus">Orchestration &amp; storage</span>
+        </div>
+        <div class="week-node" onclick="jumpToWeek(5)">
+          <span class="week-num">Wk 5</span>
+          <div class="week-bubble wk-p2" id="bubble-5">
+            <span class="wk-inner">05</span>
+          </div>
+          <span class="week-focus">MLOps &amp; competitive</span>
+        </div>
+        <div class="week-node" onclick="jumpToWeek(6)">
+          <span class="week-num">Wk 6</span>
+          <div class="week-bubble wk-p2" id="bubble-6">
+            <span class="wk-inner">06</span>
+            <div class="milestone-star">✦</div>
+          </div>
+          <span class="week-focus">TCO &amp; gate 2</span>
+        </div>
+        <div class="week-node" onclick="jumpToWeek(7)">
+          <span class="week-num">Wk 7</span>
+          <div class="week-bubble wk-p3" id="bubble-7">
+            <span class="wk-inner">07</span>
+          </div>
+          <span class="week-focus">Token Factory</span>
+        </div>
+        <div class="week-node" onclick="jumpToWeek(8)">
+          <span class="week-num">Wk 8</span>
+          <div class="week-bubble wk-p3" id="bubble-8">
+            <span class="wk-inner">08</span>
+          </div>
+          <span class="week-focus">First customer call</span>
+        </div>
+        <div class="week-node" onclick="jumpToWeek(9)">
+          <span class="week-num">Wk 9</span>
+          <div class="week-bubble wk-p3" id="bubble-9">
+            <span class="wk-inner">09</span>
+          </div>
+          <span class="week-focus">Demo mastery</span>
+        </div>
+        <div class="week-node" onclick="jumpToWeek(10)">
+          <span class="week-num">Wk 10</span>
+          <div class="week-bubble wk-p3" id="bubble-10">
+            <span class="wk-inner">10</span>
+          </div>
+          <span class="week-focus">Solution design</span>
+        </div>
+        <div class="week-node" onclick="jumpToWeek(11)">
+          <span class="week-num">Wk 11</span>
+          <div class="week-bubble wk-p3" id="bubble-11">
+            <span class="wk-inner">11</span>
+          </div>
+          <span class="week-focus">Capstone build</span>
+        </div>
+        <div class="week-node" onclick="jumpToWeek(12)">
+          <span class="week-num">Wk 12</span>
+          <div class="week-bubble wk-p3" id="bubble-12">
+            <span class="wk-inner">12</span>
+            <div class="milestone-star">✦</div>
+          </div>
+          <span class="week-focus">Certification</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─── FILTER BAR ─── -->
+  <div class="filter-bar">
+    <span class="filter-label">View</span>
+    <button class="f-btn active-all" onclick="filterPhase('all', this)">
+      <div class="f-dot" style="background:var(--green)"></div> All Weeks
+    </button>
+    <button class="f-btn" onclick="filterPhase('p1', this)">
+      <div class="f-dot" style="background:var(--p1)"></div> Phase 1 — Foundation
+    </button>
+    <button class="f-btn" onclick="filterPhase('p2', this)">
+      <div class="f-dot" style="background:var(--p2)"></div> Phase 2 — Practitioner
+    </button>
+    <button class="f-btn" onclick="filterPhase('p3', this)">
+      <div class="f-dot" style="background:var(--p3)"></div> Phase 3 — Expert
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       MAIN COLUMNS
+  ═══════════════════════════════════════ -->
+  <div class="main-cols">
+
+    <!-- ─── WEEK CARDS ─── -->
+    <div class="week-detail-section" id="week-cards">
+      <div class="sec-label">Week-by-Week Program · Click any card to expand</div>
+
+      <!-- ─── WEEK 1 ─── -->
+      <div class="week-card wc-p1" id="week-1" data-phase="p1">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p1">Week 01</span>
+          <span class="wc-title">Orientation, Access & the Nebius Story</span>
+          <span class="wc-focus">Foundation</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p1"></div><span class="wc-item-text">Complete HR onboarding, systems access, and equipment setup — Nebius console, GitHub, Slack, email, Okta SSO</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p1"></div><span class="wc-item-text">Day 1 meeting with SA Manager — review 90-day program structure, expectations, and success criteria</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p1"></div><span class="wc-item-text">Complete Nebius Company Story module — history, mission, Nasdaq listing, $700M raise, NVIDIA Reference Platform Partner status</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p1"></div><span class="wc-item-text">First read-through of AI Cloud and Token Factory product pages at nebius.com</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p1"></div><span class="wc-item-text">Meet your assigned buddy SA — schedule two job-shadow sessions for Weeks 2–3</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>SA Manager</strong> — 90-day program review and expectations alignment</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Buddy SA</strong> — assigned peer for technical mentorship throughout the program</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>HR Onboarding</strong> — systems, benefits, and compliance training</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>IT / DevOps</strong> — Nebius console access, sandbox environment provisioning</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag">Nebius console access confirmed</span>
+            <span class="deliverable-tag">GitHub + Slack onboarding complete</span>
+            <span class="deliverable-tag">90-day program schedule agreed with manager</span>
+            <span class="deliverable-tag">Buddy SA shadow sessions booked</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 1</div>
+              <div class="manager-text">Conduct a <strong>Day 1 welcome meeting</strong> covering the 90-day program structure, success criteria, and how you'll assess readiness at each gate. Confirm all systems access is provisioned before end of Day 1. Assign buddy SA and brief them on expectations for mentorship.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 1, the SA can...</div>
+            <div class="eow-text">Access all Nebius systems, explain the Nebius company narrative and funding story, and describe the 90-day program structure to a peer.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WEEK 2 ─── -->
+      <div class="week-card wc-p1" id="week-2" data-phase="p1">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p1">Week 02</span>
+          <span class="wc-title">AI Cloud Architecture & Product Portfolio</span>
+          <span class="wc-focus">Foundation</span>
+          <span class="wc-milestone">✦ Gate 1</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p1"></div><span class="wc-item-text">Complete AI Cloud Architecture Overview module — full-stack platform walk-through including data center topology (US, Finland, France, Iceland)</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p1"></div><span class="wc-item-text">Read and study the SemiAnalysis TCO study — understand how Nebius achieved Gold Medal ClusterMAX rating across all three modeled workloads</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p1"></div><span class="wc-item-text">Product portfolio deep-read: AI Cloud vs Token Factory — when to recommend each, how they complement</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p1"></div><span class="wc-item-text">Review Trust Center documentation — SOC 2, HIPAA, GDPR, ISO 27001 compliance architecture</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p1"></div><span class="wc-item-text"><strong>Gate 1 Assessment:</strong> 30-minute architecture walkthrough with SA Manager — explain the Nebius platform, product portfolio, and data center footprint from memory</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>SA Lead / Principal SA</strong> — architecture overview session and Q&amp;A</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Product Marketing</strong> — understand how Nebius's positioning is crafted and what materials are available</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Buddy SA</strong> — first job-shadow session on a real customer call</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag d-green">✦ Gate 1: Architecture walkthrough passed</span>
+            <span class="deliverable-tag">SemiAnalysis TCO study notes submitted</span>
+            <span class="deliverable-tag">Product portfolio one-pager (personal notes)</span>
+            <span class="deliverable-tag">First buddy SA job-shadow completed</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 2 (Gate 1)</div>
+              <div class="manager-text">Conduct the <strong>30-minute Gate 1 architecture walkthrough</strong>. Evaluate: can the SA explain the Nebius platform unprompted? Do they understand the product portfolio distinction (AI Cloud vs Token Factory)? Can they articulate the data center footprint? Pass/fail with written feedback. If passing, advance to Phase 2 on schedule. If not, add a targeted remediation session before Week 3 begins.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 2, the SA can...</div>
+            <div class="eow-text">Deliver a coherent, unprompted walk-through of Nebius AI Cloud architecture, the product portfolio, and the compliance posture — without referring to notes. Gate 1 passed.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WEEK 3 ─── -->
+      <div class="week-card wc-p2" id="week-3" data-phase="p2">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p2">Week 03</span>
+          <span class="wc-title">NVIDIA GPU Portfolio & Hands-On Provisioning</span>
+          <span class="wc-focus">Practitioner</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">GPU tier deep-dive: H100, H200, HGX B200, HGX B300, GB200 NVL72, GB300 NVL72 — architecture differences, memory specs, and use case fit</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">Hopper vs Blackwell architecture comparison — when to recommend which generation and why</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text"><strong>Hands-on Lab 1:</strong> Provision an HGX H100 instance via Nebius console, then via CLI, then via Terraform — document the differences in provisioning time and configuration options</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">Run a basic CUDA workload and benchmark GPU utilization — build a personal reference for what MFU looks like in practice</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">Second buddy SA job-shadow — focus on how the buddy handles GPU-related customer questions in real calls</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Infrastructure Engineering Lead</strong> — GPU architecture context and cluster design principles</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Buddy SA</strong> — second job-shadow session; debrief on GPU positioning in customer conversations</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag">Lab 1 completed: H100 provisioned via console, CLI, and Terraform</span>
+            <span class="deliverable-tag">GPU tier comparison cheat sheet (personal reference)</span>
+            <span class="deliverable-tag">MFU benchmark results documented</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 3</div>
+              <div class="manager-text">Review the SA's <strong>GPU tier comparison cheat sheet</strong> — are the use case descriptions accurate and customer-friendly? Is the SA distinguishing Hopper from Blackwell correctly? Check in at end of week: is the SA comfortable in the Nebius console independently? Note any gaps for focused remediation in Week 4.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 3, the SA can...</div>
+            <div class="eow-text">Match any customer workload description to the correct Nebius GPU tier without hesitation, provision a GPU instance via three different methods, and explain MFU in customer-friendly language.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WEEK 4 ─── -->
+      <div class="week-card wc-p2" id="week-4" data-phase="p2">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p2">Week 04</span>
+          <span class="wc-title">Orchestration — Managed Kubernetes & Slurm (Soperator)</span>
+          <span class="wc-focus">Practitioner</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">Managed Kubernetes deep-dive — topology-aware scheduling, node health monitoring, auto-repair for fault-tolerant training</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">Soperator (Slurm) architecture — when customers choose Slurm over Kubernetes and why. HPC workload patterns vs ML training patterns</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text"><strong>Hands-on Lab 2:</strong> Deploy a multi-node Kubernetes cluster on Nebius — configure a training job with topology-aware scheduling, simulate a node failure, and observe auto-repair behavior</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">InfiniBand networking module — NVIDIA Quantum-X800 InfiniBand fabric, non-blocking architecture, and what it enables for distributed training at scale</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">High-performance storage architecture — up to 1 TB/s read throughput for shared filesystems, 2 GB/s per GPU for object storage. WEKA and VAST Data integrations.</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Platform Engineering — Kubernetes team</strong> — cluster architecture session and lab guidance</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Storage engineering lead</strong> — storage architecture walk-through and customer scenario discussion</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag">Lab 2: Multi-node K8s cluster deployed and job scheduled</span>
+            <span class="deliverable-tag">Node failure recovery documented and timed</span>
+            <span class="deliverable-tag">InfiniBand vs standard networking one-liner (personal notes)</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 4</div>
+              <div class="manager-text">Ask the SA to <strong>walk you through the K8s lab results</strong> as if presenting to a customer CTO. Can they explain fault-tolerant training in plain language? Do they understand when to recommend Kubernetes vs Slurm? This is the most technically demanding week — flag any major gaps immediately to allow mid-program adjustment.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 4, the SA can...</div>
+            <div class="eow-text">Architect a multi-node training cluster on Nebius, explain fault tolerance to a customer engineering team, and articulate the InfiniBand and storage architecture story without referring to documentation.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WEEK 5 ─── -->
+      <div class="week-card wc-p2" id="week-5" data-phase="p2">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p2">Week 05</span>
+          <span class="wc-title">MLOps Stack, Managed Services & Competitive Positioning</span>
+          <span class="wc-focus">Practitioner</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">Managed MLflow — deploy, configure, and run an experiment tracking session. Understand model registry, artifact storage, and experiment comparison in the Nebius environment</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">Apache Spark on Nebius Managed Services — data pipeline architecture for ML preprocessing at scale</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">PostgreSQL managed service — metadata persistence patterns for production ML systems on Nebius</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">Competitive positioning deep-dive — Nebius vs AWS SageMaker, GCP Vertex AI, Azure ML, and CoreWeave. Differentiation framework: bare-metal MFU, availability speed, AI-native support, TCO.</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">Study real customer scenarios: Brave Search (inference), Recraft (training), Wubble (fine-tuning) — understand what drove each customer to Nebius and what they built</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Product Marketing lead</strong> — competitive intelligence briefing and messaging alignment</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Customer Success</strong> — Brave Search and Recraft account context; what drove the decisions</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Sales lead</strong> — understand how AEs position Nebius and where SAs typically enter the conversation</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag">MLflow experiment deployed and documented</span>
+            <span class="deliverable-tag">Competitive displacement one-pager (personal notes)</span>
+            <span class="deliverable-tag">Customer scenario summary: Brave, Recraft, Wubble</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 5</div>
+              <div class="manager-text">Run a <strong>mock competitive objection session</strong> — present the SA with "we're already on AWS" and evaluate the response. Is the displacement conversation natural and credible? Does the SA use the SemiAnalysis TCO framework as a proof anchor? This is a preview of what Gate 2 will require next week.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 5, the SA can...</div>
+            <div class="eow-text">Deploy and configure the full Nebius MLOps stack, handle a competitive displacement conversation against AWS or GCP using the SemiAnalysis TCO framework, and name three Nebius customers with their workload type and business result.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WEEK 6 ─── -->
+      <div class="week-card wc-p2" id="week-6" data-phase="p2">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p2">Week 06</span>
+          <span class="wc-title">TCO Modeling, Solution Design & Practitioner Certification</span>
+          <span class="wc-focus">Practitioner</span>
+          <span class="wc-milestone">✦ Gate 2</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">TCO modeling workshop — build a side-by-side cost comparison vs AWS for a realistic LLM pre-training workload using the SemiAnalysis framework. Document assumptions, GPU hours, storage, and networking costs.</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">Solution design practice — take a sample customer brief (mid-size AI startup, training a 7B parameter model) and produce a written solution design covering GPU selection, cluster configuration, storage architecture, and estimated TCO</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text"><strong>Gate 2 Assessment:</strong> Live architecture demo to a mock customer panel (SA Manager + one senior SA). Present the solution design for the 7B model training scenario. 45 minutes including Q&amp;A.</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p2"></div><span class="wc-item-text">Review Gate 2 feedback and document personal development areas for Phase 3</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>SA Manager + Senior SA</strong> — Gate 2 mock customer panel assessors</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Finance / RevOps</strong> — understand how Nebius pricing is structured and how SA-led TCO models feed into deal commercial structures</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag d-green">✦ Gate 2: Architecture demo to mock panel passed</span>
+            <span class="deliverable-tag">Written TCO model: Nebius vs AWS for 7B param training</span>
+            <span class="deliverable-tag">Solution design document (7B model scenario)</span>
+            <span class="deliverable-tag">Phase 3 development focus areas documented</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 6 (Gate 2)</div>
+              <div class="manager-text">Conduct the <strong>Gate 2 live architecture demo</strong> with a senior SA as co-assessor. Use the standardized rubric: (1) Technical accuracy of GPU and cluster design, (2) Clarity of TCO model assumptions, (3) Ability to handle technical Q&amp;A without breaking down. Written feedback within 24 hours. Gate 2 pass unlocks Phase 3 and first supervised customer call in Week 8.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 6, the SA can...</div>
+            <div class="eow-text">Design a complete Nebius solution for a realistic customer scenario, present it to a technical panel, defend architectural choices under questioning, and build a credible TCO model. Gate 2 passed. Nebius Practitioner Badge earned.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WEEK 7 ─── -->
+      <div class="week-card wc-p3" id="week-7" data-phase="p3">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p3">Week 07</span>
+          <span class="wc-title">Token Factory — Production Inference Architecture</span>
+          <span class="wc-focus">Expert</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Token Factory API deep-dive — model endpoint architecture, vLLM-optimized throughput, and how Nebius has optimized DeepSeek R1 inference for production use</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text"><strong>Hands-on Lab 3:</strong> Architect a production inference system using Token Factory — configure authentication, invoke a model endpoint, set rate limits, implement monitoring, and measure time-to-first-token</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Latency-optimized serving for reasoning models — when to recommend Token Factory (managed) vs self-managed vLLM on AI Cloud compute</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Autoscaling inference endpoint design — handling variable production traffic patterns for customer AI applications</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Study Brave Search inference architecture — 11M+ AI-generated answers daily at ~100% GPU utilization. How did they achieve it?</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Token Factory product team</strong> — product road map briefing and inference architecture deep-dive</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Brave Search account team</strong> — case study debrief on how the inference architecture was designed</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag">Lab 3: Production inference endpoint live and monitored</span>
+            <span class="deliverable-tag">Token Factory vs self-managed decision framework (personal notes)</span>
+            <span class="deliverable-tag">Brave Search architecture summary (personal study notes)</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 7</div>
+              <div class="manager-text">Ask the SA to <strong>demo the Token Factory endpoint</strong> they built in Lab 3 as if presenting to a customer CTO. Evaluate: can they explain the Token Factory vs self-managed tradeoff clearly? Are they comfortable with the vLLM/DeepSeek R1 context? Confirm Week 8 customer call is scheduled with a real AE partner.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 7, the SA can...</div>
+            <div class="eow-text">Architect a production inference system on Token Factory, explain the managed vs self-managed inference tradeoff to a customer, and describe how Brave Search achieves ~100% GPU utilization on Nebius.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WEEK 8 ─── -->
+      <div class="week-card wc-p3" id="week-8" data-phase="p3">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p3">Week 08</span>
+          <span class="wc-title">First Live Customer Call — Supervised Observation</span>
+          <span class="wc-focus">Expert</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text"><strong>First live customer call:</strong> Attend a real AE-led customer discovery call as an observer. Do not take the technical lead — observe how the AE qualifies the workload and when/how they introduce the SA</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Post-call debrief with the AE partner — what signals did the customer give? What solution would you design? What would you have done differently?</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Second live customer call — take the technical lead on a follow-up call with AE present. Answer technical questions, qualify workload depth, and propose next steps</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">RAG and Agentic Search solutions study — Nebius RAG architecture, embedding model selection, vector storage options, retrieval optimization patterns</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Fine-tuning architecture review — QLoRA, PEFT, LoRA patterns on Nebius. When to recommend fine-tuning vs RAG vs full training.</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>AE partner</strong> — assigned Account Executive for live customer call co-sell experience</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Customer(s)</strong> — first live customer interaction under SA Manager supervision</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>SA Manager</strong> — end-of-week coaching debrief on first customer call performance</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag">First customer call completed (observer role)</span>
+            <span class="deliverable-tag">Second customer call completed (technical lead role)</span>
+            <span class="deliverable-tag">Post-call solution design note submitted to manager</span>
+            <span class="deliverable-tag">RAG vs fine-tuning decision framework (personal notes)</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 8</div>
+              <div class="manager-text">Attend the second customer call where the SA takes the <strong>technical lead role</strong>. Evaluate: did they listen before proposing? Did they correctly identify the workload type? Did they position the right Nebius solution? Did they handle a technical question they didn't know the answer to gracefully? Structured coaching debrief within 48 hours of the call.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 8, the SA can...</div>
+            <div class="eow-text">Lead the technical portion of a live customer discovery call, ask qualifying questions, correctly identify the customer's workload type, and propose a Nebius solution — without manager prompting.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WEEK 9 ─── -->
+      <div class="week-card wc-p3" id="week-9" data-phase="p3">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p3">Week 09</span>
+          <span class="wc-title">Demo Mastery — Building & Delivering the Nebius Demo</span>
+          <span class="wc-focus">Expert</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Build a personal demo environment — a repeatable, customer-ready Nebius AI Cloud demo that can be tailored to training, fine-tuning, or inference scenarios in under 10 minutes of prep</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Deliver three internal demo run-throughs — to SA Manager, to a senior SA, and to an AE partner. Incorporate feedback after each run.</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Demo disaster recovery practice — practice handling a live failure (cluster not provisioning, latency spike, console error) without breaking the narrative for the customer</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Study the Nebius Solution Library on GitHub — understand which Terraform recipes are most commonly used in customer POCs and which are relevant to your territory</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Third live customer call — take full SA ownership of the technical conversation. No observer safety net.</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>AE partner</strong> — demo feedback session from a sales perspective: "what landed, what confused the customer"</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Senior SA</strong> — advanced demo technique session and feedback on narrative structure</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Customer</strong> — third live call; SA fully independent</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag">Personal demo environment built and documented</span>
+            <span class="deliverable-tag">Three internal demo run-throughs completed</span>
+            <span class="deliverable-tag">Demo feedback log maintained (one entry per run)</span>
+            <span class="deliverable-tag">Third live customer call completed independently</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 9</div>
+              <div class="manager-text">Watch one of the SA's internal demo run-throughs. Score against three criteria: <strong>(1) Technical accuracy</strong> — is the demo showing what it claims to show? <strong>(2) Narrative clarity</strong> — does the customer know why this matters at every step? <strong>(3) Disaster recovery</strong> — what happened when something went wrong in the run? Share written scoring before the AE partner demo run-through.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 9, the SA can...</div>
+            <div class="eow-text">Deliver a polished, customer-ready Nebius AI Cloud demo tailored to any workload scenario, recover gracefully from a live technical failure, and lead a customer call fully independently without manager observation.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WEEK 10 ─── -->
+      <div class="week-card wc-p3" id="week-10" data-phase="p3">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p3">Week 10</span>
+          <span class="wc-title">Advanced Solution Design — Multi-Workload Customer Scenarios</span>
+          <span class="wc-focus">Expert</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Complex scenario design practice — work through three advanced customer scenarios: (1) a pharmaceutical company needing HIPAA-compliant AI training in the EU, (2) a media company scaling stable diffusion inference to production, (3) a fintech building an agentic search system with RAG on Nebius</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Physical AI and Robotics solution patterns — how Nebius's infrastructure supports simulation workloads and physical AI model training</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Enterprise security and compliance deep-dive — tenant-level isolation, IAM architecture, and how to respond to an enterprise security questionnaire using the Trust Center</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Prepare capstone brief — review the capstone scenario (provided by SA Manager at start of Week 11) and begin architecture planning</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Security / Compliance lead</strong> — enterprise security questionnaire walk-through</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Senior SA</strong> — complex scenario review and architecture feedback</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>SA Manager</strong> — capstone scenario briefing at end of week</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag">Three advanced scenario solution designs (written)</span>
+            <span class="deliverable-tag">Enterprise security Q&amp;A using Trust Center completed</span>
+            <span class="deliverable-tag">Capstone scenario brief received and initial architecture sketch begun</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 10</div>
+              <div class="manager-text">Review the SA's <strong>three advanced scenario solution designs</strong>. Are the compliance recommendations accurate for the pharmaceutical EU scenario? Is the stable diffusion inference architecture optimal for the media scenario? Brief the SA on the capstone scenario at end of Week 10 — give them the full week to design before the Week 11 build begins.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 10, the SA can...</div>
+            <div class="eow-text">Design a complete Nebius solution for a regulated-industry customer with EU data residency, handle an enterprise security questionnaire independently, and respond to advanced agentic AI and RAG architecture questions.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WEEK 11 ─── -->
+      <div class="week-card wc-p3" id="week-11" data-phase="p3">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p3">Week 11</span>
+          <span class="wc-title">Capstone Build — Full Solution Design for Realistic RFP</span>
+          <span class="wc-focus">Expert</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Respond to the capstone RFP scenario (provided Week 10) — a realistic enterprise AI workload covering training, fine-tuning, and production inference requirements across multiple use cases</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Produce a complete solution design document including: executive summary, architecture diagram, GPU selection rationale with Hopper vs Blackwell recommendation, cluster configuration, storage design, MLOps stack recommendation, and full TCO model vs AWS</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Prepare the 30-minute customer presentation — slides, live demo environment, and anticipated Q&amp;A responses. Rehearse twice before Week 12 delivery</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Internal rehearsal with AE partner — simulate the full presentation including objections and competitive challenge from a mock AWS team</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>AE partner</strong> — rehearsal panel for capstone presentation; provide competitive challenge</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Buddy SA</strong> — peer review of solution design document before final submission</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>SA Manager</strong> — mid-week check-in to ensure capstone is on track</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag">Capstone solution design document completed</span>
+            <span class="deliverable-tag">Architecture diagram finalized</span>
+            <span class="deliverable-tag">TCO model: Nebius vs AWS completed</span>
+            <span class="deliverable-tag">30-minute presentation deck ready for Week 12</span>
+            <span class="deliverable-tag">Internal rehearsal with AE partner completed</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 11</div>
+              <div class="manager-text">Review the capstone solution design document <strong>before Week 12 begins</strong> — do not wait until the presentation. Flag any technical inaccuracies, missing components, or weak sections so the SA has time to correct before the panel. Confirm the Gate 3 panel (SA Manager + VP Sales or CRO + one Senior SA) is scheduled and briefed on their assessor roles.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 11, the SA can...</div>
+            <div class="eow-text">Produce a complete, presentation-ready solution design document for a complex enterprise AI workload — covering architecture, GPU selection, storage, MLOps, TCO, and compliance — without manager assistance.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── WEEK 12 ─── -->
+      <div class="week-card wc-p3" id="week-12" data-phase="p3">
+        <div class="wc-header" onclick="toggleCard(this)">
+          <span class="wc-week-badge badge-p3">Week 12</span>
+          <span class="wc-title">Expert Certification — Capstone Presentation & SA Graduation</span>
+          <span class="wc-focus">Expert</span>
+          <span class="wc-milestone">✦ Gate 3</span>
+          <svg class="wc-chevron" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+        </div>
+        <div class="wc-body">
+          <div class="wc-grid">
+            <div>
+              <div class="wc-col-label">Key Activities</div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text"><strong>Gate 3 Capstone Presentation:</strong> 30-minute solution presentation to the full panel (SA Manager, VP Sales or CRO, senior SA). Present the complete solution design, deliver a live Nebius demo, defend architectural choices under competitive challenge from the panel, and walk through the TCO model.</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Panel debrief and structured feedback — written assessor scores across five dimensions: technical accuracy, solution completeness, demo quality, objection handling, and commercial awareness</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">Certified Nebius SA Expert ceremony — formal graduation, badge issuance, and first solo customer account assignment</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-p3"></div><span class="wc-item-text">90-day retrospective with SA Manager — what worked in the program, what to improve for the next cohort, and the SA's 30-60-90 growth plan for the next quarter</span></div>
+            </div>
+            <div>
+              <div class="wc-col-label">People to Meet</div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>SA Manager</strong> — Gate 3 lead assessor and graduation ceremony</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>VP Sales or CRO</strong> — panel member; executive perspective on commercial relevance of the solution</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>Senior SA</strong> — panel member; technical depth assessor</span></div>
+              <div class="wc-item"><div class="wc-item-dot dot-green"></div><span class="wc-item-text"><strong>First solo customer</strong> — account assigned post-certification; introductory call in Week 13</span></div>
+            </div>
+          </div>
+          <div class="wc-col-label">Deliverables Due This Week</div>
+          <div class="wc-deliverables">
+            <span class="deliverable-tag d-green">✦ Gate 3: Capstone presentation to panel passed</span>
+            <span class="deliverable-tag d-green">✦ Certified Nebius SA — Expert Badge issued</span>
+            <span class="deliverable-tag">Written panel feedback received and reviewed</span>
+            <span class="deliverable-tag">90-day retrospective completed with manager</span>
+            <span class="deliverable-tag">30-60-90 growth plan for Q2 agreed</span>
+            <span class="deliverable-tag">First solo customer account assigned</span>
+          </div>
+          <div class="manager-strip">
+            <div class="manager-icon">👤</div>
+            <div class="manager-content">
+              <div class="manager-label">Manager Action — Week 12 (Gate 3 + Graduation)</div>
+              <div class="manager-text">Lead the <strong>Gate 3 capstone panel</strong>. Score across five dimensions using the standardized rubric. Deliver the certification badge and written assessment within 24 hours of the presentation. Complete the 90-day program retrospective — capture feedback on module quality, pacing, and lab relevance for use in the next SA onboarding cohort. The SA's 30-60-90 growth plan for Q2 should be agreed before end of week.</div>
+            </div>
+          </div>
+          <div class="eow-box">
+            <div class="eow-label">By end of Week 12, the SA is...</div>
+            <div class="eow-text">A Certified Nebius SA — Expert. Independently customer-ready. Assigned their first solo account. Capable of architecting, demonstrating, and defending any Nebius AI Cloud solution without manager support.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end week-cards -->
+
+    <!-- ═══════════════════════════════════════
+         SIDEBAR
+    ═══════════════════════════════════════ -->
+    <div class="sidebar">
+
+      <!-- ─── MILESTONE TRACKER ─── -->
+      <div class="panel">
+        <div class="panel-title">Program Milestones</div>
+        <div class="panel-sub">Three certification gates separate phases. Gates require live demonstration — not assessments.</div>
+        <div class="milestone-list">
+
+          <div class="milestone-item">
+            <div class="ms-line">
+              <div class="ms-dot wk" style="border-color:var(--p1-mid)"></div>
+              <div class="ms-connector"></div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-week">Week 1</div>
+              <div class="ms-name">Program Kickoff</div>
+              <div class="ms-desc">Systems access, buddy SA assigned, 90-day plan agreed</div>
+            </div>
+          </div>
+
+          <div class="milestone-item">
+            <div class="ms-line">
+              <div class="ms-dot cert"></div>
+              <div class="ms-connector"></div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-week">Week 2 · End of Phase 1</div>
+              <div class="ms-name">Gate 1 — Foundation Badge</div>
+              <div class="ms-desc">30-min architecture walkthrough with SA Manager. Pass to enter Phase 2.</div>
+              <div><span class="ms-badge badge-p1b">Nebius Foundation Badge</span></div>
+            </div>
+          </div>
+
+          <div class="milestone-item">
+            <div class="ms-line">
+              <div class="ms-dot wk" style="border-color:var(--p2-mid)"></div>
+              <div class="ms-connector"></div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-week">Weeks 3–5</div>
+              <div class="ms-name">Technical Deep Build</div>
+              <div class="ms-desc">GPU, orchestration, MLOps, competitive — hands-on labs every week</div>
+            </div>
+          </div>
+
+          <div class="milestone-item">
+            <div class="ms-line">
+              <div class="ms-dot cert"></div>
+              <div class="ms-connector"></div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-week">Week 6 · End of Phase 2</div>
+              <div class="ms-name">Gate 2 — Practitioner Badge</div>
+              <div class="ms-desc">45-min live architecture demo to mock customer panel. Pass to enter Phase 3 and first supervised customer call.</div>
+              <div><span class="ms-badge badge-p2b">Nebius Practitioner Badge</span></div>
+            </div>
+          </div>
+
+          <div class="milestone-item">
+            <div class="ms-line">
+              <div class="ms-dot wk" style="border-color:var(--p3-mid)"></div>
+              <div class="ms-connector"></div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-week">Weeks 7–11</div>
+              <div class="ms-name">Customer-Facing Ramp</div>
+              <div class="ms-desc">Token Factory, live customer calls, demo mastery, complex solution design, capstone build</div>
+            </div>
+          </div>
+
+          <div class="milestone-item">
+            <div class="ms-line">
+              <div class="ms-dot cert"></div>
+            </div>
+            <div class="ms-content">
+              <div class="ms-week">Week 12 · End of Phase 3</div>
+              <div class="ms-name">Gate 3 — Expert Certification</div>
+              <div class="ms-desc">30-min capstone presentation to SA Manager, VP Sales, and senior SA panel. First solo account assigned on pass.</div>
+              <div><span class="ms-badge badge-cert">Certified Nebius SA — Expert</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── KEY STAKEHOLDERS ─── -->
+      <div class="panel">
+        <div class="panel-title">Stakeholder Map</div>
+        <div class="panel-sub">Everyone the SA needs to meet in their first 90 days, and why.</div>
+        <div class="stakeholder-list">
+
+          <div class="sh-item">
+            <div class="sh-avatar av-green">SM</div>
+            <div class="sh-info">
+              <div class="sh-role">SA Manager</div>
+              <div class="sh-purpose">Program owner. Conducts all three gate assessments. Weekly check-ins. Final certification authority.</div>
+            </div>
+            <div class="sh-week">Wk 1</div>
+          </div>
+
+          <div class="sh-item">
+            <div class="sh-avatar av-blue">SA</div>
+            <div class="sh-info">
+              <div class="sh-role">Buddy SA (Assigned Peer)</div>
+              <div class="sh-purpose">Technical mentor. Two job-shadow sessions in Weeks 2–3. Available for informal Q&amp;A throughout the 90 days.</div>
+            </div>
+            <div class="sh-week">Wk 1</div>
+          </div>
+
+          <div class="sh-item">
+            <div class="sh-avatar av-orange">AE</div>
+            <div class="sh-info">
+              <div class="sh-role">AE Partner</div>
+              <div class="sh-purpose">First live customer call partner in Week 8. Capstone rehearsal panel. Ongoing co-sell relationship post-graduation.</div>
+            </div>
+            <div class="sh-week">Wk 8</div>
+          </div>
+
+          <div class="sh-item">
+            <div class="sh-avatar av-blue">PM</div>
+            <div class="sh-info">
+              <div class="sh-role">Product Marketing Lead</div>
+              <div class="sh-purpose">Competitive intelligence briefing. Messaging alignment. Customer proof point context (Brave, Recraft, Wubble).</div>
+            </div>
+            <div class="sh-week">Wk 5</div>
+          </div>
+
+          <div class="sh-item">
+            <div class="sh-avatar av-green">SR</div>
+            <div class="sh-info">
+              <div class="sh-role">Senior SA / Principal SA</div>
+              <div class="sh-purpose">Architecture review sessions. Gate 2 mock panel co-assessor. Gate 3 panel technical assessor. Demo feedback.</div>
+            </div>
+            <div class="sh-week">Wk 2</div>
+          </div>
+
+          <div class="sh-item">
+            <div class="sh-avatar av-purple">VP</div>
+            <div class="sh-info">
+              <div class="sh-role">VP Sales or CRO</div>
+              <div class="sh-purpose">Gate 3 capstone panel — provides executive commercial perspective. First exposure to the SA as a credible technical partner.</div>
+            </div>
+            <div class="sh-week">Wk 12</div>
+          </div>
+
+          <div class="sh-item">
+            <div class="sh-avatar av-blue">TF</div>
+            <div class="sh-info">
+              <div class="sh-role">Token Factory Product Team</div>
+              <div class="sh-purpose">Product road map briefing. Inference architecture deep-dive. vLLM and DeepSeek R1 optimization context.</div>
+            </div>
+            <div class="sh-week">Wk 7</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── 90-DAY DELIVERABLES CHECKLIST ─── -->
+      <div class="panel">
+        <div class="panel-title">90-Day Deliverables Checklist</div>
+        <div class="panel-sub">Every formal deliverable due across the 12-week program.</div>
+        <div class="checklist">
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">✦ Gate 1: Architecture walkthrough</div>
+              <div class="cl-due">Due: End of Week 2</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">Lab 1: H100 provisioned via console, CLI, Terraform</div>
+              <div class="cl-due">Due: Week 3</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">Lab 2: Multi-node K8s cluster deployed</div>
+              <div class="cl-due">Due: Week 4</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">Competitive displacement one-pager</div>
+              <div class="cl-due">Due: Week 5</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">TCO model: Nebius vs AWS (7B param training)</div>
+              <div class="cl-due">Due: Week 6</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">✦ Gate 2: Live architecture demo to mock panel</div>
+              <div class="cl-due">Due: End of Week 6</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">Lab 3: Token Factory inference endpoint live</div>
+              <div class="cl-due">Due: Week 7</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">First customer call (observer role)</div>
+              <div class="cl-due">Due: Week 8</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">Personal demo environment built &amp; documented</div>
+              <div class="cl-due">Due: Week 9</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">Three advanced scenario solution designs</div>
+              <div class="cl-due">Due: Week 10</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">Capstone solution design document</div>
+              <div class="cl-due">Due: Week 11</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">✦ Gate 3: Capstone presentation to full panel</div>
+              <div class="cl-due">Due: Week 12</div>
+            </div>
+          </div>
+
+          <div class="cl-item">
+            <div class="cl-check"></div>
+            <div class="cl-text">
+              <div class="cl-name">90-day retrospective + Q2 growth plan</div>
+              <div class="cl-due">Due: End of Week 12</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ─── ENVIRONMENT SETUP ─── -->
+      <div class="panel">
+        <div class="panel-title">Technical Environment Setup</div>
+        <div class="panel-sub">Everything the SA needs provisioned before Day 1 of Week 1.</div>
+        <div class="setup-list">
+
+          <div class="setup-item">
+            <div class="setup-num">01</div>
+            <div class="setup-text">
+              <div class="setup-name">Nebius AI Cloud Console</div>
+              <div class="setup-desc">Full console access with a dedicated sandbox project. Billing limit set for lab usage. Admin IAM role for the 90-day program.</div>
+            </div>
+          </div>
+
+          <div class="setup-item">
+            <div class="setup-num">02</div>
+            <div class="setup-text">
+              <div class="setup-name">Token Factory API Access</div>
+              <div class="setup-desc">Developer API key with rate limits appropriate for lab work. Access to production model endpoints including DeepSeek R1.</div>
+            </div>
+          </div>
+
+          <div class="setup-item">
+            <div class="setup-num">03</div>
+            <div class="setup-text">
+              <div class="setup-name">GitHub — Nebius Solution Library</div>
+              <div class="setup-desc">Contributor access to github.com/nebius/nebius-solution-library. Clone the repo locally before Week 3 lab work begins.</div>
+            </div>
+          </div>
+
+          <div class="setup-item">
+            <div class="setup-num">04</div>
+            <div class="setup-text">
+              <div class="setup-name">Terraform CLI + Nebius Provider</div>
+              <div class="setup-desc">Terraform installed locally. Nebius Terraform provider configured with authentication. Validated against the console sandbox project.</div>
+            </div>
+          </div>
+
+          <div class="setup-item">
+            <div class="setup-num">05</div>
+            <div class="setup-text">
+              <div class="setup-name">kubectl + Helm</div>
+              <div class="setup-desc">kubectl configured for the Nebius Managed Kubernetes sandbox cluster. Helm 3 installed for workload deployment in Week 4 lab.</div>
+            </div>
+          </div>
+
+          <div class="setup-item">
+            <div class="setup-num">06</div>
+            <div class="setup-text">
+              <div class="setup-name">Nebius CLI</div>
+              <div class="setup-desc">Nebius CLI installed and authenticated. Required for Week 3 Lab 1 (provisioning comparison: console vs CLI vs Terraform).</div>
+            </div>
+          </div>
+
+          <div class="setup-item">
+            <div class="setup-num">07</div>
+            <div class="setup-text">
+              <div class="setup-name">CRM Access (Salesforce)</div>
+              <div class="setup-desc">SA role access to Salesforce. Required from Week 8 onward for logging customer call notes and tracking deal involvement.</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div><!-- end sidebar -->
+
+  </div><!-- end main-cols -->
+
+  <!-- ─── FOOTER ─── -->
+  <div class="footer">
+    <div class="footer-left">
+      Portfolio Artifact #3 of 5 · SA Enablement · Onboarding Program · Prepared by Rus Teston<br>
+      Reference: nebius.com · docs.nebius.com · github.com/nebius/nebius-solution-library · docs.tokenfactory.nebius.com
+    </div>
+    <div class="footer-badge">✦ Nebius SA 90-Day Onboarding Blueprint</div>
+  </div>
+
+  <div style="text-align:center;margin-top:16px;padding-bottom:20px;">
+    <a href="https://nebius.rus-teston.com" style="color:#0ea5e9;text-decoration:none;font-size:0.9rem;">← Back to Nebius Projects</a>
+  </div>
+
+</div><!-- end page -->
+
+<!-- ─── MODAL ─── -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  // ─── MODAL ───
+  const modal = document.getElementById('modal');
+  const modalBody = document.getElementById('modalBody');
+  const modalClose = document.getElementById('modalClose');
+
+  document.querySelectorAll('.panel, .timeline-wrap').forEach(el => {
+    el.addEventListener('click', (e) => {
+      if (e.target.closest('.week-node')) return;
+      modalBody.innerHTML = el.innerHTML;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  modalClose.addEventListener('click', () => {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // ─── TOGGLE CARD EXPAND / COLLAPSE ───
+  function toggleCard(header) {
+    const card = header.closest('.week-card');
+    card.classList.toggle('expanded');
+  }
+
+  // ─── JUMP TO WEEK (from timeline bubble click) ───
+  function jumpToWeek(weekNum) {
+    const card = document.getElementById('week-' + weekNum);
+    if (!card) return;
+
+    // Expand the card
+    card.classList.add('expanded');
+
+    // Remove hidden class if filtered
+    card.classList.remove('hidden');
+
+    // Scroll into view
+    setTimeout(() => {
+      card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+
+    // Highlight the bubble
+    document.querySelectorAll('.week-bubble').forEach(b => b.classList.remove('active'));
+    const bubble = document.getElementById('bubble-' + weekNum);
+    if (bubble) bubble.classList.add('active');
+  }
+
+  // ─── PHASE FILTER ───
+  function filterPhase(phase, btn) {
+    // Update button states
+    document.querySelectorAll('.f-btn').forEach(b => {
+      b.classList.remove('active-all', 'active-p1', 'active-p2', 'active-p3');
+    });
+
+    if (phase === 'all')  btn.classList.add('active-all');
+    if (phase === 'p1')   btn.classList.add('active-p1');
+    if (phase === 'p2')   btn.classList.add('active-p2');
+    if (phase === 'p3')   btn.classList.add('active-p3');
+
+    // Show / hide week cards
+    document.querySelectorAll('.week-card').forEach(card => {
+      if (phase === 'all') {
+        card.classList.remove('hidden');
+      } else {
+        const cardPhase = card.getAttribute('data-phase');
+        if (cardPhase === phase) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+          card.classList.remove('expanded');
+        }
+      }
+    });
+  }
+</script>
+
+</body>
+</html>

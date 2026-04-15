@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nebius — Quick Competitive Positioning</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0C1A3A;
+      --bg-2: #10224A;
+      --bg-3: #162C52;
+      --bg-4: #1C3660;
+      --border: #1E3A5C;
+      --border-2: #2A4D70;
+      --border-3: #356080;
+      --text-1: #F0F6FF;
+      --text-2: #B0CFEA;
+      --text-3: #5A8AAE;
+      --green: #00C853;
+      --green-dim: #00C85318;
+      --green-mid: #00C85340;
+      --good: #00C853;
+      --good-bg: #0A2818;
+      --good-border: #1A4020;
+      --warn: #FF9F3B;
+      --warn-bg: #1A1808;
+      --warn-border: #3A2A10;
+      --bad: #FF4D4D;
+      --bad-bg: #1A0A0A;
+      --bad-border: #3A1515;
+      --radius: 8px;
+      --radius-lg: 14px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: linear-gradient(180deg, #0C1A3A 0%, #0A3050 40%, #0E3558 100%);
+      color: var(--text-1);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      min-height: 100vh;
+      padding: 28px;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .page {
+      position: relative; z-index: 1;
+      max-width: 1500px;
+      margin: 0 auto;
+    }
+
+    /* ─── TOP BAR ─── */
+    .top-bar {
+      display: flex; align-items: center;
+      justify-content: space-between;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border-2);
+      margin-bottom: 24px;
+      flex-wrap: wrap; gap: 10px;
+    }
+
+    .brand {
+      display: flex; align-items: center; gap: 9px;
+    }
+
+    .brand-mark {
+      width: 28px; height: 28px;
+      background: var(--green);
+      border-radius: 6px; display: grid; place-items: center;
+    }
+
+    .brand-mark svg { width: 15px; height: 15px; }
+
+    .brand-name {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700; font-size: 1.2rem;
+      color: var(--text-1); letter-spacing: -0.2px;
+    }
+
+    .top-right {
+      display: flex; align-items: center; gap: 14px;
+    }
+
+    .doc-type {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--text-3);
+      text-transform: uppercase; letter-spacing: 0.1em;
+    }
+
+    .creator-pill {
+      display: flex; align-items: center; gap: 6px;
+      padding: 4px 12px; border-radius: 100px;
+      background: var(--bg-3); border: 1px solid var(--border-2);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.67rem; color: var(--text-2);
+    }
+
+    .c-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
+
+    /* ─── HERO ─── */
+    .hero { margin-bottom: 24px; }
+
+    .hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--green);
+      text-transform: uppercase; letter-spacing: 0.15em;
+      margin-bottom: 6px;
+    }
+
+    .hero h1 {
+      font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+      font-weight: 700; letter-spacing: -0.5px;
+      line-height: 1.15; color: var(--text-1);
+      margin-bottom: 10px;
+    }
+
+    .hero h1 span { color: var(--green); }
+
+    .hero-sub {
+      font-size: 0.9rem; color: var(--text-2);
+      max-width: 800px; line-height: 1.65;
+    }
+
+    /* ─── LEGEND ─── */
+    .legend {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .legend-item {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem; padding: 5px 12px;
+      border-radius: 100px;
+    }
+
+    .legend-good { background: var(--good-bg); color: var(--good); border: 1px solid var(--good-border); }
+    .legend-warn { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
+    .legend-bad { background: var(--bad-bg); color: var(--bad); border: 1px solid var(--bad-border); }
+
+    /* ─── TABLE CARD ─── */
+    .table-card {
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      cursor: pointer;
+    }
+
+    .table-card:hover {
+      transform: scale(1.01);
+      border-color: var(--border-3);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1200px;
+    }
+
+    thead th {
+      background: var(--bg-3);
+      color: var(--text-1);
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-align: left;
+      padding: 14px 14px;
+      border-right: 1px solid var(--border);
+      border-bottom: 2px solid var(--border-2);
+      position: sticky;
+      top: 0;
+    }
+
+    thead th:first-child { width: 260px; }
+
+    tbody td {
+      padding: 14px;
+      border-top: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      vertical-align: top;
+      font-size: 0.82rem;
+      color: var(--text-2);
+      background: var(--bg-2);
+      line-height: 1.5;
+    }
+
+    tbody tr:nth-child(even) td { background: var(--bg-3); }
+    tbody tr:hover td { background: var(--bg-4); }
+
+    tbody td:first-child {
+      font-weight: 600;
+      color: var(--text-1);
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: 100px;
+      font-size: 0.68rem;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 5px;
+    }
+
+    .good { background: var(--good-bg); color: var(--good); border: 1px solid var(--good-border); }
+    .warn { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
+    .bad { background: var(--bad-bg); color: var(--bad); border: 1px solid var(--bad-border); }
+
+    .cell-title {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 3px;
+      color: var(--text-1);
+    }
+
+    /* ─── NOTES ─── */
+    .notes {
+      margin-top: 18px;
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      cursor: pointer;
+    }
+
+    .notes:hover {
+      transform: scale(1.02);
+      border-color: var(--border-3);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+
+    .notes h2 {
+      font-size: 1rem; font-weight: 600;
+      color: var(--green); margin-bottom: 8px;
+    }
+
+    .notes p {
+      font-size: 0.88rem; color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    .notes p strong { color: var(--text-1); }
+
+    /* ─── FOOTER ─── */
+    .footer {
+      margin-top: 22px; padding-top: 14px;
+      border-top: 1px solid var(--border-2);
+      display: flex; align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
+    }
+
+    .footer-left {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; color: #ffffff; line-height: 1.6;
+    }
+
+    .footer-badge {
+      display: flex; align-items: center; gap: 7px;
+      padding: 5px 14px; border-radius: 100px;
+      background: var(--green-dim); border: 1px solid var(--green-mid);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; color: var(--green);
+      font-weight: 600; text-transform: uppercase; letter-spacing: 0.09em;
+    }
+
+    /* ─── MODAL ─── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(4, 8, 20, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+    .modal-content {
+      background: var(--bg-2);
+      border: 1px solid var(--border-2);
+      border-radius: 12px;
+      padding: 40px 48px;
+      max-width: 1200px; width: 95%;
+      max-height: 85vh; overflow-y: auto;
+      position: relative;
+      transform: scale(0.95) translateY(10px);
+      transition: transform 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+
+    .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+
+    .modal-close {
+      position: absolute; top: 16px; right: 20px;
+      background: var(--bg-3); border: 1px solid var(--border-2);
+      border-radius: 8px; color: var(--text-2);
+      font-size: 1.2rem; width: 36px; height: 36px;
+      display: grid; place-items: center;
+      cursor: pointer; transition: all 0.2s ease;
+    }
+
+    .modal-close:hover { background: var(--bg-4); color: var(--text-1); }
+
+    .modal-content td { font-size: 0.92rem; line-height: 1.6; }
+    .modal-content th { font-size: 0.92rem; }
+    .modal-content .cell-title { font-size: 0.95rem; }
+    .modal-content .tag { font-size: 0.78rem; }
+    .modal-content .notes h2 { font-size: 1.15rem; }
+    .modal-content .notes p { font-size: 1rem; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 20 20" fill="none">
+          <rect x="2" y="2" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="11" y="2" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="2" y="11" width="7" height="7" fill="#000" rx="1"/>
+          <rect x="11" y="11" width="7" height="7" fill="#000" rx="1"/>
+        </svg>
+      </div>
+      <span class="brand-name">Nebius</span>
+    </div>
+    <div class="top-right">
+      <span class="doc-type">Sales Enablement · Competitive Positioning</span>
+      <div class="creator-pill">
+        <div class="c-dot"></div>
+        <span>Portfolio by Rus Teston</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-eyebrow">Sales Enablement · Battle Card Reference</div>
+    <h1>Quick <span>Competitive</span> Positioning</h1>
+    <p class="hero-sub">Nebius compared against five key competitors across nine differentiators. Designed for sales enablement, battle cards, and positioning discussions.</p>
+  </div>
+
+  <!-- LEGEND -->
+  <div class="legend">
+    <span class="legend-item legend-good">✅ Strong alignment / advantage</span>
+    <span class="legend-item legend-warn">⚠️ Partial alignment / mixed</span>
+    <span class="legend-item legend-bad">❌ Weak alignment / disadvantage</span>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-card" id="tableCard">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Nebius Differentiator</th>
+            <th>Nebius</th>
+            <th>CoreWeave</th>
+            <th>Lambda Labs</th>
+            <th>RunPod</th>
+            <th>Vast.ai</th>
+            <th>AWS / Azure / GCP</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>AI-Native Infrastructure</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Purpose-built for AI</span>Designed around AI training and inference from the start.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Strong AI focus</span>Highly specialized around GPU cloud for AI.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">AI-first</span>Well aligned, especially for developers and research users.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Mixed model</span>AI support is strong, but leans more serverless/marketplace.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">Marketplace-driven</span>Less like a curated AI platform, more like GPU sourcing.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">General-purpose cloud</span>AI exists inside a much broader cloud ecosystem.</td>
+          </tr>
+          <tr>
+            <td>GPU Availability & Access</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">High availability</span>Strong access with vertically integrated infrastructure.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Industry-leading access</span>One of the toughest competitors on GPU access and scale.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Moderate availability</span>Good access, but generally less scale than the top tier.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Variable availability</span>Availability can fluctuate depending on supply and node mix.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">Unpredictable supply</span>Can be cheap, but consistency is a challenge.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Constrained and expensive</span>Often region-bound, quota-limited, or costly.</td>
+          </tr>
+          <tr>
+            <td>Performance (cluster scaling, InfiniBand)</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">High-performance clusters</span>Optimized for demanding AI training and scaling needs.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Elite performance</span>Very strong story for large model training.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Solid but smaller scale</span>Good performance, not usually at mega-cluster level.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Node-dependent</span>Performance can vary depending on environment selected.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">Inconsistent</span>Marketplace variability can hurt repeatability.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Strong but generalized</span>Powerful infra, not always tuned for AI-first workflows.</td>
+          </tr>
+          <tr>
+            <td>Cost Efficiency (price per GPU hour)</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Competitive pricing</span>Positioned as a performance-plus-value option.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">Premium pricing</span>High-end capability often comes with premium cost.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Cost-effective</span>Often attractive for researchers and smaller teams.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Flexible pricing</span>Usage-based approach appeals to cost-conscious users.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Cheapest option</span>Usually wins the price war, though with tradeoffs.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">Highest cost profile</span>Most expensive path for GPU-heavy AI workloads.</td>
+          </tr>
+          <tr>
+            <td>Enterprise Readiness (SLA, support)</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Enterprise-grade posture</span>Strong fit for serious AI workloads and business use cases.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Proven enterprise traction</span>Significant enterprise momentum and credibility.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Growing maturity</span>Good experience, often perceived as more developer-centric.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Limited enterprise depth</span>Not always top-of-mind for strict enterprise requirements.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">Not enterprise-grade</span>Lowest confidence for enterprise support and predictability.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Best-in-class maturity</span>Wins on operational maturity, governance, and enterprise trust.</td>
+          </tr>
+          <tr>
+            <td>Time-to-Deploy</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Fast provisioning</span>Strong positioning around fast access to AI infrastructure.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Can lag under demand</span>Demand pressure can affect speed-to-access.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Fast deployment</span>Known for quick setup and user convenience.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Very fast</span>Appealing for rapid experiments and burst workloads.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Instant when available</span>Fast if the right hardware is available at the right time.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">Slower and more complex</span>Provisioning can be more operationally heavy.</td>
+          </tr>
+          <tr>
+            <td>Ease of Use (developer experience)</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Streamlined AI workflow</span>Clear fit for ML users who want less cloud friction.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">More infra-oriented</span>Powerful, but can feel heavier operationally.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Very user-friendly</span>One of the strongest usability stories in the segment.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Simple UX</span>Approachable for quick starts and iterative work.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Technical overhead</span>Usability depends on buyer sophistication.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">Complex ecosystem</span>Broad service portfolios create friction for focused AI teams.</td>
+          </tr>
+          <tr>
+            <td>Vertical Integration (ownership vs marketplace)</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Fully owned stack</span>Greater control, consistency, and optimization potential.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Strong ownership model</span>Also competes well on integrated infrastructure.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Partial integration</span>Not always framed with the same ownership depth.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">Marketplace hybrid</span>Less controlled than vertically integrated providers.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">Marketplace model</span>Great for cost hunting, weaker for consistency.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Fully owned but generalized</span>Ownership is strong, though the stack is not AI-specific.</td>
+          </tr>
+          <tr>
+            <td>AI Specialization</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Deep AI focus</span>Clear specialization around modern AI workloads.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">Deep AI focus</span>One of the most direct AI-specialist comparisons.</td>
+            <td><span class="tag good">✅ Strong</span><span class="cell-title">AI-focused</span>Strong resonance with ML practitioners.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Partial specialization</span>Useful for AI, but not as strongly positioned as AI-first leaders.</td>
+            <td><span class="tag bad">❌ Weak</span><span class="cell-title">Not deeply specialized</span>Closer to GPU access than full AI platform specialization.</td>
+            <td><span class="tag warn">⚠️ Partial</span><span class="cell-title">Broad AI portfolio</span>Many AI services, but infrastructure is not framed as AI-native.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="notes" id="notesCard">
+    <h2>Suggested positioning takeaway</h2>
+    <p>
+      Nebius is strongest when positioned at the intersection of <strong>AI-native infrastructure</strong>,
+      <strong>high-performance GPU access</strong>, and <strong>competitive cost efficiency</strong>.
+      CoreWeave is the closest direct rival on scale and performance, hyperscalers win on enterprise maturity,
+      and marketplace players often win on price but give up consistency and enterprise polish.
+    </p>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-left">
+      Portfolio Artifact · Sales Enablement · Competitive Positioning · Prepared by Rus Teston<br>
+      Reference: nebius.com · 9 differentiators · 6 competitors compared
+    </div>
+    <div class="footer-badge">✦ Nebius Quick Competitive Positioning</div>
+  </div>
+
+  <div style="text-align:center;margin-top:16px;padding-bottom:20px;">
+    <a href="https://nebius.rus-teston.com" style="color:#0ea5e9;text-decoration:none;font-size:0.9rem;">← Back to Nebius Projects</a>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-content">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+  const modal = document.getElementById('modal');
+  const modalBody = document.getElementById('modalBody');
+  const modalClose = document.getElementById('modalClose');
+
+  document.querySelectorAll('.table-card, .notes').forEach(el => {
+    el.addEventListener('click', () => {
+      modalBody.innerHTML = el.innerHTML;
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  modalClose.addEventListener('click', () => {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+</script>
+</body>
+</html>

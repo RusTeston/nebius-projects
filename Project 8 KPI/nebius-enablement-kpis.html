@@ -1,0 +1,2641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebius Revenue Enablement — KPI Framework</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f7f6f2;
+    --accent: #00c2a0;
+    --accent-dim: #00c2a015;
+    --accent-mid: #00c2a030;
+    --gray-100: #f0ede6;
+    --gray-200: #dedad0;
+    --gray-400: #9a9488;
+    --gray-600: #5c5750;
+    --red: #e05252;
+    --yellow: #e0a832;
+    --green: #2ec47a;
+    --red-dim: #e0525215;
+    --yellow-dim: #e0a83215;
+    --green-dim: #2ec47a15;
+    --section-sa: #4f7fff;
+    --section-ae: #f26522;
+    --section-prog: #9b59b6;
+    --section-exec: #00c2a0;
+    --section-biz: #e84393;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--black);
+    color: var(--white);
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 60px 80px;
+    overflow: hidden;
+    background: radial-gradient(ellipse 80% 60% at 60% 30%, #00c2a010 0%, transparent 70%),
+                radial-gradient(ellipse 50% 50% at 10% 80%, #4f7fff08 0%, transparent 60%),
+                var(--black);
+  }
+
+  .header-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 70%, transparent 100%);
+  }
+
+  .header-inner {
+    position: relative;
+    z-index: 2;
+    max-width: 1100px;
+  }
+
+  .nebius-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(0,194,160,.12);
+    border: 1px solid rgba(0,194,160,.3);
+    border-radius: 40px;
+    padding: 6px 18px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 36px;
+  }
+
+  .nebius-badge::before {
+    content: '';
+    width: 7px; height: 7px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .5; transform: scale(.7); }
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(42px, 7vw, 88px);
+    line-height: 1.0;
+    letter-spacing: -.02em;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  h1 span {
+    color: var(--accent);
+    font-style: italic;
+  }
+
+  .header-subtitle {
+    font-size: 18px;
+    font-weight: 300;
+    color: var(--gray-400);
+    margin-top: 24px;
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  .header-meta {
+    margin-top: 48px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+  }
+
+  .meta-value {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+  }
+
+  .meta-value.accent { color: var(--accent); }
+
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    left: 60px;
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .scroll-hint::after {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gray-600);
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,10,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    padding: 0 60px;
+    overflow-x: auto;
+  }
+
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    height: 56px;
+    white-space: nowrap;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 20px;
+    height: 100%;
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    color: var(--gray-400);
+    text-decoration: none;
+    border-bottom: 2px solid transparent;
+    transition: color .2s, border-color .2s;
+  }
+
+  .nav-link:hover { color: var(--white); }
+
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ── INTRO BAND ── */
+  .intro-band {
+    background: var(--gray-100);
+    color: var(--black);
+    padding: 64px 60px;
+  }
+
+  .intro-band-inner {
+    max-width: 1100px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+
+  .intro-band h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 32px;
+    color: var(--black);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
+
+  .intro-band p {
+    font-size: 15px;
+    color: var(--gray-600);
+    line-height: 1.75;
+  }
+
+  .phased-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .phase-item {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .phase-num {
+    flex-shrink: 0;
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--black);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 2px;
+  }
+
+  .phase-text strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 2px;
+  }
+
+  .phase-text span {
+    font-size: 13px;
+    color: var(--gray-600);
+  }
+
+  /* ── MAIN CONTENT ── */
+  main {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 60px 120px;
+  }
+
+  /* ── CATEGORY SECTION ── */
+  .category-section {
+    margin-top: 80px;
+  }
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+
+  .category-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+
+  .category-header-text {}
+
+  .category-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .category-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--white);
+    line-height: 1.1;
+  }
+
+  .category-desc {
+    font-size: 14px;
+    color: var(--gray-400);
+    margin-top: 6px;
+    max-width: 700px;
+    line-height: 1.65;
+  }
+
+  /* ── KPI CARD ── */
+  .kpi-card {
+    background: rgba(255,255,255,.032);
+    border: 1px solid rgba(255,255,255,.07);
+    border-radius: 16px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: border-color .25s;
+  }
+
+  .kpi-card:hover {
+    border-color: rgba(255,255,255,.14);
+  }
+
+  .kpi-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 24px 28px 20px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .kpi-card-header-left {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .kpi-number {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--gray-600);
+    padding-top: 4px;
+    min-width: 28px;
+  }
+
+  .kpi-title-block {}
+
+  .kpi-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--white);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .kpi-definition {
+    font-size: 13.5px;
+    color: var(--gray-400);
+    line-height: 1.6;
+    max-width: 680px;
+  }
+
+  .kpi-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding-left: 0;
+    margin-top: 10px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .badge-leading {
+    background: rgba(0,194,160,.12);
+    color: var(--accent);
+    border: 1px solid rgba(0,194,160,.25);
+  }
+
+  .badge-lagging {
+    background: rgba(79,127,255,.12);
+    color: #7fa8ff;
+    border: 1px solid rgba(79,127,255,.25);
+  }
+
+  .badge-freq {
+    background: rgba(255,255,255,.06);
+    color: var(--gray-400);
+    border: 1px solid rgba(255,255,255,.1);
+  }
+
+  .kpi-toggle {
+    flex-shrink: 0;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,.1);
+    background: transparent;
+    color: var(--gray-400);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background .2s, color .2s, transform .25s;
+    line-height: 1;
+  }
+
+  .kpi-card.open .kpi-toggle {
+    transform: rotate(45deg);
+    background: rgba(255,255,255,.08);
+    color: var(--white);
+  }
+
+  /* ── EXPANDED BODY ── */
+  .kpi-body {
+    display: none;
+    padding: 0 28px 28px;
+    border-top: 1px solid rgba(255,255,255,.06);
+    animation: slideDown .2s ease;
+  }
+
+  .kpi-card.open .kpi-body { display: block; }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 24px;
+  }
+
+  .kpi-field {
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 12px;
+    padding: 16px 18px;
+  }
+
+  .kpi-field-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .kpi-field-label::before {
+    content: '';
+    display: block;
+    width: 14px; height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    opacity: .7;
+  }
+
+  .kpi-field-value {
+    font-size: 14px;
+    color: var(--white);
+    line-height: 1.6;
+  }
+
+  .kpi-field-value code {
+    display: inline-block;
+    background: rgba(0,194,160,.1);
+    border: 1px solid rgba(0,194,160,.2);
+    color: var(--accent);
+    font-family: 'DM Mono', 'Fira Code', monospace;
+    font-size: 12.5px;
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+    word-break: break-all;
+  }
+
+  /* ── THRESHOLDS ── */
+  .threshold-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .threshold {
+    flex: 1;
+    min-width: 80px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    text-align: center;
+  }
+
+  .threshold-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .threshold-value {
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .t-green { background: var(--green-dim); border: 1px solid rgba(46,196,122,.2); }
+  .t-green .threshold-label { color: var(--green); }
+  .t-green .threshold-value { color: var(--green); }
+
+  .t-yellow { background: var(--yellow-dim); border: 1px solid rgba(224,168,50,.2); }
+  .t-yellow .threshold-label { color: var(--yellow); }
+  .t-yellow .threshold-value { color: var(--yellow); }
+
+  .t-red { background: var(--red-dim); border: 1px solid rgba(224,82,82,.2); }
+  .t-red .threshold-label { color: var(--red); }
+  .t-red .threshold-value { color: var(--red); }
+
+  /* ── ACCOUNTABILITY BLOCK ── */
+  .accountability-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .acct-cell {
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.06);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+
+  .acct-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--gray-600);
+    margin-bottom: 4px;
+  }
+
+  .acct-value {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  /* ── BUSINESS PURPOSE BANNER ── */
+  .business-banner {
+    margin-top: 20px;
+    background: linear-gradient(135deg, rgba(0,194,160,.08) 0%, rgba(0,194,160,.03) 100%);
+    border: 1px solid rgba(0,194,160,.18);
+    border-radius: 10px;
+    padding: 14px 18px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .biz-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .biz-content {}
+
+  .biz-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+
+  .biz-text {
+    font-size: 13.5px;
+    color: rgba(247,246,242,.75);
+    line-height: 1.6;
+  }
+
+  /* ── ACTION PLAN ── */
+  .action-plan {
+    margin-top: 12px;
+    background: rgba(255,255,255,.03);
+    border: 1px solid rgba(255,255,255,.06);
+    border-left: 3px solid var(--red);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+  }
+
+  .action-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 6px;
+  }
+
+  .action-text {
+    font-size: 13.5px;
+    color: var(--gray-400);
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: rgba(255,255,255,.03);
+    border-top: 1px solid rgba(255,255,255,.07);
+    padding: 48px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .footer-brand {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--white);
+  }
+
+  .footer-brand span { color: var(--accent); }
+
+  .footer-meta {
+    font-size: 13px;
+    color: var(--gray-600);
+    text-align: right;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    header, nav { padding-left: 24px; padding-right: 24px; }
+    .intro-band { padding: 48px 24px; }
+    .intro-band-inner { grid-template-columns: 1fr; gap: 40px; }
+    main { padding: 0 24px 80px; }
+    footer { padding: 40px 24px; flex-direction: column; align-items: flex-start; }
+    .footer-meta { text-align: left; }
+    .scroll-hint { left: 24px; }
+    .kpi-grid { grid-template-columns: 1fr; }
+    .accountability-row { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ HEADER -->
+<header>
+  <div class="header-grid"></div>
+  <div class="header-inner">
+    <div class="nebius-badge">Nebius AI Cloud &nbsp;·&nbsp; nebius.com</div>
+    <h1>Revenue Enablement<br><span>KPI Framework</span></h1>
+    <p class="header-subtitle">
+      A comprehensive set of Key Performance Indicators proposed for the Nebius Revenue Enablement program — spanning Solutions Architect onboarding, seller technical readiness, partner independence, and business impact measurement.
+    </p>
+    <div class="header-meta">
+      <div class="meta-item">
+        <span class="meta-label">Total KPIs</span>
+        <span class="meta-value accent">25</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Categories</span>
+        <span class="meta-value">5</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Audiences Covered</span>
+        <span class="meta-value">SA · AE · Partner</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Prepared By</span>
+        <span class="meta-value">Rus Teston</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-hint">Expand any KPI to explore full detail</div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════ NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#sa-ramp" class="nav-link"><span class="nav-dot" style="background:#4f7fff"></span>SA Ramp &amp; Speed</a>
+    <a href="#program-quality" class="nav-link"><span class="nav-dot" style="background:#f26522"></span>Program Quality</a>
+    <a href="#field-performance" class="nav-link"><span class="nav-dot" style="background:#9b59b6"></span>Field Performance</a>
+    <a href="#partner" class="nav-link"><span class="nav-dot" style="background:#00c2a0"></span>Partner Performance</a>
+    <a href="#business-impact" class="nav-link"><span class="nav-dot" style="background:#e84393"></span>Business Impact</a>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════════════ INTRO BAND -->
+<div class="intro-band">
+  <div class="intro-band-inner">
+    <div>
+      <h2>How to Use This Framework</h2>
+      <p>These 25 KPIs represent the full measurement chain for a world-class Revenue Enablement program at Nebius — from the speed of onboarding to the dollar value of partner-sourced pipeline. Each KPI is actionable: it tells you not only what to measure, but what to do when the number goes red.</p>
+      <br>
+      <p>Click any KPI card to expand its full detail: formula, data source, thresholds, ownership, and the specific action plan for when performance drops below target. Use the category navigation above to jump to any section.</p>
+    </div>
+    <div>
+      <p style="font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#9a9488;margin-bottom:20px;">Recommended Implementation Phasing</p>
+      <div class="phased-list">
+        <div class="phase-item">
+          <div class="phase-num">1</div>
+          <div class="phase-text">
+            <strong>Days 0–90 · Ramp &amp; Quality</strong>
+            <span>Launch the 5 Ramp KPIs + NPS &amp; completion rate. Requires minimal tooling — LMS data and CRM hire dates.</span>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">2</div>
+          <div class="phase-text">
+            <strong>Month 6 · Field Performance</strong>
+            <span>Activate field KPIs once CRM opportunity tagging is established and cohort comparisons become meaningful.</span>
+          </div>
+        </div>
+        <div class="phase-item">
+          <div class="phase-num">3</div>
+          <div class="phase-text">
+            <strong>Month 12 · Partner &amp; Business Impact</strong>
+            <span>Add partner and executive KPIs as the partner program matures and enablement ROI becomes demonstrable.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ MAIN -->
+<main>
+
+<!-- ══════════════════════ CATEGORY 1: SA RAMP & SPEED -->
+<section class="category-section" id="sa-ramp">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(79,127,255,.12);border:1px solid rgba(79,127,255,.25);">🚀</div>
+    <div class="category-header-text">
+      <div class="category-eyebrow" style="color:#7fa8ff;">Category 1 of 5</div>
+      <div class="category-title">Ramp &amp; Speed</div>
+      <div class="category-desc">These leading indicators measure how quickly the enablement program converts new hires and partners into productive contributors. Every week of unnecessary ramp time is a week of missed pipeline — and missed revenue.</div>
+    </div>
+  </div>
+
+  <!-- KPI 1 -->
+  <div class="kpi-card" id="kpi1">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi1')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">01</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">SA Average Ramp Time</div>
+          <div class="kpi-definition">Weeks elapsed from a Solutions Architect's hire date to their first solo, manager-unobserved customer-facing demo — the point at which they are independently generating pipeline.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-leading">● Leading</span>
+            <span class="badge badge-freq">Monthly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Avg Ramp = Σ(Solo Demo Date − Hire Date) / # SAs in Cohort</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">HRIS (hire dates) + LMS certification gate logs (Gate 2 pass date) + CRM calendar for first unobserved customer demo.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Under <strong>8 weeks</strong> from hire date to first solo customer demo.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≤ 8 wks</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">9–11 wks</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&gt; 11 wks</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Industry average for AI infrastructure SAs: 9–12 weeks. Nebius target is to lead the market by cutting to 8 weeks.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">SA Enablement — Structured Onboarding &amp; Ramp Acceleration. Directly answers the VP of Sales question: how fast can a new SA generate pipeline?</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Senior Manager, Revenue Enablement</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Sales Ops / HRIS Administrator</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Reducing SA ramp from 12 to 8 weeks across a 20-person team creates 80 weeks of additional productive capacity per year — equivalent to adding 1.5 FTE SAs with zero additional headcount cost. This is the single most direct measure of the onboarding program's financial return.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Audit gate pass rates for Gate 1 and Gate 2 to find where SAs are stalling. Review manager coaching completion — if managers aren't doing their weekly coaching actions, ramp time always degrades. Check whether technical lab environments were provisioned before Day 1. Convene SA leadership for a 30-day cohort review.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 2 -->
+  <div class="kpi-card" id="kpi2">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi2')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">02</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">AE Time to First Qualified Opportunity</div>
+          <div class="kpi-definition">Calendar days from an Account Executive's start date to their first CRM-logged opportunity that meets the organization's qualification criteria (e.g., MEDDIC/SPICED score threshold or SA-confirmed technical fit).</div>
+          <div class="kpi-badges">
+            <span class="badge badge-leading">● Leading</span>
+            <span class="badge badge-freq">Monthly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Avg = Σ(First Qualified Opp Date − AE Start Date) / # AEs in Cohort</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">CRM (Salesforce or HubSpot): opportunity creation date, qualification stage, and AE ownership field. HRIS for start dates.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">First qualified opportunity logged within <strong>30 days</strong> of AE start date.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≤ 30 days</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">31–45 days</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&gt; 45 days</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">B2B SaaS/IaaS industry benchmark: 45–60 days. Target is 30 days, reflecting the effectiveness of AE Technical Cheat Sheet and foundation training.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Seller Technical Enablement. AEs with stronger technical fluency qualify AI infrastructure deals faster — eliminating the "technical gatekeeping" delay that inflates ramp time.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Revenue Enablement Manager (AE Track)</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Sales Operations / CRM Admin</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">AEs who qualify GPU infrastructure deals faster create more pipeline per quarter. For Nebius, where deal sizes often start at $100K+ and the competitive window is narrow, a 15-day improvement in time to first opportunity across 20 AEs can represent millions in additional annual pipeline creation.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Review AE Technical Cheat Sheet usage data from LMS — are AEs completing the workload decoder and discovery questions modules? Conduct call-shadowing sessions with new AEs in their first 3 weeks. Check whether territory assignments and target account lists were provided before Day 1. Consider pairing new AEs with a buddy AE for their first two discovery calls.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 3 -->
+  <div class="kpi-card" id="kpi3">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi3')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">03</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Partner Time to First Deal Registration</div>
+          <div class="kpi-definition">Calendar days from a partner's portal activation date to their first deal registered in the CRM — the commercial proof that the partner onboarding program is connecting to the sales motion.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-leading">● Leading</span>
+            <span class="badge badge-freq">Monthly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Avg = Σ(First Deal Registration Date − Portal Activation Date) / # Partners in Cohort</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">Partner portal (activation timestamp) + CRM deal registration log. Partner type segmentation available in partner portal data.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">First deal registered within <strong>30 days</strong> of completing Stage 1 (Onboarded) of the Partner Enablement Framework.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≤ 30 days</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">31–45 days</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&gt; 45 days</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Demonstrated in Nebius Metrics Dashboard cohort data: 24 days (enabled) vs 42 days (non-enabled). Target is ≤30 days.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Partner Technical Enablement. Partner programs that don't produce a registered deal within 30 days of Stage 1 completion are not connecting enablement to the sales motion.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Partner Enablement Lead</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Partner Operations / CRM Admin</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Partners who register their first deal faster are 3× more likely to become active, recurring revenue contributors. At Nebius's current partner growth trajectory, shaving 15 days off the first-deal registration cycle across 50 partners per year represents a material pipeline pull-forward — without adding a single new partner.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Review Stage 1 curriculum for the partner type showing the slowest registration times. Check whether deal registration mechanics (portal walkthrough, registration form) are covered in Stage 1 onboarding — many partners fail to register deals simply because they don't know how. Assign a partner success manager to check in with Stage 1 completers at the 2-week mark.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 4 -->
+  <div class="kpi-card" id="kpi4">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi4')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">04</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Certification Gate Pass Rate (First Attempt)</div>
+          <div class="kpi-definition">The percentage of enrolled learners who pass each program certification gate on their first attempt — indicating that prerequisite modules are effectively preparing learners for live demonstration requirements.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-leading">● Leading</span>
+            <span class="badge badge-freq">Per Cohort</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Pass Rate = (Learners Passing Gate on 1st Attempt / Total Learners Attempting Gate) × 100</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">LMS gate assessment logs — attempt number, pass/fail flag, assessor score. Tracked per gate (Gate 1, 2, 3) and per role track (SA, AE, Partner).</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Above <strong>80%</strong> first-attempt pass rate across all three gates for all role tracks.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 80%</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">65–79%</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 65%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">No internal baseline yet. Industry benchmark for technical certification programs: 70–75% first-attempt pass rate. Nebius target exceeds industry standard.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Programs &amp; Content — Certification quality and role-based learning effectiveness. A low pass rate signals content gaps, not learner failure.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Revenue Enablement Manager (Programs)</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">LMS Administrator</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Gates that most learners fail signal that modules are not preparing people for real-world customer interactions. A gate failure is expensive: it delays ramp time, consumes assessor time, and demoralizes new hires. Tracking this metric at the gate and module level allows the enablement team to fix the content before it costs the business pipeline.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Identify which specific gate is failing and conduct a root-cause analysis: are learners struggling with the demo format, the technical content, or the objection-handling portion? Pull module NPS scores for the weeks preceding the failing gate. Consider adding an optional practice session or pre-gate "dry run" with a manager before the formal assessment.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 5 -->
+  <div class="kpi-card" id="kpi5">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi5')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">05</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Phase Completion Rate</div>
+          <div class="kpi-definition">The percentage of enrolled learners who complete each program phase (Foundation, Practitioner, Expert) within the prescribed timeline — a direct measure of whether managers are releasing employees to complete their enablement or creating scheduling obstacles.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-leading">● Leading</span>
+            <span class="badge badge-freq">Monthly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Completion Rate = (Learners Completing Phase on Time / Total Enrolled Learners) × 100</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">LMS enrollment and completion logs. Phase completion timestamps compared against scheduled phase-end dates by cohort.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Above <strong>85%</strong> on-time phase completion per cohort per role track.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 85%</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">70–84%</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 70%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">To be established in first cohort. Phase completion drop-off is almost always a manager availability problem, not a learner motivation problem — monitor by manager.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Execution &amp; Operations. Phase completion rate is the operational heartbeat of the enablement program — if learners are not completing phases, nothing downstream (ramp time, win rate) improves.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Revenue Enablement Manager</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">LMS Administrator</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Completion rates below 85% signal that the program is losing structural integrity — learners are falling behind and cohort-level learning is breaking down. This directly degrades every downstream KPI: ramp time lengthens, gate pass rates drop, and field performance metrics deteriorate. Catching low completion early allows intervention before it becomes a revenue problem.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Segment completion data by manager — low completion is almost always concentrated under specific managers who are pulling new hires into deals or meetings before they complete their learning. Escalate to SA or AE leadership with completion-by-manager data. Review whether module time estimates are accurate (if modules take 40% longer than estimated, completion naturally suffers). Consider adding async content options for high-demand phases.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CATEGORY 2: PROGRAM QUALITY -->
+<section class="category-section" id="program-quality">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(242,101,34,.12);border:1px solid rgba(242,101,34,.25);">📊</div>
+    <div class="category-header-text">
+      <div class="category-eyebrow" style="color:#f26522;">Category 2 of 5</div>
+      <div class="category-title">Program Quality</div>
+      <div class="category-desc">These metrics track whether enablement content is meeting the field's needs. In a fast-moving AI infrastructure market where Nebius launches new GPU architectures and customer proof points frequently, content that lags the product by more than 60 days becomes a credibility liability.</div>
+    </div>
+  </div>
+
+  <!-- KPI 6 -->
+  <div class="kpi-card" id="kpi6">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi6')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">06</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Module NPS Score</div>
+          <div class="kpi-definition">Average post-module satisfaction score (0–10 scale) collected immediately after each module is completed — the primary content quality signal that drives the enablement team's content iteration backlog.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-leading">● Leading</span>
+            <span class="badge badge-freq">Per Module</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Module NPS = Avg of all post-module scores (0–10) per module, per cohort</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">LMS built-in survey or embedded post-module form (Google Forms / Typeform integrated with LMS). One question: "How relevant was this module to your current role at Nebius? (0–10)"</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Average module score above <strong>7.5</strong>. Any module scoring below <strong>7.0</strong> triggers a mandatory content review within 30 days.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 7.5</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">7.0–7.4</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 7.0</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">To be established at first cohort. Watch for low scores on technically dense modules (e.g., AE Pricing, Partner Escalation) — these historically underperform without field-driven examples.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Programs &amp; Content — Content quality and field relevance. Also directly connected to Measurement &amp; Impact — NPS data feeds the content iteration log that proves program responsiveness.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Revenue Enablement Manager (Content)</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">LMS Administrator</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Content that earns low scores loses field trust. Once an SA or AE decides that enablement content isn't worth their time, adoption drops — and every downstream metric suffers. Module NPS is the early warning system that keeps content relevant before it becomes a structural adoption problem.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Review open-text feedback for the failing module. Common root causes: content feels too generic (needs more Nebius-specific examples), content is out of date (GPU tiers or pricing have changed), or the module is too long (break into smaller units). Engage 2–3 high-performing SAs or AEs as content reviewers. Set a 30-day revision deadline and re-survey the next cohort.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 7 -->
+  <div class="kpi-card" id="kpi7">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi7')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">07</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Learner Self-Reported Confidence Delta</div>
+          <div class="kpi-definition">The measured increase in learners' self-reported confidence on key technical and commercial skills (GPU tier selection, competitive positioning, TCO modeling) between pre-program baseline survey and post-program completion survey.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-leading">● Leading</span>
+            <span class="badge badge-freq">Per Cohort</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Confidence Delta = Post-Program Avg Score − Pre-Program Avg Score (per skill, per role)</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">Pre-program survey (Day 1) and post-program survey (Phase completion). Skills assessed: GPU workload matching, competitive objection handling, TCO model defense, discovery question quality.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Minimum <strong>+2.0 point</strong> improvement (on a 10-point scale) in each core skill area by end of Phase 2 (Practitioner).</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">+2.0 pts</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">+1.0–1.9 pts</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; +1.0 pts</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Pre-program survey establishes the baseline per cohort. Track by skill and by role to identify which areas the program develops most effectively.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">SA Enablement + Seller Technical Enablement. Confidence directly predicts field behavior — SAs and AEs who feel confident in technical conversations engage more assertively with customers and escalate less frequently.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Revenue Enablement Manager</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Enablement Operations / Survey Admin</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">In AI infrastructure sales, a technically hesitant SA or AE is a revenue risk. This metric bridges the gap between "did they complete the modules" and "are they actually more capable?" Confidence delta is one of the clearest qualitative signals that the program is producing behavioral change — not just completion certificates.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Identify which specific skills show the lowest confidence gain. If competitive positioning confidence is low, add more objection-handling roleplay sessions with tenured SAs or AEs. If GPU tier selection confidence is low, review whether the technical lab exercises include sufficient hands-on workload matching scenarios. Consider adding optional "office hours" sessions with SA leadership.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 8 -->
+  <div class="kpi-card" id="kpi8">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi8')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">08</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Content Freshness Index</div>
+          <div class="kpi-definition">The percentage of enablement modules that have been reviewed and updated within 60 days of a material Nebius product launch, pricing change, competitive event, or new customer case study publication.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Monthly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Freshness % = (Modules Updated Within 60 Days of Trigger Event / Total Triggered Modules) × 100</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">LMS/CMS content last-modified timestamps. Product launch calendar (from Product Marketing). Content iteration log maintained by Enablement team.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value"><strong>100%</strong> of triggered modules updated within 60 days. Time to Competitive Response (separate KPI #25) targets under 14 days for competitive events.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">100%</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">85–99%</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 85%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">To be established at program launch. Nebius launches new GPU tiers, partnerships, and customer proof points at high frequency — this metric will be regularly tested.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Programs &amp; Content — Consistency and quality of technical messaging. Execution &amp; Operations — Alignment with product launches and go-to-market priorities.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Revenue Enablement Manager (Content)</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Product Marketing / Enablement Ops</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Nebius is one of the fastest-moving AI infrastructure platforms in the world — GB300 NVL72 deployments, new InfiniBand interconnects, and new customer proof points emerge regularly. An SA walking into a customer conversation with 90-day-old content loses credibility — and deals — to competitors who are current. Content freshness is a direct competitive advantage.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Implement a 48-hour Product Launch Alert process: when Product Marketing publishes a launch, Enablement receives an automatic trigger to begin content review. Build a content dependency map that links each module to the product features or customer examples it references — so launch events automatically generate a content review queue rather than requiring manual discovery.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 9 -->
+  <div class="kpi-card" id="kpi9">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi9')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">09</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Field Manager Coaching Completion Rate</div>
+          <div class="kpi-definition">The percentage of managers who complete their weekly structured coaching action for each direct report currently enrolled in the onboarding program — tracking the human side of enablement that content alone cannot replace.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-leading">● Leading</span>
+            <span class="badge badge-freq">Weekly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Coaching Completion % = (Weekly Coaching Actions Logged / Total Required Weekly Actions) × 100</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">Manager self-log in LMS (weekly coaching check-in form) or CRM activity log. Corroborated by learner post-week pulse surveys: "Did your manager complete your scheduled coaching session this week? (Y/N)"</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Above <strong>90%</strong> weekly coaching completion across all managers with active onboarding reports.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 90%</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">75–89%</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 75%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">To be established at program launch. Warning: coaching completion rates almost always start high and degrade as manager workload increases mid-quarter — watch for Q-end dips.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">SA Enablement — Structured Onboarding. Manager coaching is the most reliable predictor of onboarding success. A program with 90% module completion but 30% manager coaching completion will consistently underperform.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">SA / AE / Partner Leadership (with Enablement reporting)</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Revenue Enablement Manager</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Content develops knowledge. Manager coaching develops behavior. The SA 90-Day Blueprint embeds a specific manager coaching action into every week — not because it's best practice, but because data consistently shows that learners without active manager observation never translate knowledge into customer-ready capability. This metric makes manager accountability visible and reportable to leadership.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Identify by manager name which managers have the lowest completion rates. Escalate through SA/AE VP — this is a management accountability issue, not an enablement issue. Review whether coaching actions are realistic in terms of time commitment (each coaching action in the blueprint is scoped to 20–30 minutes). Consider a quarterly manager enablement session focused on coaching techniques for technical roles.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 10 -->
+  <div class="kpi-card" id="kpi10">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi10')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">10</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Program Adoption Rate</div>
+          <div class="kpi-definition">The percentage of eligible new hires and newly activated partners who enroll in the enablement program within 14 days of their start or activation date — indicating whether the program is treated as mandatory or optional by the organization.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-leading">● Leading</span>
+            <span class="badge badge-freq">Monthly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Adoption Rate = (Enrolled Within 14 Days / Total Eligible New Hires or Partners) × 100</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">LMS enrollment timestamps vs HRIS start dates (for employees) or partner portal activation dates (for partners). Segmented by role track and manager.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value"><strong>100%</strong> enrollment within 14 days for all eligible new hires. Any eligible new hire not enrolled within 14 days triggers a manager notification.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 95%</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">80–94%</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 80%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">To be set at program launch. Low adoption at launch is common — it almost always reflects whether executive sponsorship has signaled the program as required, not optional.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Execution &amp; Operations — Drive adoption and engagement across global teams. LMS/CMS utilization tracking. Programs with 100% adoption but 50% completion tell a different story than programs with 50% adoption.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Revenue Enablement Manager</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">LMS Administrator</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">High-quality programs that nobody takes cannot drive revenue. Adoption rate is the organizational signal that determines whether enablement has executive air cover. If adoption is below 80%, the root cause is almost always the absence of a mandate from the CRO or VP of Sales — not a content quality problem. This metric makes that conversation concrete.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Identify unenrolled eligible employees by manager. Escalate to CRO / VP of Sales with a list of non-enrolled new hires and a summary of what they are missing. Request that enablement enrollment be added to the standard new hire onboarding checklist managed by People Ops — this removes the opt-in friction. For partners, review the portal activation email sequence to ensure program enrollment is step two, not step ten.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CATEGORY 3: FIELD PERFORMANCE -->
+<section class="category-section" id="field-performance">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(155,89,182,.12);border:1px solid rgba(155,89,182,.25);">🎯</div>
+    <div class="category-header-text">
+      <div class="category-eyebrow" style="color:#c084fc;">Category 3 of 5</div>
+      <div class="category-title">Field Performance</div>
+      <div class="category-desc">These lagging indicators measure whether enablement changed field behavior — and whether that behavior change produced better business outcomes. Measured 60–90 days post-ramp using cohort comparison methodology (enablement-complete vs non-complete).</div>
+    </div>
+  </div>
+
+  <!-- KPI 11 -->
+  <div class="kpi-card" id="kpi11">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi11')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">11</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">SA Technical Win Rate</div>
+          <div class="kpi-definition">The percentage of customer technical evaluations won in deals where an SA was involved, segmented by whether the SA completed the full onboarding program — the most direct measure of SA enablement effectiveness.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Quarterly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Win Rate = (Technical Evaluations Won / Total Technical Evaluations) × 100 [segmented by enablement-complete vs non-complete SAs]</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">CRM: opportunity stage (Technical Win/Loss), SA owner field, and LMS enablement completion flag. Requires SA name to be tagged on CRM opportunities.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Enablement-complete SA cohort wins at a rate at least <strong>15 percentage points higher</strong> than non-complete peers. Absolute target: <strong>65%+</strong> technical win rate for complete cohort.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 65% / +15pt gap</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">55–64%</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 55%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Nebius portfolio data (simulated): enabled SA cohort 68% vs non-enabled 49%. Establish actual baseline from first 6 months of CRM data with SA tagging.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">SA Enablement — Continuously developing SA technical and sales capabilities. The technical win rate is the ultimate proof that SAs are converting customer confidence into deals.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">VP, Solutions Architecture + Revenue Enablement</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Sales Operations / CRM Admin</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">The technical win rate is the number that earns budget. A 19-point gap between enabled and non-enabled SA cohorts (68% vs 49%) translates directly into closed revenue. For a company competing against AWS, GCP, and CoreWeave in every technical evaluation, this metric is the CRO's clearest evidence that investing in SA enablement is not optional.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Pull win/loss analysis data for the most recent quarter — which technical evaluation scenarios are SAs losing and why? Common failure points: TCO defense (compete on cost vs AWS), multi-node cluster architecture (networking depth), or demo environment reliability. Update Gate 2 assessment scenarios to mirror the losing evaluation contexts. Conduct targeted win/loss debrief sessions with SA leadership.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 12 -->
+  <div class="kpi-card" id="kpi12">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi12')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">12</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">AE Discovery-to-Technical Validation Speed</div>
+          <div class="kpi-definition">Average calendar days from an AE's first discovery call with a prospect to the SA-involved technical validation session — a deal velocity metric that reveals whether AE technical fluency is compressing or lengthening the pipeline cycle.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Monthly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Avg Days = Σ(Technical Validation Date − First Discovery Call Date) / Total Deals Reaching Technical Validation</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">CRM: activity log (first discovery call date) + opportunity stage timestamp (technical validation stage entry). AE ownership field for cohort segmentation.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Under <strong>21 days</strong> from first discovery call to technical validation for enablement-complete AE cohort.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≤ 21 days</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">22–35 days</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&gt; 35 days</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">To be established from CRM historical data for the first two quarters. Expect enabled AE cohort to validate 30–40% faster than non-enabled peers.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Seller Technical Enablement — AEs improving their ability to position and sell complex solutions. Technical fluency compresses the discovery-to-validation cycle by enabling AEs to qualify workloads correctly in the first call.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">VP, Sales + Revenue Enablement</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Sales Operations</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">In AI infrastructure deals, the technical validation session is often the commercial gate. Compressing the path from discovery to technical validation by even 10 days across a team of 20 AEs creates hundreds of additional pipeline-days per quarter — accelerating revenue recognition and freeing SA capacity for more evaluations.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Review AE Cheat Sheet usage data — specifically the workload decoder and SA escalation guide sections. AEs who understand the "green signal" escalation criteria bring in SAs at the right moment, not too early or too late. Add a role-play module where AEs practice the handoff conversation with their assigned SA. Audit whether SA availability is the bottleneck (scheduling constraints inflate this metric regardless of AE quality).</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 13 -->
+  <div class="kpi-card" id="kpi13">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi13')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">13</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">AE Quota Attainment at 90 Days</div>
+          <div class="kpi-definition">The percentage of quota achieved by new Account Executives in their first 90 days in role, compared between enablement-complete and non-complete cohorts — a direct revenue measure of AE onboarding effectiveness.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Quarterly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Attainment % = (Revenue Closed by AE in First 90 Days / 90-Day Quota) × 100</code><br><br>Compared across enablement-complete vs non-complete cohorts.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">CRM (closed-won revenue by AE within 90 days of start date) + Compensation system (quota by AE). LMS completion flag for cohort segmentation.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Enablement-complete AE cohort achieves at least <strong>60% of quota</strong> in first 90 days. (Industry context: average B2B rep hits 30–40% in first quarter.)</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 60%</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">40–59%</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 40%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Industry average: ~30% of B2B reps hit quota in their first 90 days. Only 30% of B2B reps across all industries hit quota in 2024, reflecting a highly challenging environment. Nebius target of 60% reflects the quality bar that structured enablement should enable.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Seller Technical Enablement — Measurement &amp; Impact. This is the financial proof of AE enablement ROI that a CRO uses to justify enablement investment in budget discussions.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">CRO / VP Sales + Revenue Enablement</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Sales Operations / Compensation Admin</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">The 90-day quota attainment comparison is the executive money metric for AE enablement. If enabled AEs close more revenue in their first 90 days than non-enabled peers, the ROI calculation for the program becomes self-evident. Conversely, if the gap doesn't exist, the enablement program must be examined for gaps in content-to-behavior connection.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Audit the AE Foundation curriculum for depth of deal execution content — are AEs learning how to run a Nebius deal, or just learning the product? Review whether the AE Cheat Sheet sections on proof points and competitive positioning are being used in active deals. Pull call recordings from first-90-day AEs and listen for qualification depth. Consider adding a "first deal coaching sprint" — a 2-week intensive with an experienced AE buddy.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 14 -->
+  <div class="kpi-card" id="kpi14">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi14')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">14</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Average AE Deal Size (90-Day Cohort)</div>
+          <div class="kpi-definition">Average closed deal size (in dollars) for new AEs in their first 90 days, compared between enablement-complete and non-complete cohorts — using deal size as a proxy for qualification depth and technical fluency.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Quarterly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Avg Deal Size = Σ(Closed-Won ARR) / Total Closed-Won Deals — segmented by enablement completion flag</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">CRM: closed-won opportunity ARR value, AE owner, and close date within 90 days of AE start. LMS completion flag for cohort split.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Enablement-complete AE cohort average deal size at least <strong>30% higher</strong> than non-complete peers. Absolute target: <strong>$140K+ average ARR</strong> per deal for complete cohort.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ $140K / +30%</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">$100K–139K</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; $100K</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Nebius portfolio data (simulated): $148K (enabled) vs $102K (non-enabled). A $46K gap per deal is the enablement ROI signal. Establish actual baseline from CRM data in first 6 months.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Seller Technical Enablement — AEs with better technical fluency qualify larger, more complex workloads. A GPU training cluster deal worth $400K requires different qualification depth than a $40K inference deployment.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">VP Sales + Revenue Enablement</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Sales Operations</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">AEs who understand Nebius's GPU tier architecture and workload economics can position $400K multi-node training cluster deals instead of $40K single-node compute instances. A $46K average deal size gap between enabled and non-enabled cohorts, multiplied across 20 AEs closing 5 deals per quarter, represents $4.6M in additional annual ARR attributable to the enablement program.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Review whether the AE workload decoder module is teaching AEs to identify large-scale training opportunities (multi-node, long-duration, high GPU count) versus smaller inference or fine-tuning workloads. Introduce deal sizing coaching: help AEs recognize the signals that indicate a customer's workload justifies a larger cluster. Review whether AEs are bringing in SAs early enough to influence scope expansion before commercial terms are discussed.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 15 -->
+  <div class="kpi-card" id="kpi15">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi15')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">15</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Competitive Win Rate vs Named Competitors</div>
+          <div class="kpi-definition">The percentage of competitive deals won against named competitors (AWS, GCP, Azure, CoreWeave) where Nebius was explicitly evaluated, tracked quarterly and trended over time to measure whether enablement is effectively arming the field.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Quarterly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Competitive Win Rate = (Competitive Deals Won / Total Competitive Deals) × 100 [by competitor name]</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">CRM: "Competitor present" field + win/loss stage. Requires AEs to log competitor names on all opportunities where a named competitor was involved in the evaluation.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Competitive win rate trending <strong>upward quarter-over-quarter</strong>. Absolute targets vary by competitor; absolute floor of <strong>40%</strong> against any single named competitor.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 50% + trending ↑</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">40–49%</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 40%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Establish from first two quarters of CRM data with competitor logging. Track separately by competitor — win rate vs CoreWeave will differ from win rate vs AWS.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Seller Technical Enablement + Programs &amp; Content — Competitive positioning content effectiveness. Nebius competes directly with hyperscalers on price/performance and with CoreWeave on GPU cloud specialization. The competitive win rate is the clearest market signal that messaging is working.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">VP Sales + Product Marketing + Revenue Enablement</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Sales Operations / CRM Admin</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Every competitive evaluation Nebius loses to AWS, GCP, or CoreWeave is a direct revenue loss in a market where switching costs are high and multi-year contracts are common. A rising competitive win rate is the proof that the AE Cheat Sheet competitive one-liners, the SA TCO defense training, and the SemiAnalysis Gold Medal TCO positioning are translating into customer decisions — not just field confidence.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Conduct a structured win/loss analysis for the previous quarter, segmented by competitor. Identify the top 3 stated reasons for losing — then check whether those objections are addressed in current enablement content. Update the AE Cheat Sheet competitive section and SA objection playbook within 14 days of the win/loss analysis completion. Schedule a cross-functional competitive debrief with Product, Marketing, and SA leadership.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CATEGORY 4: PARTNER PERFORMANCE -->
+<section class="category-section" id="partner">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(0,194,160,.12);border:1px solid rgba(0,194,160,.25);">🤝</div>
+    <div class="category-header-text">
+      <div class="category-eyebrow" style="color:var(--accent);">Category 4 of 5</div>
+      <div class="category-title">Partner Performance</div>
+      <div class="category-desc">These metrics track whether the partner enablement framework is producing independence and pipeline contribution. The goal is not partner training completion — it is partners who generate revenue and require fewer Nebius resources to do so.</div>
+    </div>
+  </div>
+
+  <!-- KPI 16 -->
+  <div class="kpi-card" id="kpi16">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi16')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">16</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Partner-Sourced Pipeline (90-Day)</div>
+          <div class="kpi-definition">Total pipeline value (in dollars) generated by partners who have achieved Stage 2 (Competent) or higher in the Partner Enablement Framework, tracked quarterly — the primary commercial output of the partner enablement program.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Quarterly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Partner Pipeline = Σ(Open Opportunity ARR tagged as partner-sourced, where partner = Stage 2+) for trailing 90 days</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">CRM: partner-sourced opportunity flag + partner name + opportunity ARR. Partner portal: stage certification status. Requires CRM to have a "Partner Source" picklist on opportunities.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Set in Year 1 planning based on partner program size. Partners not generating pipeline within <strong>90 days of Stage 2 certification</strong> trigger a partner health review.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">At / above plan</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">75–99% of plan</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 75% of plan</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Establish from first two quarters of partner-tagged CRM data. Track separately by partner type — VAR pipeline will differ significantly from ISV/MSP pipeline in average deal size.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Partner Technical Enablement — Align partner enablement with go-to-market priorities. Partner-sourced pipeline is the board-level metric that determines whether the partner program is a strategic asset or a cost center.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">VP of Partnerships + Revenue Enablement</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Partner Operations / Sales Operations</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Partner-sourced pipeline is the commercial proof of the partner ecosystem's value to Nebius. A partner who generates $500K in pipeline and requires minimal SA resources is worth more than a partner who generates $500K but requires constant SA escalation. Tracking this metric against partner enablement stage reveals which investments in partner development are producing commercial returns.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Identify which partner types or specific partners are below pipeline targets. For partners generating no pipeline post-Stage 2, conduct a one-on-one GTM alignment session: do they have qualified accounts identified? Are they using the deal registration process correctly? Check whether the Stage 1–2 curriculum is giving partners enough commercial tools — pitch narrative, deal registration walkthrough, co-sell motion guidance. Consider introducing a "first deal sprint" incentive.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 17 -->
+  <div class="kpi-card" id="kpi17">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi17')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">17</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">SA Escalation Rate per Partner Deal</div>
+          <div class="kpi-definition">The average number of Nebius Solutions Architect touchpoints required per partner-managed customer deal — tracked quarterly and expected to decrease over time as partners develop independence. The single best metric for measuring whether partners are becoming self-sufficient.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Quarterly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Escalation Rate = Total Nebius SA Touchpoints on Partner-Managed Deals / Total Partner-Managed Deals in Period</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">CRM: SA activity log on partner-tagged opportunities. Requires SA activities on partner deals to be logged (calls, emails, demos) with a "partner deal" flag.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Trending toward <strong>1.2 or fewer</strong> SA escalations per partner deal for Stage 3+ (GTM-Ready) partners. Stage 1–2 partners: escalation rate is expected and acceptable.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≤ 1.2 (Stage 3+)</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">1.3–2.5</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&gt; 2.5</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Nebius portfolio data (simulated): 1.2 (enabled) vs 3.4 (non-enabled). At 1.2 escalations per deal vs 3.4, each SA can support 3× as many partner deals without adding headcount.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Partner Technical Enablement — Build and scale technical enablement programs that improve partner competency and independence. The escalation rate is the independence metric that makes enablement ROI visible to operations and finance.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">VP of Partnerships + SA Leadership</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Sales Operations / CRM Admin</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">At Nebius's growth rate, every SA escalation that a well-enabled partner could handle independently is an SA hour diverted from net-new pipeline. If the partner program can reduce escalation rate from 3.4 to 1.2 across 50 partner deals per quarter, Nebius reclaims 110 SA hours per quarter — the equivalent of a part-time SA at zero additional cost. This is the economic case for partner enablement investment.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Categorize escalation types: are partners escalating for technical demos (content gap), pricing questions (commercial training gap), or product questions (product knowledge gap)? Each type requires a different curriculum fix. Add an escalation playbook to Stage 2–3 content: what can a partner resolve independently vs what genuinely requires Nebius SA involvement? Track escalation type distribution monthly.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 18 -->
+  <div class="kpi-card" id="kpi18">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi18')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">18</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Partner Certification Rate by Type</div>
+          <div class="kpi-definition">The percentage of active partners (by type: VAR, ISV/MSP, Alliance) who have achieved Stage 3 (GTM-Ready) or higher within the Partner Enablement Framework, tracked by partner type and trended quarterly.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Quarterly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Cert Rate = (Partners at Stage 3+ / Total Active Partners) × 100 — reported per partner type</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">Partner portal: stage certification status per partner, partner type classification. LMS: gate completion records for each partner.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value"><strong>60% of active partners</strong> at Stage 3 (GTM-Ready) or higher within 12 months of the partner program launch.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 60%</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">40–59%</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 40%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">To be established from first cohort. Track separately by partner type — ISV/MSP partners typically certify faster due to higher technical baseline; VAR partners may require more commercial fluency support.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Partner Technical Enablement — Partner lifecycle alignment. Certified partners generate more pipeline, close faster, and require less SA support — the three commercial outcomes that define a successful partner program.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Partner Enablement Lead</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Partner Operations / LMS Admin</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Certification rates by partner type reveal where the enablement program is succeeding and where it needs investment. If VAR certification rates are lagging while ISV/MSP rates are strong, the commercial fluency content for VARs needs enhancement. This level of segmentation ensures enablement resources are directed to the highest-leverage interventions, not spread uniformly across all partners.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Identify which stage is the bottleneck (Stage 1 → 2 or Stage 2 → 3) for the underperforming partner type. For low Stage 2 → 3 progression, check whether the GTM unlock requirement (e.g., jointly registered deal in active pipeline) is realistic or is acting as an unintentional barrier. Consider introducing a "Stage 3 sprint cohort" — a structured 4-week accelerated pathway for partners who are ready but haven't crossed the line.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 19 -->
+  <div class="kpi-card" id="kpi19">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi19')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">19</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Joint Case Studies Published per Quarter</div>
+          <div class="kpi-definition">Number of Nebius-and-partner co-authored customer case studies published on nebius.com or partner channels per quarter — an output metric that tracks whether Expert-stage partners are producing thought leadership that creates awareness and pipeline for both organizations.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Quarterly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Count = # Co-authored Case Studies Published in Quarter (by partner name and partner type)</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">nebius.com CMS (published case studies with partner attribution) + partner-submitted publication links. Maintained by Product Marketing with Enablement input.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">At least <strong>2 co-authored case studies per quarter</strong> per active Expert-stage partner. Program-level target: <strong>4+ published</strong> per quarter by end of Year 1.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 4/quarter</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">2–3/quarter</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">≤ 1/quarter</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Establish from existing nebius.com case study library. Partners who produce case studies signal ecosystem maturity and provide the sales team with proof points for specific workload types.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Partner Technical Enablement — Stage 4 (Expert) partner GTM outcome. Programs &amp; Content — Partner-generated case studies extend the enablement content library with real-world customer evidence.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Partner Enablement Lead + Product Marketing</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Product Marketing / Web CMS Admin</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Expert-stage partners who publish case studies create a self-reinforcing pipeline engine: each case study drives awareness for both Nebius and the partner, creates a sales tool for the entire field team, and provides evidence of the partner ecosystem's maturity to future partners considering joining the program. Case study output is the most visible signal of a healthy, mature partner ecosystem.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Low case study output usually means partners have satisfied customers but lack the bandwidth or process to document them. Introduce a "Case Study Concierge" service: Nebius provides a standard template and a 30-minute interview session — the partner just needs to approve the draft. Build case study creation into the Expert-stage curriculum as a structured milestone, not an optional aspiration. Offer nebius.com promotion as an incentive.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 20 -->
+  <div class="kpi-card" id="kpi20">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi20')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">20</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Partner Net Revenue Retention</div>
+          <div class="kpi-definition">Year-over-year change in Nebius revenue managed or influenced by partners who completed the enablement program, measuring whether enabled partners are growing their Nebius customer base or merely maintaining it.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Annual</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Partner NRR = (Current Year Partner-Influenced ARR / Prior Year Partner-Influenced ARR) × 100</code><br><br>Target: above 110% (net expansion).</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">CRM: partner-influenced ARR by partner (current and prior year). Requires consistent partner attribution logic applied retroactively for comparison. Finance alignment required on ARR attribution rules.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Above <strong>110% NRR</strong> — enabled partner cohort should be expanding their Nebius revenue base year over year, not just maintaining it.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 110% NRR</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">100–109%</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 100%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">To be established at 12-month mark. This is an annual metric — it cannot be meaningfully tracked until partners have been in the program for a full year. Industry benchmark: top partner programs achieve 115–130% NRR from enabled partner cohorts.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Partner Technical Enablement — Ultimate measure of partner program ROI. Partners who expand their Nebius revenue year-over-year are operating as genuine force multipliers for Nebius's growth trajectory.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">VP of Partnerships + CRO</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Finance / Sales Operations</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Partner NRR above 110% proves that the partner ecosystem is a growth engine, not just a distribution channel. For Nebius's board and investors, a partner cohort that consistently expands its Nebius revenue year-over-year demonstrates that the partnership model is scalable and that enablement investment produces compounding commercial returns over time.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Identify whether the NRR shortfall is due to partner churn (losing partner relationships) or partner stagnation (partners not expanding into new accounts). For churn: investigate whether partners are losing Nebius customers to competitors — this may be a product or pricing issue, not an enablement issue. For stagnation: review whether Expert-stage curriculum includes account expansion strategies and co-sell motions for growing within existing accounts.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════ CATEGORY 5: BUSINESS IMPACT -->
+<section class="category-section" id="business-impact">
+  <div class="category-header">
+    <div class="category-icon" style="background:rgba(232,67,147,.12);border:1px solid rgba(232,67,147,.25);">📈</div>
+    <div class="category-header-text">
+      <div class="category-eyebrow" style="color:#f472b6;">Category 5 of 5</div>
+      <div class="category-title">Business Impact</div>
+      <div class="category-desc">These executive-level metrics connect the enablement program directly to Nebius's revenue growth, market position, and organizational scalability. These are the KPIs that earn budget, secure headcount, and justify continued investment in the enablement function.</div>
+    </div>
+  </div>
+
+  <!-- KPI 21 -->
+  <div class="kpi-card" id="kpi21">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi21')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">21</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Enablement ROI</div>
+          <div class="kpi-definition">Revenue generated by enablement-complete cohorts minus the fully-loaded cost of the enablement program, expressed as a multiplier — the definitive financial argument for enablement budget in a CRO or CFO conversation.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Semi-Annual</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Enablement ROI = (Revenue Uplift from Enabled Cohort − Program Cost) / Program Cost × 100</code><br><br>Revenue uplift = delta between enabled and non-enabled cohort ARR × number of enabled reps.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">CRM (cohort revenue comparison) + Finance (program cost: headcount, LMS licenses, content development, external facilitators). Requires Finance partnership to agree on attribution methodology.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Minimum <strong>3× ROI</strong> — for every $1 invested in the enablement program, the business generates $3 in additional revenue from enabled cohorts vs non-enabled peers.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ 3× ROI</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">2–2.9×</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; 2×</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Illustrative calculation: $46K deal size gap × 20 AEs × 5 deals/quarter = $4.6M additional ARR/year. If program cost is $800K/year, ROI = 5.75×. Establish actual numbers from first full cohort comparison.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Measurement &amp; Impact — The board-level metric that determines whether enablement receives budget growth or budget cuts. Also required for executive reporting on enablement effectiveness and business impact.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Senior Manager, Revenue Enablement + CRO</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Finance / Sales Operations</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">This is the number that determines whether the Revenue Enablement function grows, stays flat, or gets cut in the next budget cycle. Enablement programs that cannot demonstrate ROI lose resources to direct sales headcount and product investment. Programs that demonstrate 3–5× ROI earn budget expansions, additional headcount, and executive sponsorship. Building the ROI measurement methodology is as important as building the program itself.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Audit the cohort comparison methodology with Finance — ensure the revenue attribution is rigorous and defensible (same territory, same tenure, same product mix where possible). Review whether the program cost calculation includes all fully-loaded costs (headcount time, LMS, content development) to avoid an artificial inflation of ROI. If ROI is genuinely below 2×, conduct a program effectiveness audit: which modules have the lowest completion and lowest NPS scores? Start the improvement there.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 22 -->
+  <div class="kpi-card" id="kpi22">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi22')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">22</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Revenue Capacity Added Through Ramp Reduction</div>
+          <div class="kpi-definition">The dollar value of additional revenue capacity created by reducing average ramp time, calculated by translating saved ramp weeks into additional quota-contributing weeks per role — making the ramp time improvement directly legible to Finance and the CRO.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Quarterly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Revenue Capacity Added = (Prior Ramp Weeks − Current Ramp Weeks) × Avg Weekly Quota Contribution per Role × # New Hires in Cohort</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">Ramp time KPI (KPI #1) + Compensation system (annual quota by role, divided by 52 for weekly quota contribution). HRIS (cohort size per quarter).</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Quantify and report this figure in every quarterly enablement review. The target is that this number grows as ramp time decreases and team size increases.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">Growing Q/Q</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">Flat</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">Declining</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Illustrative: 4 weeks saved × 20 SAs × ($2M annual quota / 52 weeks) = $3.08M in additional annual revenue capacity. Establish actual numbers from first full cohort.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">SA Enablement — Ramp Acceleration. Measurement &amp; Impact — Translates operational metrics into the financial language that CROs and CFOs use to evaluate headcount and program investments.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Senior Manager, Revenue Enablement</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Finance / Sales Operations</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">This metric translates the language of enablement ("we reduced ramp time by 4 weeks") into the language of the business ("we created $3M in additional annual revenue capacity without adding headcount"). It is the bridge between enablement operations and the financial models that determine how Nebius plans hiring, quota, and growth investments.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">If this metric is declining, ramp time is increasing — return to KPI #1 action plan. If flat, the program has plateau'd and requires a curriculum refresh or a new gate structure to break through. Present the revenue capacity calculation to CRO leadership in the next quarterly business review to create organizational urgency around ramp time improvement.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 23 -->
+  <div class="kpi-card" id="kpi23">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi23')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">23</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Field Satisfaction Score (Enablement NPS)</div>
+          <div class="kpi-definition">Quarterly survey of SAs, AEs, and partners rating the enablement function's overall contribution to their productivity and success — the field's vote of confidence in the enablement team, and a leading indicator of future adoption rates.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-leading">● Leading</span>
+            <span class="badge badge-freq">Quarterly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Enablement NPS = % Promoters (9–10) − % Detractors (0–6)</code><br><br>Single survey question: "How likely are you to recommend Nebius Revenue Enablement resources to a new colleague? (0–10)"</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">Quarterly pulse survey distributed via email or LMS (Typeform / Google Forms). Anonymous responses. Segmented by role (SA, AE, Partner) and by tenure (0–6 months, 6–18 months, 18+ months).</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Above <strong>+50 NPS</strong> — a score that reflects a highly effective and field-trusted enablement function. Industry average for internal enablement NPS: +25 to +35.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≥ +50 NPS</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">+25–49 NPS</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&lt; +25 NPS</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Establish at program launch (first quarterly survey). Industry benchmark: internal enablement functions average +25 to +35. World-class programs score +50 to +70.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Measurement &amp; Impact — Field feedback and continuous improvement. A low field NPS is the earliest signal that adoption will decline in the next quarter — before it shows up in completion rates or revenue metrics.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Senior Manager, Revenue Enablement</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Enablement Operations</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">Field trust in the enablement function is the most important intangible asset of the enablement team. When SAs and AEs trust that enablement resources are relevant, current, and useful, they voluntarily engage — which drives adoption, completion, and downstream performance. When trust is low, they opt out, work around the program, and the entire KPI cascade deteriorates. The Enablement NPS is the diagnostic that catches this before it becomes structural.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Conduct 5–10 individual interviews with Detractors (score 0–6) to understand the specific pain points. Common root causes: content feels out of date, program feels disconnected from actual sales motion, or delivery format doesn't fit how the field works (e.g., too much live training, not enough async). Use the qualitative feedback to build a specific improvement plan and share it with the field — visibility into how feedback drives change is itself a trust-builder.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 24 -->
+  <div class="kpi-card" id="kpi24">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi24')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">24</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Enablement-to-Field Ratio</div>
+          <div class="kpi-definition">The number of field roles (SAs + AEs + active partners) supported per full-time Revenue Enablement team member — tracking whether the enablement function is scaling efficiently as Nebius grows its field organization.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-lagging">● Lagging</span>
+            <span class="badge badge-freq">Quarterly</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Ratio = (Total SAs + Total AEs + Active Partners) / Total Enablement FTEs</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">HRIS (SA and AE headcount) + Partner portal (active partner count) + Enablement team headcount. Tracked quarterly with trend analysis.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Ratio should increase over time (enablement team grows slower than field). A well-built program should support up to <strong>75–100 field roles per enablement FTE</strong> at steady state with strong LMS infrastructure.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">↑ over time</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">Flat (plateau)</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">Declining</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">Establish from program launch. Industry benchmark: mature enablement functions support 50–100 field roles per enablement FTE. New programs start at 20–30 and scale upward as LMS and self-serve content infrastructure matures.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Execution &amp; Operations — LMS/CMS implementation and scalable delivery. This metric is the operational efficiency argument for investing in enablement infrastructure (LMS, self-serve content, automated certifications) over hiring proportionally.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Senior Manager, Revenue Enablement + CRO</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">HRIS / Enablement Operations</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">This metric makes the case for LMS and self-serve content investment. If the ratio is flat despite field headcount growth, it means the enablement team is spending too much time on live delivery and not enough time building scalable infrastructure. A rising ratio — without quality degradation — proves that the program architecture is maturing and that the team is working smarter, not just harder.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Audit the current split of enablement team time: what percentage is live facilitation vs async content development vs program management? If live facilitation exceeds 40% of team time, the program is not scaling. Accelerate the migration of high-frequency content (onboarding modules, product updates) to async LMS format. Build a self-certification option for lower-stakes assessments so enablement team time is reserved for Gate 2/3 live assessments only.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 25 -->
+  <div class="kpi-card" id="kpi25">
+    <div class="kpi-card-header" onclick="toggleKPI('kpi25')">
+      <div class="kpi-card-header-left">
+        <div class="kpi-number">25</div>
+        <div class="kpi-title-block">
+          <div class="kpi-name">Time to Competitive Response</div>
+          <div class="kpi-definition">Average calendar days from a competitor product announcement or pricing change to updated competitive enablement content deployed to the field — measuring enablement's operational speed in a market where Nebius, AWS, GCP, and CoreWeave move rapidly.</div>
+          <div class="kpi-badges">
+            <span class="badge badge-leading">● Leading</span>
+            <span class="badge badge-freq">Per Event</span>
+          </div>
+        </div>
+      </div>
+      <button class="kpi-toggle">+</button>
+    </div>
+    <div class="kpi-body">
+      <div class="kpi-grid">
+        <div class="kpi-field">
+          <div class="kpi-field-label">Formula</div>
+          <div class="kpi-field-value"><code>Response Time = Competitive Content Deploy Date − Competitor Announcement Date [tracked per event]</code></div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Data Source</div>
+          <div class="kpi-field-value">Competitive event log (maintained by Product Marketing + Enablement) + LMS/CMS content publish timestamps. Requires a formal trigger process: competitor announcement → Enablement notified within 24 hours.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Target / Goal</div>
+          <div class="kpi-field-value">Under <strong>14 calendar days</strong> from competitor announcement to updated competitive content in the field for major events. Under <strong>7 days</strong> for pricing changes that directly affect deal-in-progress situations.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Performance Thresholds</div>
+          <div class="kpi-field-value">
+            <div class="threshold-row">
+              <div class="threshold t-green"><div class="threshold-label">Green</div><div class="threshold-value">≤ 14 days</div></div>
+              <div class="threshold t-yellow"><div class="threshold-label">Yellow</div><div class="threshold-value">15–21 days</div></div>
+              <div class="threshold t-red"><div class="threshold-label">Red</div><div class="threshold-value">&gt; 21 days</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Baseline</div>
+          <div class="kpi-field-value">To be established from program launch. In AI infrastructure, competitor announcements happen monthly — GB300 vs Hopper successor comparisons, CoreWeave pricing moves, and AWS competitive pricing changes all require rapid field response.</div>
+        </div>
+        <div class="kpi-field">
+          <div class="kpi-field-label">Strategic Alignment</div>
+          <div class="kpi-field-value">Execution &amp; Operations — Alignment with product launches and go-to-market priorities. Programs &amp; Content — Consistency and currency of competitive messaging. This metric is Nebius's competitive agility indicator for the enablement function.</div>
+        </div>
+      </div>
+      <div class="kpi-field" style="margin-top:16px;">
+        <div class="kpi-field-label">Accountability</div>
+        <div class="accountability-row">
+          <div class="acct-cell"><div class="acct-label">KPI Owner</div><div class="acct-value">Revenue Enablement Manager + Product Marketing</div></div>
+          <div class="acct-cell"><div class="acct-label">Data Custodian</div><div class="acct-value">Product Marketing / Enablement Ops</div></div>
+        </div>
+      </div>
+      <div class="business-banner">
+        <div class="biz-icon">💡</div>
+        <div class="biz-content">
+          <div class="biz-label">Business Purpose</div>
+          <div class="biz-text">When AWS announces a new GPU instance type or CoreWeave drops pricing on H100 clusters, every SA and AE in the field who is in an active deal needs updated competitive positioning within days — not weeks. A 21-day response time means deals are lost before the new messaging reaches the field. A 7-day response time is a competitive advantage that gives Nebius's field the ability to reframe the competitive narrative before the customer's evaluation crystallizes around the competitor's announcement.</div>
+        </div>
+      </div>
+      <div class="action-plan">
+        <div class="action-label">🔴 If Red — Action Plan</div>
+        <div class="action-text">Implement a 24-hour Competitive Alert Protocol: Product Marketing monitors competitor channels and sends a structured alert to Enablement within 24 hours of any material announcement. Build a Competitive Response Playbook template that can be completed in 48 hours (key facts, talking points, objection responses, TCO comparison) and published as a field flash before the full module is updated. Create a dedicated "Competitive Corner" section in the LMS where flash updates land immediately — separate from the main curriculum update cycle.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════════════════ FOOTER -->
+<footer>
+  <div>
+    <div class="footer-brand">Nebius <span>AI Cloud</span></div>
+    <div style="font-size:13px;color:#5c5750;margin-top:6px;">nebius.com · Revenue Enablement KPI Framework</div>
+  </div>
+  <div class="footer-meta">
+    Prepared by Rus Teston · Senior Manager, Revenue Enablement<br>
+    25 KPIs · 5 Categories · Solutions Architect, AE, &amp; Partner Audiences<br>
+    <span style="color:#3d3d3d;font-size:12px;">Click any KPI card to expand full measurement detail</span>
+  </div>
+</footer>
+
+<script>
+  function toggleKPI(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+  }
+
+  // Nav active states on scroll
+  const sections = document.querySelectorAll('.category-section');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.style.color = '';
+          link.style.borderBottomColor = 'transparent';
+        });
+        const id = entry.target.id;
+        const activeLink = document.querySelector(`.nav-link[href="#${id}"]`);
+        if (activeLink) {
+          activeLink.style.color = '#f7f6f2';
+          activeLink.style.borderBottomColor = activeLink.querySelector('.nav-dot').style.background;
+        }
+      }
+    });
+  }, { threshold: 0.2 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

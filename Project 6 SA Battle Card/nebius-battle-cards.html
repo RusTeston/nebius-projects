@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nebius AI Cloud — Solutions Architect Battle Cards</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ─── TOKENS ────────────────────────────────────────────────── */
+  :root {
+    --bg:          #0a0c10;
+    --bg-card:     #0f1218;
+    --bg-panel:    #141821;
+    --bg-row:      #191e28;
+    --border:      #222840;
+    --border-lite: #1c2236;
+
+    --nebius:      #4f9cff;
+    --nebius-dim:  #1a3560;
+    --nebius-glow: rgba(79,156,255,.18);
+
+    --accent-red:  #ff4f6a;
+    --accent-red-dim: #3d0e17;
+    --accent-green:#3dffa0;
+    --accent-green-dim: #0a2e1c;
+    --accent-yellow:#f5c842;
+    --accent-yellow-dim: #2e2408;
+    --accent-purple:#a879ff;
+    --accent-purple-dim: #1e1040;
+
+    --text:        #e8eaf0;
+    --text-muted:  #6e7a96;
+    --text-dim:    #3a4560;
+
+    --competitor-coreweave:  #e85d3a;
+    --competitor-lambda:     #8fd14f;
+    --competitor-crusoe:     #f0a535;
+    --competitor-runpod:     #b87cff;
+
+    --font-sans:  'Inter', sans-serif;
+    --font-display:'Syne', sans-serif;
+    --font-mono:  'DM Mono', monospace;
+    --radius:     8px;
+  }
+
+  /* ─── RESET ────────────────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ───────────────────────────────────────────────── */
+  .site-header {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10,12,16,.92);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+  }
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-display);
+    font-weight: 800; font-size: 18px;
+    letter-spacing: -.3px; color: var(--nebius);
+  }
+  .logo-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--nebius); box-shadow: 0 0 12px var(--nebius); }
+  .header-meta {
+    display: flex; align-items: center; gap: 20px;
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);
+  }
+  .badge {
+    padding: 3px 8px; border-radius: 4px;
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: .5px;
+  }
+  .badge-conf    { background: var(--accent-red-dim);    color: var(--accent-red); }
+  .badge-sa      { background: var(--nebius-dim);         color: var(--nebius); }
+  .badge-rev     { background: var(--accent-yellow-dim);  color: var(--accent-yellow); }
+
+  /* ─── HERO ─────────────────────────────────────────────────── */
+  .hero {
+    padding: 56px 32px 40px;
+    max-width: 1280px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 320px; gap: 48px; align-items: end;
+  }
+  .hero-eyebrow {
+    font-family: var(--font-mono); font-size: 11px; color: var(--nebius);
+    text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: var(--font-display); font-size: 38px; font-weight: 800;
+    line-height: 1.1; letter-spacing: -.5px;
+  }
+  .hero h1 span { color: var(--nebius); }
+  .hero-sub {
+    margin-top: 16px; font-size: 15px; color: var(--text-muted);
+    max-width: 640px; line-height: 1.7;
+  }
+  .hero-stats {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .stat-box {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 16px;
+  }
+  .stat-box .val {
+    font-family: var(--font-display); font-size: 22px; font-weight: 800;
+    color: var(--nebius); line-height: 1;
+  }
+  .stat-box .lbl { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ─── COMPETITOR TABS ──────────────────────────────────────── */
+  .tabs-wrapper { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+  .tabs-nav {
+    display: flex; gap: 4px; border-bottom: 1px solid var(--border);
+    margin-bottom: 32px; overflow-x: auto; padding-bottom: 0;
+  }
+  .tab-btn {
+    padding: 12px 22px;
+    background: transparent; border: none; cursor: pointer;
+    font-family: var(--font-display); font-size: 13px; font-weight: 700;
+    color: var(--text-muted); letter-spacing: .2px;
+    border-bottom: 2px solid transparent; margin-bottom: -1px;
+    white-space: nowrap; transition: color .2s, border-color .2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--text); border-bottom-color: currentColor; }
+  .tab-btn[data-tab="coreweave"].active  { color: var(--competitor-coreweave); }
+  .tab-btn[data-tab="lambda"].active     { color: var(--competitor-lambda); }
+  .tab-btn[data-tab="crusoe"].active     { color: var(--competitor-crusoe); }
+  .tab-btn[data-tab="runpod"].active     { color: var(--competitor-runpod); }
+  .tab-indicator {
+    width: 7px; height: 7px; border-radius: 50%;
+  }
+  .tab-btn[data-tab="coreweave"] .tab-indicator { background: var(--competitor-coreweave); }
+  .tab-btn[data-tab="lambda"]    .tab-indicator { background: var(--competitor-lambda); }
+  .tab-btn[data-tab="crusoe"]    .tab-indicator { background: var(--competitor-crusoe); }
+  .tab-btn[data-tab="runpod"]    .tab-indicator { background: var(--competitor-runpod); }
+
+  /* ─── TAB PANELS ───────────────────────────────────────────── */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ─── COMPETITOR BANNER ────────────────────────────────────── */
+  .comp-banner {
+    border-radius: var(--radius); padding: 24px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px; border: 1px solid;
+  }
+  .comp-banner[data-comp="coreweave"] { background: rgba(232,93,58,.07); border-color: rgba(232,93,58,.25); }
+  .comp-banner[data-comp="lambda"]    { background: rgba(143,209,79,.07); border-color: rgba(143,209,79,.25); }
+  .comp-banner[data-comp="crusoe"]    { background: rgba(240,165,53,.07); border-color: rgba(240,165,53,.25); }
+  .comp-banner[data-comp="runpod"]    { background: rgba(184,124,255,.07); border-color: rgba(184,124,255,.25); }
+  .comp-name {
+    font-family: var(--font-display); font-size: 26px; font-weight: 800;
+  }
+  [data-comp="coreweave"] .comp-name { color: var(--competitor-coreweave); }
+  [data-comp="lambda"]    .comp-name { color: var(--competitor-lambda); }
+  [data-comp="crusoe"]    .comp-name { color: var(--competitor-crusoe); }
+  [data-comp="runpod"]    .comp-name { color: var(--competitor-runpod); }
+  .comp-tagline { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
+  .comp-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill {
+    padding: 4px 10px; border-radius: 20px;
+    font-size: 11px; font-family: var(--font-mono);
+    border: 1px solid; white-space: nowrap;
+  }
+  .pill-danger { background: var(--accent-red-dim); border-color: var(--accent-red); color: var(--accent-red); }
+  .pill-warn   { background: var(--accent-yellow-dim); border-color: var(--accent-yellow); color: var(--accent-yellow); }
+  .pill-ok     { background: var(--accent-green-dim); border-color: var(--accent-green); color: var(--accent-green); }
+  .pill-info   { background: var(--nebius-dim); border-color: var(--nebius); color: var(--nebius); }
+
+  /* ─── SECTION CARDS ────────────────────────────────────────── */
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  .section-grid.full { grid-template-columns: 1fr; }
+  .section-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); overflow: hidden;
+  }
+  .section-header {
+    padding: 14px 20px; border-bottom: 1px solid var(--border-lite);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-icon {
+    width: 28px; height: 28px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0;
+  }
+  .icon-blue   { background: var(--nebius-dim); }
+  .icon-red    { background: var(--accent-red-dim); }
+  .icon-yellow { background: var(--accent-yellow-dim); }
+  .icon-green  { background: var(--accent-green-dim); }
+  .icon-purple { background: var(--accent-purple-dim); }
+  .section-title {
+    font-family: var(--font-display); font-size: 13px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .8px; color: var(--text);
+  }
+  .section-subtitle { font-size: 11px; color: var(--text-muted); margin-left: auto; }
+  .section-body { padding: 18px 20px; }
+
+  /* ─── COMPARISON TABLE ─────────────────────────────────────── */
+  .comp-table { width: 100%; border-collapse: collapse; }
+  .comp-table th {
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: .8px;
+    color: var(--text-muted); padding: 8px 10px; text-align: left;
+    border-bottom: 1px solid var(--border-lite);
+  }
+  .comp-table th:not(:first-child) { text-align: center; }
+  .comp-table td {
+    padding: 10px 10px; border-bottom: 1px solid var(--border-lite);
+    font-size: 12.5px; vertical-align: top;
+  }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table td:first-child { color: var(--text-muted); font-size: 12px; }
+  .comp-table td:not(:first-child) { text-align: center; }
+  .comp-table tr:nth-child(even) td { background: rgba(255,255,255,.02); }
+  .chk-yes { color: var(--accent-green); font-size: 15px; }
+  .chk-no  { color: var(--accent-red);   font-size: 15px; }
+  .chk-par { color: var(--accent-yellow); font-size: 13px; }
+  .th-nebius { color: var(--nebius) !important; }
+
+  /* ─── RISK TABLE ───────────────────────────────────────────── */
+  .risk-row {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 1px solid var(--border-lite);
+  }
+  .risk-row:last-child { border-bottom: none; }
+  .risk-badge {
+    flex-shrink: 0; padding: 2px 8px; border-radius: 4px;
+    font-family: var(--font-mono); font-size: 10px; font-weight: 500;
+    text-transform: uppercase; letter-spacing: .4px; margin-top: 2px;
+  }
+  .risk-high   { background: var(--accent-red-dim);    color: var(--accent-red); }
+  .risk-med    { background: var(--accent-yellow-dim);  color: var(--accent-yellow); }
+  .risk-low    { background: var(--accent-green-dim);   color: var(--accent-green); }
+  .risk-content { flex: 1; }
+  .risk-title { font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+  .risk-desc  { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .risk-nebius { font-size: 12px; color: var(--nebius); margin-top: 4px; font-style: italic; }
+
+  /* ─── TRAP BLOCK ───────────────────────────────────────────── */
+  .trap-block {
+    border-left: 3px solid var(--accent-red);
+    background: rgba(255,79,106,.05);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 14px 16px; margin-bottom: 14px;
+  }
+  .trap-block:last-child { margin-bottom: 0; }
+  .trap-block .trap-title {
+    font-family: var(--font-display); font-weight: 700; font-size: 13px;
+    color: var(--accent-red); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .trap-block .trap-body { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; }
+  .trap-block .trap-probe {
+    margin-top: 8px; padding: 8px 10px; border-radius: 6px;
+    background: rgba(255,79,106,.08); border: 1px dashed rgba(255,79,106,.3);
+    font-family: var(--font-mono); font-size: 11px; color: var(--accent-red);
+  }
+
+  /* ─── REBUTTAL BLOCK ───────────────────────────────────────── */
+  .rebuttal-block { margin-bottom: 14px; }
+  .rebuttal-block:last-child { margin-bottom: 0; }
+  .rebuttal-fud {
+    background: var(--accent-red-dim); border: 1px solid rgba(255,79,106,.2);
+    border-radius: var(--radius) var(--radius) 0 0;
+    padding: 10px 14px;
+    font-family: var(--font-mono); font-size: 11.5px; color: var(--accent-red);
+  }
+  .rebuttal-fud::before { content: '⚠ FUD: '; font-weight: 600; }
+  .rebuttal-ans {
+    background: var(--accent-green-dim); border: 1px solid rgba(61,255,160,.2);
+    border-top: none; border-radius: 0 0 var(--radius) var(--radius);
+    padding: 10px 14px;
+    font-size: 12.5px; color: var(--text); line-height: 1.55;
+  }
+  .rebuttal-ans strong { color: var(--accent-green); }
+
+  /* ─── INTEGRATION BLOCK ────────────────────────────────────── */
+  .integration-stack { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .stack-chip {
+    padding: 5px 12px; border-radius: 20px;
+    font-family: var(--font-mono); font-size: 11px;
+    background: var(--bg-panel); border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+  .stack-chip.nebius-native { border-color: var(--nebius); color: var(--nebius); background: var(--nebius-dim); }
+  .integration-step {
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 10px 0; border-bottom: 1px solid var(--border-lite);
+  }
+  .integration-step:last-child { border-bottom: none; }
+  .step-num {
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--nebius-dim); border: 1px solid var(--nebius);
+    color: var(--nebius); font-family: var(--font-mono); font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px;
+  }
+  .step-content { flex: 1; }
+  .step-title { font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 2px; }
+  .step-desc  { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .step-time  {
+    font-family: var(--font-mono); font-size: 10px;
+    padding: 2px 7px; border-radius: 4px;
+    background: var(--nebius-dim); color: var(--nebius);
+    white-space: nowrap; align-self: center; margin-left: 8px;
+  }
+
+  /* ─── CALL-OUT BOX ─────────────────────────────────────────── */
+  .callout {
+    border-radius: var(--radius); padding: 14px 16px; margin-bottom: 14px;
+    font-size: 12.5px; line-height: 1.6;
+  }
+  .callout-blue   { background: var(--nebius-glow); border: 1px solid rgba(79,156,255,.25); }
+  .callout-red    { background: rgba(255,79,106,.06); border: 1px solid rgba(255,79,106,.2); }
+  .callout-yellow { background: rgba(245,200,66,.06); border: 1px solid rgba(245,200,66,.2); }
+  .callout-green  { background: rgba(61,255,160,.06); border: 1px solid rgba(61,255,160,.2); }
+  .callout strong { color: var(--nebius); }
+  .callout-red strong    { color: var(--accent-red); }
+  .callout-yellow strong { color: var(--accent-yellow); }
+  .callout-green strong  { color: var(--accent-green); }
+
+  /* ─── DISCOVERY QUESTIONS ──────────────────────────────────── */
+  .dq-list { list-style: none; }
+  .dq-list li {
+    padding: 8px 0; border-bottom: 1px solid var(--border-lite);
+    font-size: 12.5px; color: var(--text-muted); line-height: 1.5;
+    display: flex; gap: 8px;
+  }
+  .dq-list li:last-child { border-bottom: none; }
+  .dq-list li::before {
+    content: '?'; flex-shrink: 0;
+    font-family: var(--font-mono); font-size: 11px;
+    color: var(--nebius); background: var(--nebius-dim);
+    width: 18px; height: 18px; border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
+    margin-top: 2px;
+  }
+
+  /* ─── MINEFIELD ────────────────────────────────────────────── */
+  .minefield {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+  }
+  .mine-box {
+    background: var(--bg-panel); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 12px 14px;
+  }
+  .mine-label {
+    font-family: var(--font-mono); font-size: 10px; color: var(--accent-red);
+    text-transform: uppercase; letter-spacing: .6px; margin-bottom: 4px;
+  }
+  .mine-text { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+  .mine-win  { font-size: 12px; color: var(--accent-green); margin-top: 4px; font-weight: 500; }
+
+  /* ─── WIN THEMES ───────────────────────────────────────────── */
+  .win-themes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+  .win-theme {
+    background: var(--nebius-glow); border: 1px solid rgba(79,156,255,.2);
+    border-radius: var(--radius); padding: 12px;
+    text-align: center;
+  }
+  .win-theme-icon { font-size: 20px; margin-bottom: 6px; }
+  .win-theme-title { font-family: var(--font-display); font-size: 12px; font-weight: 700; color: var(--nebius); }
+  .win-theme-desc { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* ─── FOOTER ───────────────────────────────────────────────── */
+  .site-footer {
+    max-width: 1280px; margin: 60px auto 0;
+    padding: 28px 32px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);
+  }
+  .footer-note { display: flex; align-items: center; gap: 8px; }
+
+  /* ─── MISC UTILS ───────────────────────────────────────────── */
+  .mb-20 { margin-bottom: 20px; }
+  .mt-12 { margin-top: 12px; }
+  hr.divider { border: none; border-top: 1px solid var(--border-lite); margin: 16px 0; }
+  .label-sm {
+    font-family: var(--font-mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: .7px; color: var(--text-muted);
+    margin-bottom: 6px;
+  }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; }
+    .section-grid { grid-template-columns: 1fr; }
+    .win-themes { grid-template-columns: repeat(2, 1fr); }
+    .minefield { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .hero { padding: 32px 16px 28px; }
+    .tabs-wrapper { padding: 0 16px; }
+    .site-header { padding: 0 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="site-header">
+  <div class="logo">
+    <div class="logo-dot"></div>
+    NEBIUS
+  </div>
+  <div class="header-meta">
+    <span class="badge badge-conf">CONFIDENTIAL</span>
+    <span class="badge badge-sa">SA USE ONLY</span>
+    <span class="badge badge-rev">Rev Q2-2026</span>
+    <span>Last Updated: April 2026</span>
+  </div>
+</header>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div>
+    <div class="hero-eyebrow">Solutions Architect Intelligence</div>
+    <h1>Competitive <span>Battle Cards</span><br/>AI Cloud Infrastructure</h1>
+    <p class="hero-sub">
+      Precision-crafted technical intelligence for enterprise opportunities. These battle cards provide SA teams with the architectural depth, compliance knowledge, and discovery frameworks needed to win against Nebius's primary GPU cloud competitors. Built on current market data through Q1 2026.
+    </p>
+  </div>
+  <div class="hero-stats">
+    <div class="stat-box">
+      <div class="val">GB300</div>
+      <div class="lbl">NVL72 · 1st in Europe production</div>
+    </div>
+    <div class="stat-box">
+      <div class="val">800G</div>
+      <div class="lbl">Quantum-X800 IB fabric — 1st globally</div>
+    </div>
+    <div class="stat-box">
+      <div class="val">4+</div>
+      <div class="lbl">Compliance certifications (SOC 2, HIPAA, GDPR, ISO 27001)</div>
+    </div>
+    <div class="stat-box">
+      <div class="val">$2B</div>
+      <div class="lbl">NVIDIA strategic investment (March 2026)</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TABS ═══════════ -->
+<div class="tabs-wrapper">
+  <div class="tabs-nav">
+    <button class="tab-btn active" data-tab="coreweave">
+      <span class="tab-indicator"></span>CoreWeave
+    </button>
+    <button class="tab-btn" data-tab="lambda">
+      <span class="tab-indicator"></span>Lambda Labs
+    </button>
+    <button class="tab-btn" data-tab="crusoe">
+      <span class="tab-indicator"></span>Crusoe Cloud
+    </button>
+    <button class="tab-btn" data-tab="runpod">
+      <span class="tab-indicator"></span>RunPod
+    </button>
+  </div>
+
+  <!-- ═══════ COREWEAVE ═══════ -->
+  <div class="tab-panel active" id="panel-coreweave">
+    <div class="comp-banner" data-comp="coreweave">
+      <div>
+        <div class="comp-name">CoreWeave</div>
+        <div class="comp-tagline">Kubernetes-native GPU hyperscaler · Nasdaq IPO Q1 2024 · ~$1B quarterly revenue</div>
+      </div>
+      <div class="comp-pills">
+        <span class="pill pill-warn">Premium Pricing</span>
+        <span class="pill pill-warn">Contract Lock-In</span>
+        <span class="pill pill-danger">Limited GDPR Coverage</span>
+        <span class="pill pill-ok">Kubernetes-First</span>
+      </div>
+    </div>
+
+    <!-- ROW 1: Tech Specs + Implementation Risk -->
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-blue">📊</div>
+          <div class="section-title">Tech Spec Gaps</div>
+          <div class="section-subtitle">Side-by-Side Feature Comparison</div>
+        </div>
+        <div class="section-body">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th class="th-nebius">Nebius</th>
+                <th>CoreWeave</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Latest GPU (Blackwell Ultra)</td><td><span class="chk-yes">✓</span> GB300 NVL72 in production</td><td><span class="chk-par">~</span> GB200 available; GB300 roadmap</td></tr>
+              <tr><td>InfiniBand Fabric Generation</td><td><span class="chk-yes">✓</span> 800 Gbps Quantum-X800 (first globally)</td><td><span class="chk-par">~</span> 400 Gbps NDR IB</td></tr>
+              <tr><td>Slurm Orchestration</td><td><span class="chk-yes">✓</span> Managed Soperator (open-source)</td><td><span class="chk-no">✗</span> SUNK (Slurm on Kubernetes); less flexible</td></tr>
+              <tr><td>SOC 2 Type II</td><td><span class="chk-yes">✓</span> Certified</td><td><span class="chk-par">~</span> Type I; Type II expected mid-2026</td></tr>
+              <tr><td>ISO 27001</td><td><span class="chk-yes">✓</span> Certified</td><td><span class="chk-no">✗</span> Not publicly confirmed</td></tr>
+              <tr><td>HIPAA</td><td><span class="chk-yes">✓</span> Compliant</td><td><span class="chk-no">✗</span> Not currently offered</td></tr>
+              <tr><td>GDPR / EU Data Residency</td><td><span class="chk-yes">✓</span> Finland & Paris DCs; GDPR-native</td><td><span class="chk-no">✗</span> US-centric; EU region limited</td></tr>
+              <tr><td>Shared Filesystem Throughput</td><td><span class="chk-yes">✓</span> Up to 1 TB/s read (VAST Data)</td><td><span class="chk-par">~</span> High-perf NVMe; architecture dependent</td></tr>
+              <tr><td>Object Storage per GPU</td><td><span class="chk-yes">✓</span> 2 GB/s per GPU</td><td><span class="chk-par">~</span> Not published; varies by tier</td></tr>
+              <tr><td>Terraform + CLI + Console</td><td><span class="chk-yes">✓</span> Full IaC native day one</td><td><span class="chk-yes">✓</span> Kubernetes-centric; Helm-first</td></tr>
+              <tr><td>Capacity Blocks / Dashboard</td><td><span class="chk-yes">✓</span> Real-time multi-region dashboard</td><td><span class="chk-no">✗</span> Contract-based; no self-serve visibility</td></tr>
+              <tr><td>Free Egress</td><td><span class="chk-yes">✓</span> Included</td><td><span class="chk-par">~</span> Negotiated; not guaranteed in standard tier</td></tr>
+              <tr><td>Dedicated SA Support (free)</td><td><span class="chk-yes">✓</span> Free for multi-node deployments</td><td><span class="chk-par">~</span> White-glove at additional cost</td></tr>
+              <tr><td>MLPerf Benchmark Results</td><td><span class="chk-yes">✓</span> Leading results in v5.1</td><td><span class="chk-par">~</span> Participated; results vary by cluster config</td></tr>
+            </tbody>
+          </table>
+          <div class="callout callout-blue mt-12">
+            <strong>Key Gap to Exploit:</strong> CoreWeave is still pursuing SOC 2 Type II (expected mid-2026) and lacks HIPAA compliance. Any regulated industry prospect (healthcare, fintech, government) is a clear Nebius win. Additionally, CoreWeave's 400 Gbps InfiniBand is already half the bandwidth of Nebius's 800 Gbps Quantum-X800 fabric for large-scale distributed training.
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-yellow">⚠</div>
+          <div class="section-title">Implementation Risk</div>
+          <div class="section-subtitle">Deployment Timelines & Resource Requirements</div>
+        </div>
+        <div class="section-body">
+          <div class="risk-row">
+            <div class="risk-badge risk-high">HIGH</div>
+            <div class="risk-content">
+              <div class="risk-title">Kubernetes Expertise Dependency</div>
+              <div class="risk-desc">CoreWeave's platform is Kubernetes-native from the ground up. Teams without dedicated K8s/DevOps expertise face weeks of onboarding, custom Helm chart authoring, and operator management before productive workloads run. This is a hidden FTE cost often missed in procurement.</div>
+              <div class="risk-nebius">→ Nebius offers managed Kubernetes AND Slurm with pre-configured topology-aware scheduling. Engineers launch workloads immediately post-provisioning with zero cluster configuration required.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-high">HIGH</div>
+            <div class="risk-content">
+              <div class="risk-title">Minimum Contract Commitments</div>
+              <div class="risk-desc">CoreWeave primarily operates on reserved capacity contracts, often requiring 6–12 month minimum commits. On-demand access at hyperscale is limited. Budget-locked teams face stranded capacity if workloads change or models evolve.</div>
+              <div class="risk-nebius">→ Nebius Capacity Blocks offer transparent reserved capacity with real-time availability dashboards. On-demand plus long-term commitment discounts (up to 35%) without binary lock-in.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-med">MED</div>
+            <div class="risk-content">
+              <div class="risk-title">Compliance Gap Delivery Risk</div>
+              <div class="risk-desc">CoreWeave's SOC 2 Type II timeline is "mid-2026." Enterprise procurement cycles with compliance requirements cannot afford a platform that is in-process. Deploying now means operating in a compliance grey zone until certification is achieved.</div>
+              <div class="risk-nebius">→ Nebius is SOC 2 Type II, ISO 27001, HIPAA, and GDPR certified today. No waiting, no waivers required.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-med">MED</div>
+            <div class="risk-content">
+              <div class="risk-title">US-Centric Architecture for Global Teams</div>
+              <div class="risk-desc">CoreWeave's geographic presence is heavily US-focused. European teams face data residency challenges, latency penalties, and GDPR data sovereignty concerns when routing through US regions.</div>
+              <div class="risk-nebius">→ Nebius operates GDPR-native DCs in Helsinki (Finland) and Paris with full EU data residency guarantees. Zero transfer to US regions by default.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-low">LOW</div>
+            <div class="risk-content">
+              <div class="risk-title">Pricing Opacity at Scale</div>
+              <div class="risk-desc">CoreWeave's enterprise contracts involve custom pricing negotiated via sales. Public on-demand pricing exists but enterprise rates require significant deal cycles and often include opaque tiered egress structures.</div>
+              <div class="risk-nebius">→ Nebius publishes all on-demand GPU rates publicly with transparent long-term commitment discounts up to 35%.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2: Architectural Trap + Rebuttals -->
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-red">🪤</div>
+          <div class="section-title">Architectural "Trap"</div>
+          <div class="section-subtitle">Deep Platform Flaws to Surface</div>
+        </div>
+        <div class="section-body">
+          <div class="trap-block">
+            <div class="trap-title">⚠ The Kubernetes Monoculture Trap</div>
+            <div class="trap-body">CoreWeave is <em>entirely</em> Kubernetes-native. This sounds modern, but it creates a deep trap for HPC and research workloads that are Slurm-native. Converting Slurm job scripts, MPI configurations, and cluster-level scheduling policies to Kubernetes CRDs is a non-trivial engineering project. CoreWeave's SUNK (Slurm on Kubernetes) is a workaround, not a native experience — it runs Slurm <em>on top of</em> K8s, introducing scheduling latency, additional abstraction overhead, and a non-standard Slurm topology that breaks standard topology-aware job placement. Ask the prospect: how many of your researchers write SBATCH scripts today?</div>
+            <div class="trap-probe">Probe: "How does SUNK handle your current Slurm prolog/epilog scripts and MPI topology.conf? Can you guarantee GPU Direct RDMA works through the K8s network fabric?"</div>
+          </div>
+          <div class="trap-block">
+            <div class="trap-title">⚠ InfiniBand Bandwidth Ceiling — 400G vs. 800G</div>
+            <div class="trap-body">CoreWeave's InfiniBand interconnect tops out at 400 Gbps NDR. Nebius is the first provider globally to run production GB300 NVL72 systems on 800 Gbps Quantum-X800 InfiniBand. For distributed training at scale (Llama-class models, multimodal pre-training, RLHF at hundreds of GPUs), all-reduce communication time between nodes doubles on 400G vs 800G fabric. This is not marketing — it is measurable wall-clock training time.</div>
+            <div class="trap-probe">Probe: "At what GPU count does your all-reduce communication overhead become the training bottleneck? Have you benchmarked this at 256+ GPUs?"</div>
+          </div>
+          <div class="trap-block">
+            <div class="trap-title">⚠ Tenant Isolation in Multi-GPU InfiniBand Fabric</div>
+            <div class="trap-body">CoreWeave's multi-tenant environment relies on InfiniBand Partition Keys (PKeys) and VLANs for tenant isolation. While standard practice, PKey misconfiguration has historically caused cross-tenant RDMA traffic leakage in multi-tenant fabrics. Ask what audit controls exist for PKey enforcement and whether tenants receive independent third-party attestation of network isolation — not just a shared SOC 2 report that covers infrastructure broadly.</div>
+            <div class="trap-probe">Probe: "Can you provide a network isolation attestation specific to RDMA fabric for our security team? Are InfiniBand PKeys audited per-tenant?"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-green">🛡</div>
+          <div class="section-title">Technical Rebuttals</div>
+          <div class="section-subtitle">Countering CoreWeave FUD Against Nebius</div>
+        </div>
+        <div class="section-body">
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Nebius is too small / not proven at scale."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius operates ISEG — the #19 most powerful supercomputer in the world — built in Helsinki. NVIDIA invested $2B in Nebius (March 2026) and named them a strategic partner with a roadmap to 5 GW of NVIDIA systems by 2030. Brave Search processes over 11 million daily AI queries on Nebius with near-100% compute utilization. Scale is demonstrated, not speculative.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"CoreWeave has more Kubernetes ecosystem integrations."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius supports full Kubernetes (managed) AND Slurm (via open-source Soperator operator), covering the full HPC and AI orchestration spectrum. Nebius integrates Terraform, CLI, Console, and all major ML platforms (MLflow, JupyterHub, Weights & Biases, Ray, etc.) on day one. CoreWeave's K8s-only approach excludes the substantial research community on Slurm.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"CoreWeave has a larger GPU fleet and better availability."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius's Capacity Blocks feature provides real-time, transparent visibility into GPU availability across all regions — something CoreWeave cannot offer self-serve. Nebius was first globally to run production GB300 NVL72 on 800G InfiniBand and first in Europe for both GB300 and B300. The quality and generation of hardware matters more than raw fleet size.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Nebius doesn't have enterprise SLAs."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius provides 24/7 expert support and dedicated SA assistance for multi-node deployments — free of charge. Full SLAs are available. For regulated industries, Nebius's completed SOC 2 Type II, ISO 27001, HIPAA, and GDPR certifications provide stronger compliance guarantees than CoreWeave can currently offer.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"CoreWeave's clients include OpenAI, Microsoft, and Google."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius's customer base includes JetBrains, Brave Search, Decart, CentML, TheStage AI, and Prisma Labs — and was commissioned by SemiAnalysis to demonstrate lowest TCO across large LLM pre-training, multimodal RL research, and production inference. Nebius won the SemiAnalysis ClusterMAX Gold Medal rating. Reference wins are available upon request under NDA.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 3: Integration Playbook + Discovery Questions -->
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-purple">🔌</div>
+          <div class="section-title">Integration Playbook</div>
+          <div class="section-subtitle">Fitting Nebius Into CoreWeave-Evaluating Stacks</div>
+        </div>
+        <div class="section-body">
+          <div class="label-sm">Native Integrations — Day One</div>
+          <div class="integration-stack">
+            <span class="stack-chip nebius-native">Terraform</span>
+            <span class="stack-chip nebius-native">Kubernetes (managed)</span>
+            <span class="stack-chip nebius-native">Slurm (Soperator)</span>
+            <span class="stack-chip nebius-native">NVIDIA NIM</span>
+            <span class="stack-chip nebius-native">MLflow</span>
+            <span class="stack-chip nebius-native">JupyterHub</span>
+            <span class="stack-chip nebius-native">Weights & Biases</span>
+            <span class="stack-chip nebius-native">Ray / Ray Train</span>
+            <span class="stack-chip nebius-native">NVIDIA Triton</span>
+            <span class="stack-chip nebius-native">HAProxy / Nginx LB</span>
+            <span class="stack-chip">PyTorch / JAX / TF</span>
+            <span class="stack-chip">Helm Charts</span>
+            <span class="stack-chip">NCCL / MPI</span>
+          </div>
+          <hr class="divider" />
+          <div class="label-sm">Migration Path: CoreWeave → Nebius</div>
+          <div class="integration-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Inventory Existing Workloads</div>
+              <div class="step-desc">Catalog CoreWeave job types: Kubernetes Deployments, Helm charts, SUNK Slurm jobs, custom operators. Identify GPU types, instance sizes, and storage mount points (NVMe volumes, NFS).</div>
+            </div>
+            <div class="step-time">Day 1–2</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Provision Nebius Environment via Terraform</div>
+              <div class="step-desc">Use Nebius Terraform provider to mirror current cluster topology. Nebius publishes Terraform recipes and tutorials. SA team assists with topology-aware scheduling configuration at no charge.</div>
+            </div>
+            <div class="step-time">Day 2–4</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Migrate Slurm Workloads to Native Soperator</div>
+              <div class="step-desc">Port SBATCH scripts and MPI configs directly to Nebius Soperator (no K8s translation required for Slurm-native workloads). GPU Direct RDMA is configured by default with correct topology.conf.</div>
+            </div>
+            <div class="step-time">Day 3–7</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Validate MLOps Integrations</div>
+              <div class="step-desc">Connect Weights & Biases / MLflow experiment tracking, configure NVIDIA Triton inference endpoints, and validate VPC networking and storage throughput with benchmark workloads.</div>
+            </div>
+            <div class="step-time">Day 5–10</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Compliance Documentation & Cutover</div>
+              <div class="step-desc">Receive Nebius SOC 2, ISO 27001, and HIPAA compliance documentation. Complete tenant isolation attestation. Execute phased traffic cutover with parallel run period.</div>
+            </div>
+            <div class="step-time">Day 10–14</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-blue">🔍</div>
+          <div class="section-title">Discovery Questions</div>
+          <div class="section-subtitle">Questions to Surface CoreWeave Vulnerabilities</div>
+        </div>
+        <div class="section-body">
+          <ul class="dq-list">
+            <li>What compliance certifications are mandatory for your AI workloads — do any of them require SOC 2 Type II today, not "planned for mid-2026"?</li>
+            <li>Do any of your training or inference workloads involve PHI, PII, or financial data subject to HIPAA, GDPR, or regional data sovereignty laws?</li>
+            <li>How many of your data scientists or HPC engineers write SBATCH scripts vs. Kubernetes YAML manifests today?</li>
+            <li>At what GPU count does your model's all-reduce communication become the training bottleneck? Have you benchmarked this beyond 128 GPUs?</li>
+            <li>What is your current 12-month GPU commitment with CoreWeave, and what happens if your model architecture changes and you need different GPU memory profiles?</li>
+            <li>Do you have dedicated DevOps headcount to manage Kubernetes operators, custom CRDs, and Helm chart lifecycle for ML workloads?</li>
+            <li>Do you require EU data residency or have customers in the EU who require GDPR data processing agreements?</li>
+            <li>When you need to scale a multi-node job on short notice, how do you currently get visibility into available GPU capacity — is that self-serve or does it require a sales call?</li>
+            <li>What is your current total cost of infrastructure including egress, storage IOPS, and platform engineering FTE overhead — not just GPU hourly rate?</li>
+          </ul>
+          <div class="win-themes">
+            <div class="win-theme">
+              <div class="win-theme-icon">🏛</div>
+              <div class="win-theme-title">Compliance-First</div>
+              <div class="win-theme-desc">Win when SOC 2 II, HIPAA, or GDPR is non-negotiable</div>
+            </div>
+            <div class="win-theme">
+              <div class="win-theme-icon">⚡</div>
+              <div class="win-theme-title">Performance Edge</div>
+              <div class="win-theme-desc">Win on 800G IB fabric and GB300 NVL72 for large-scale training</div>
+            </div>
+            <div class="win-theme">
+              <div class="win-theme-icon">🌍</div>
+              <div class="win-theme-title">EU Sovereignty</div>
+              <div class="win-theme-desc">Win when EU data residency or GDPR is a hard requirement</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end coreweave panel -->
+
+  <!-- ═══════ LAMBDA LABS ═══════ -->
+  <div class="tab-panel" id="panel-lambda">
+    <div class="comp-banner" data-comp="lambda">
+      <div>
+        <div class="comp-name">Lambda Labs</div>
+        <div class="comp-tagline">Simplicity-first GPU cloud · NVIDIA investor · Waitlist-prone availability · ~16,000 orgs including all top 10 US universities</div>
+      </div>
+      <div class="comp-pills">
+        <span class="pill pill-danger">Availability Uncertainty</span>
+        <span class="pill pill-warn">Limited Managed Services</span>
+        <span class="pill pill-warn">No Slurm Native</span>
+        <span class="pill pill-ok">Developer Simplicity</span>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-blue">📊</div>
+          <div class="section-title">Tech Spec Gaps</div>
+          <div class="section-subtitle">Side-by-Side Feature Comparison</div>
+        </div>
+        <div class="section-body">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th class="th-nebius">Nebius</th>
+                <th>Lambda Labs</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Latest GPU (Blackwell Ultra)</td><td><span class="chk-yes">✓</span> GB300 NVL72 production</td><td><span class="chk-par">~</span> H100/H200 primary; newer GPU waitlists</td></tr>
+              <tr><td>InfiniBand Fabric</td><td><span class="chk-yes">✓</span> 800 Gbps Quantum-X800</td><td><span class="chk-par">~</span> InfiniBand available; spec not published</td></tr>
+              <tr><td>Managed Kubernetes</td><td><span class="chk-yes">✓</span> Full managed K8s</td><td><span class="chk-par">~</span> Kubernetes support; not fully managed</td></tr>
+              <tr><td>Managed Slurm</td><td><span class="chk-yes">✓</span> Soperator (open-source)</td><td><span class="chk-no">✗</span> Not offered</td></tr>
+              <tr><td>SOC 2 Type II</td><td><span class="chk-yes">✓</span></td><td><span class="chk-par">~</span> SOC 2 Type I; Type II not confirmed</td></tr>
+              <tr><td>ISO 27001</td><td><span class="chk-yes">✓</span></td><td><span class="chk-no">✗</span> Not publicly certified</td></tr>
+              <tr><td>HIPAA</td><td><span class="chk-yes">✓</span></td><td><span class="chk-no">✗</span> Not offered</td></tr>
+              <tr><td>GDPR / EU DC</td><td><span class="chk-yes">✓</span> Helsinki, Paris</td><td><span class="chk-no">✗</span> US-based; no EU DC</td></tr>
+              <tr><td>Shared Filesystem (11–12 GB/s / 8-GPU node)</td><td><span class="chk-yes">✓</span> Matches benchmark</td><td><span class="chk-yes">✓</span> VAST Data; matches Nebius</td></tr>
+              <tr><td>On-Demand GPU Availability</td><td><span class="chk-yes">✓</span> Transparent Capacity Blocks</td><td><span class="chk-no">✗</span> Frequent waitlists for H100/H200</td></tr>
+              <tr><td>Capacity Reservation Self-Serve</td><td><span class="chk-yes">✓</span> Real-time dashboard</td><td><span class="chk-no">✗</span> Waitlist / sales contact required</td></tr>
+              <tr><td>Multi-Region Compute</td><td><span class="chk-yes">✓</span> US, EU, global expansion</td><td><span class="chk-par">~</span> US-primary; limited regions</td></tr>
+              <tr><td>Observability & MLOps Built-In</td><td><span class="chk-yes">✓</span> Integrated observability stack</td><td><span class="chk-par">~</span> Basic monitoring; 3rd-party required</td></tr>
+              <tr><td>Inference Endpoint Management</td><td><span class="chk-yes">✓</span> Managed inference with per-token billing</td><td><span class="chk-par">~</span> 1-Click deploy but limited endpoint mgmt</td></tr>
+            </tbody>
+          </table>
+          <div class="callout callout-blue mt-12">
+            <strong>Storage Parity Note:</strong> Lambda and Nebius both achieve ~11–12 GB/s per 8-GPU node with VAST Data (per SemiAnalysis benchmarks). This is a tie — do not compete on storage throughput here. Win on compliance, Slurm orchestration, EU data residency, and long-term capacity predictability.
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-yellow">⚠</div>
+          <div class="section-title">Implementation Risk</div>
+          <div class="section-subtitle">Why Lambda Looks Easy But Isn't at Scale</div>
+        </div>
+        <div class="section-body">
+          <div class="risk-row">
+            <div class="risk-badge risk-high">HIGH</div>
+            <div class="risk-content">
+              <div class="risk-title">Availability Risk for Time-Critical Workloads</div>
+              <div class="risk-desc">Lambda's H100 and H200 instances regularly enter waitlists during demand surges. For AI teams with scheduled training runs, grant-funded compute windows, or production inference SLAs, availability uncertainty is a critical risk that cannot be managed reactively. Community analysis (DEV Community Eval #005, March 2026) confirms Lambda is "unreliable for time-sensitive workloads requiring guaranteed capacity."</div>
+              <div class="risk-nebius">→ Nebius Capacity Blocks give teams forward visibility into reserved GPU capacity across all DCs. Reserve compute for specific training windows weeks in advance via self-serve dashboard.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-high">HIGH</div>
+            <div class="risk-content">
+              <div class="risk-title">No Native Slurm for HPC Research Workloads</div>
+              <div class="risk-desc">Lambda's platform is VM-centric with 1-Click GPU cluster deployment, but lacks a managed Slurm operator. Research institutions and HPC teams that run MPI workloads, multi-node training jobs with complex scheduling policies, or use SBATCH scripts face significant re-engineering or must self-install and maintain Slurm — eliminating the simplicity advantage.</div>
+              <div class="risk-nebius">→ Nebius Soperator provides managed Slurm-on-Kubernetes with GPU Direct RDMA, topology-aware scheduling, and prolog/epilog support as a fully managed service.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-high">HIGH</div>
+            <div class="risk-content">
+              <div class="risk-title">No HIPAA / ISO 27001 for Regulated Data</div>
+              <div class="risk-desc">Lambda does not offer HIPAA compliance or ISO 27001 certification. Healthcare AI, clinical ML, and life sciences teams cannot process PHI or regulated genomics data on Lambda without significant risk and compliance workarounds.</div>
+              <div class="risk-nebius">→ Nebius holds HIPAA, SOC 2 Type II, ISO 27001, and GDPR certifications. Healthcare and regulated industry AI workloads are first-class supported.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-med">MED</div>
+            <div class="risk-content">
+              <div class="risk-title">Performance Consistency in Long-Running Jobs</div>
+              <div class="risk-desc">Independent benchmarks and community reports note that Lambda instances can experience unexpected slowdowns in long-running training jobs, introducing variability in cost and wall-clock time estimates. This is particularly damaging for large pre-training runs where compute time is the primary cost driver.</div>
+              <div class="risk-nebius">→ Nebius minimizes infrastructure virtualization overhead to maximize Model FLOPS Utilization (MFU), delivering consistent bare-metal-equivalent performance with documented MLPerf v5.1 leading results.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-low">LOW</div>
+            <div class="risk-content">
+              <div class="risk-title">US-Only Infrastructure for EU Customers</div>
+              <div class="risk-desc">Lambda's infrastructure is US-centric with no EU data centers. EU AI teams and any organization with EU customers processing personal data face GDPR data transfer challenges when using Lambda.</div>
+              <div class="risk-nebius">→ Nebius operates GDPR-native data centers in Helsinki and Paris with full data residency guarantees and DPA templates available.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-red">🪤</div>
+          <div class="section-title">Architectural "Trap"</div>
+          <div class="section-subtitle">Hidden Flaws in Lambda's Simplicity Narrative</div>
+        </div>
+        <div class="section-body">
+          <div class="trap-block">
+            <div class="trap-title">⚠ The 1-Click Cluster Illusion</div>
+            <div class="trap-body">Lambda's "1-Click Clusters" are excellent for getting a multi-GPU node running quickly. But this simplicity masks what happens at production scale: there is no managed MLOps layer, no integrated observability, no multi-team RBAC, and no topology-aware job scheduler built in. Teams that start on Lambda for research prototyping inevitably build their own infrastructure glue — MLflow, experiment tracking, job queuing, checkpoint management — which becomes technical debt that makes migration expensive and ties teams to Lambda's limitations longer than planned.</div>
+            <div class="trap-probe">Probe: "Three months from now, when you have 5 researchers running concurrent experiments on the same cluster, how will you handle job prioritization, GPU allocation fairness, and cost attribution by project? Does Lambda provide that, or will you build it?"</div>
+          </div>
+          <div class="trap-block">
+            <div class="trap-title">⚠ Waitlist Capacity Risk at Critical Moments</div>
+            <div class="trap-body">Lambda's availability model is demand-driven, not reserved. For any team with a hard deadline — model release date, conference submission, grant reporting window — a waitlist during peak demand is a project-critical risk. There is no SLA on when waitlisted capacity will be available, and there is no self-serve mechanism to reserve capacity in advance. This is an architectural choice Lambda made to simplify operations; the cost is paid by the customer during demand spikes.</div>
+            <div class="trap-probe">Probe: "If your H100 instances go on waitlist the week before your model needs to be production-ready, what is your contingency? Have you tested Lambda's burst capacity in the last 90 days?"</div>
+          </div>
+          <div class="trap-block">
+            <div class="trap-title">⚠ No EU Regulatory Stack for GDPR-Bound Workloads</div>
+            <div class="trap-body">Lambda processes all compute in US data centers. Organizations that train or fine-tune on EU personal data (customer interactions, medical records, financial transactions) are potentially in violation of GDPR Chapter V (international data transfers) without appropriate SCCs and a valid transfer mechanism. Lambda does not offer Standard Contractual Clauses for EU→US data flows in the context of AI training data — ask their legal team.</div>
+            <div class="trap-probe">Probe: "Does any of your training data contain EU personal data? Have you completed a GDPR Transfer Impact Assessment for processing that data in Lambda's US data centers?"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-green">🛡</div>
+          <div class="section-title">Technical Rebuttals</div>
+          <div class="section-subtitle">Countering Lambda FUD Against Nebius</div>
+        </div>
+        <div class="section-body">
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Lambda is simpler and faster to get started than Nebius."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius engineers launch workloads immediately after provisioning — no cluster configuration required. Pre-configured drivers, topology-aware scheduling, and documented APIs eliminate DevOps friction from day one. The difference is that Nebius's simplicity doesn't disappear at scale — Lambda's does.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Lambda has NVIDIA as an investor, so they'll always have the latest GPUs."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> NVIDIA invested $2 billion in Nebius (March 2026) — dwarfing their Lambda relationship — and named Nebius a strategic partner for next-generation AI infrastructure with a roadmap through 2030. Nebius was the first provider globally to run production GB300 NVL72 systems on 800G InfiniBand. Nebius is deploying NVIDIA Rubin, Vera CPUs, and BlueField storage as part of the partnership. The GPU access argument clearly favors Nebius.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Nebius is a European company — we need US-based infrastructure."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius is headquartered in Amsterdam (NASDAQ: NBIS) with R&D hubs across Europe, North America, and Israel. Nebius operates data centers and serves US customers today with full US-accessible GPU compute. For teams that also need EU data residency, Nebius provides both — Lambda cannot offer EU compute at all.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Lambda's pricing is more transparent and competitive."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius publishes all on-demand pricing publicly and offers up to 35% discounts for long-term commitments. SemiAnalysis commissioned a TCO comparison across large LLM pre-training, multimodal RL research, and production inference — Nebius delivered the lowest TCO across all three scenarios. "Transparent pricing" means nothing if the GPU isn't available when you need it.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Lambda supports all our existing tools — PyTorch, JupyterHub, etc."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius integrates all the same tools natively: PyTorch, TensorFlow, JAX, JupyterHub, MLflow, Weights & Biases, Ray, NVIDIA NIM, Triton, and more. Nebius adds managed Kubernetes, managed Slurm via Soperator, and built-in observability — capabilities Lambda requires third-party assembly for.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-purple">🔌</div>
+          <div class="section-title">Integration Playbook</div>
+          <div class="section-subtitle">Migrating Lambda Research Teams to Nebius Production</div>
+        </div>
+        <div class="section-body">
+          <div class="callout callout-yellow mb-20">
+            <strong>Common Lambda Pattern:</strong> Teams start on Lambda for research simplicity, then hit scale/compliance/availability walls. Nebius is the natural production-grade destination. Migration is typically lightweight since Lambda workloads are VM-based and portable.
+          </div>
+          <div class="label-sm">Native Integrations — Day One</div>
+          <div class="integration-stack">
+            <span class="stack-chip nebius-native">PyTorch / TF / JAX</span>
+            <span class="stack-chip nebius-native">JupyterHub</span>
+            <span class="stack-chip nebius-native">Weights & Biases</span>
+            <span class="stack-chip nebius-native">MLflow</span>
+            <span class="stack-chip nebius-native">Slurm (Soperator)</span>
+            <span class="stack-chip nebius-native">Kubernetes (managed)</span>
+            <span class="stack-chip nebius-native">NVIDIA NIM / Triton</span>
+            <span class="stack-chip">Ray / Dask</span>
+            <span class="stack-chip">HuggingFace Hub</span>
+            <span class="stack-chip">vLLM</span>
+          </div>
+          <hr class="divider" />
+          <div class="integration-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Export Lambda Environment (Container Images)</div>
+              <div class="step-desc">Lambda workloads typically run in Docker/Singularity containers with standard CUDA images. Export container definitions and requirements.txt. Lambda's pre-installed PyTorch images are compatible with Nebius CUDA drivers.</div>
+            </div>
+            <div class="step-time">Day 1</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Provision Nebius K8s or Slurm Cluster</div>
+              <div class="step-desc">Use Nebius Console or Terraform to provision an equivalent cluster. Topology-aware scheduling and RDMA networking are pre-configured. No manual driver installation or network tuning required.</div>
+            </div>
+            <div class="step-time">Day 1–2</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Reconnect MLOps Integrations</div>
+              <div class="step-desc">Update W&B project config, MLflow tracking server URI, and storage bucket endpoints. Nebius object storage is S3-compatible — minimal code changes required for dataset and checkpoint pipelines.</div>
+            </div>
+            <div class="step-time">Day 2–3</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Reserve Capacity for Scheduled Runs</div>
+              <div class="step-desc">Create Capacity Block reservations for upcoming training windows. Confirm multi-region availability via real-time dashboard. Eliminate waitlist risk permanently.</div>
+            </div>
+            <div class="step-time">Day 3</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Compliance Documentation for Stakeholders</div>
+              <div class="step-desc">Provide SOC 2 Type II, ISO 27001, HIPAA attestation, and GDPR DPA to legal/security teams. This step alone can accelerate enterprise procurement by weeks vs. Lambda's certification gaps.</div>
+            </div>
+            <div class="step-time">Day 3–5</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-blue">🔍</div>
+          <div class="section-title">Discovery Questions</div>
+          <div class="section-subtitle">Surfacing Lambda's Structural Limitations</div>
+        </div>
+        <div class="section-body">
+          <ul class="dq-list">
+            <li>Have you experienced a Lambda waitlist in the last 6 months? If so, what was the business impact of delayed compute access?</li>
+            <li>Does your organization have any compliance requirements — HIPAA, ISO 27001, GDPR — that your GPU cloud must satisfy? Has Lambda provided documentation for these?</li>
+            <li>When you have 5 or more researchers running concurrent jobs, how do you manage GPU allocation, job prioritization, and cost attribution across projects?</li>
+            <li>Do you train on any data containing EU personal data, health records, or financial information? Have you completed a GDPR transfer assessment for Lambda?</li>
+            <li>What happens to your planned training timeline if your H100 cluster is unavailable due to a waitlist when you need it next quarter?</li>
+            <li>As you move from research to production inference, does Lambda provide the managed inference endpoint management, observability, and SLA you need?</li>
+            <li>Have you done a full TCO comparison including the engineering cost of building and maintaining the MLOps tooling that Lambda doesn't include?</li>
+            <li>For your next generation of workloads — models larger than your current largest — what GPU memory requirements do you anticipate, and how will you access GB200/GB300 class hardware on Lambda?</li>
+          </ul>
+          <div class="win-themes">
+            <div class="win-theme">
+              <div class="win-theme-icon">📅</div>
+              <div class="win-theme-title">Capacity Predictability</div>
+              <div class="win-theme-desc">Win when availability certainty and reserved capacity matter</div>
+            </div>
+            <div class="win-theme">
+              <div class="win-theme-icon">🔒</div>
+              <div class="win-theme-title">Compliance Coverage</div>
+              <div class="win-theme-desc">Win on HIPAA, ISO 27001, GDPR in regulated industries</div>
+            </div>
+            <div class="win-theme">
+              <div class="win-theme-icon">🚀</div>
+              <div class="win-theme-title">Research-to-Production</div>
+              <div class="win-theme-desc">Win when teams need to graduate from prototype to production</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end lambda panel -->
+
+  <!-- ═══════ CRUSOE ═══════ -->
+  <div class="tab-panel" id="panel-crusoe">
+    <div class="comp-banner" data-comp="crusoe">
+      <div>
+        <div class="comp-name">Crusoe Cloud</div>
+        <div class="comp-tagline">Energy-first GPU cloud · $1B+ Series E · OpenAI &amp; Oracle partnerships · 1.8 GW data center announced · Fast Company Most Innovative 2026</div>
+      </div>
+      <div class="comp-pills">
+        <span class="pill pill-warn">US-Centric</span>
+        <span class="pill pill-warn">No GDPR Coverage</span>
+        <span class="pill pill-ok">SOC 2 Certified</span>
+        <span class="pill pill-ok">99.98% Uptime SLA</span>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-blue">📊</div>
+          <div class="section-title">Tech Spec Gaps</div>
+          <div class="section-subtitle">Side-by-Side Feature Comparison</div>
+        </div>
+        <div class="section-body">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th class="th-nebius">Nebius</th>
+                <th>Crusoe Cloud</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Latest GPU (Blackwell Ultra)</td><td><span class="chk-yes">✓</span> GB300 NVL72 in production</td><td><span class="chk-par">~</span> GB200 NVL72 available; GB300 roadmap</td></tr>
+              <tr><td>InfiniBand Fabric Speed</td><td><span class="chk-yes">✓</span> 800 Gbps Quantum-X800 (global first)</td><td><span class="chk-par">~</span> RDMA optimized; spec not fully published</td></tr>
+              <tr><td>AMD GPU Support</td><td><span class="chk-no">✗</span> NVIDIA only</td><td><span class="chk-yes">✓</span> MI300X, MI355X (differentiated offering)</td></tr>
+              <tr><td>SOC 2</td><td><span class="chk-yes">✓</span> Type II</td><td><span class="chk-yes">✓</span> SOC 2 (type not publicly confirmed)</td></tr>
+              <tr><td>ISO 27001</td><td><span class="chk-yes">✓</span></td><td><span class="chk-no">✗</span> Not publicly certified</td></tr>
+              <tr><td>HIPAA</td><td><span class="chk-yes">✓</span></td><td><span class="chk-no">✗</span> Not publicly offered</td></tr>
+              <tr><td>GDPR / EU Data Residency</td><td><span class="chk-yes">✓</span> Finland, Paris DCs</td><td><span class="chk-no">✗</span> US-only data centers</td></tr>
+              <tr><td>Managed Kubernetes</td><td><span class="chk-yes">✓</span></td><td><span class="chk-yes">✓</span></td></tr>
+              <tr><td>Managed Slurm</td><td><span class="chk-yes">✓</span> Soperator (open-source)</td><td><span class="chk-yes">✓</span> Slurm clusters</td></tr>
+              <tr><td>AutoCluster / Fault Tolerance</td><td><span class="chk-par">~</span> Topology-aware scheduling</td><td><span class="chk-yes">✓</span> AutoClusters with automatic node swapping</td></tr>
+              <tr><td>Managed Inference Engine</td><td><span class="chk-yes">✓</span> Per-token billing</td><td><span class="chk-yes">✓</span> MemoryAlloy inference engine (proprietary)</td></tr>
+              <tr><td>Uptime SLA</td><td><span class="chk-yes">✓</span> Enterprise SLA</td><td><span class="chk-yes">✓</span> 99.98%</td></tr>
+              <tr><td>Real-Time Capacity Dashboard</td><td><span class="chk-yes">✓</span> Capacity Blocks</td><td><span class="chk-par">~</span> Command Center; primarily operational</td></tr>
+              <tr><td>Sustainability / Green Energy</td><td><span class="chk-par">~</span> Helsinki DC (renewables-rich region)</td><td><span class="chk-yes">✓</span> Core differentiator — Power Peninsula™</td></tr>
+            </tbody>
+          </table>
+          <div class="callout callout-blue mt-12">
+            <strong>Honest Assessment:</strong> Crusoe is a technically credible competitor with strong energy sustainability credentials, OpenAI/Oracle partnerships, and a clear enterprise roadmap. The primary Nebius advantages are: (1) EU data residency and GDPR coverage, (2) ISO 27001 and HIPAA certifications, (3) superior InfiniBand fabric generation, and (4) the $2B NVIDIA strategic partnership signaling hardware access priority through 2030.
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-yellow">⚠</div>
+          <div class="section-title">Implementation Risk</div>
+          <div class="section-subtitle">Crusoe Risks in Enterprise Deployments</div>
+        </div>
+        <div class="section-body">
+          <div class="risk-row">
+            <div class="risk-badge risk-high">HIGH</div>
+            <div class="risk-content">
+              <div class="risk-title">No EU Regulatory Compliance Stack</div>
+              <div class="risk-desc">Crusoe operates exclusively from US data centers. For European enterprises, international AI teams, or US companies with EU customers, training and inference on personal data triggers GDPR data transfer obligations that Crusoe cannot satisfy through data residency alone. There are no Crusoe EU data centers on the public roadmap for 2026.</div>
+              <div class="risk-nebius">→ Nebius provides GDPR-native DCs in Helsinki and Paris. EU data never leaves the EU without explicit authorization. DPA templates and transfer documentation are provided as standard.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-high">HIGH</div>
+            <div class="risk-content">
+              <div class="risk-title">Missing ISO 27001 and HIPAA for Regulated Industries</div>
+              <div class="risk-desc">Crusoe holds SOC 2 but not ISO 27001 or HIPAA. Enterprise procurement in healthcare, life sciences, financial services, and government typically requires both. This creates a compliance gap that may not be waivable regardless of other Crusoe capabilities.</div>
+              <div class="risk-nebius">→ Nebius is certified under SOC 2 Type II, ISO 27001, HIPAA, and GDPR. Full compliance documentation available for enterprise procurement teams without additional contractual work.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-med">MED</div>
+            <div class="risk-content">
+              <div class="risk-title">Proprietary Inference Engine Lock-In Risk</div>
+              <div class="risk-desc">Crusoe's Managed Inference is powered by their proprietary MemoryAlloy technology (acquired from Atero). While performance claims are strong (up to 9.9x faster time-to-first-token), customers building on a proprietary inference engine become dependent on Crusoe's continued development and pricing decisions for that stack.</div>
+              <div class="risk-nebius">→ Nebius inference is built on NVIDIA-native tooling (NIM, Triton) with open-standard APIs. No proprietary inference engine lock-in. Customers retain portability.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-med">MED</div>
+            <div class="risk-content">
+              <div class="risk-title">Energy Business Divestiture Transition Risk</div>
+              <div class="risk-desc">Crusoe divested its original bitcoin mining business to NYDIG in 2025 to focus on AI infrastructure. While strategically sound, this is a relatively recent pivot. Core organizational identity and operational maturity around pure AI cloud delivery (as opposed to energy arbitrage) is still being established at scale.</div>
+              <div class="risk-nebius">→ Nebius has been purpose-built for AI infrastructure since inception (from Yandex's AI division), with no business model pivot risk. Full-stack AI cloud is the only business.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-low">LOW</div>
+            <div class="risk-content">
+              <div class="risk-title">AMD GPU Ecosystem Maturity</div>
+              <div class="risk-desc">Crusoe is investing heavily in AMD MI300X and MI355X GPUs alongside NVIDIA. While AMD's HBM3 memory (192GB) is compelling for large-model inference, AMD's ROCm software ecosystem is less mature than CUDA for training, and many ML frameworks have limited AMD optimization. Teams may face unexpected compatibility issues.</div>
+              <div class="risk-nebius">→ Nebius standardizes on the full NVIDIA stack (CUDA, cuDNN, NCCL, NVLink) ensuring maximum framework compatibility and access to NVIDIA-optimized model libraries.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-red">🪤</div>
+          <div class="section-title">Architectural "Trap"</div>
+          <div class="section-subtitle">Crusoe's Deep Platform Vulnerabilities</div>
+        </div>
+        <div class="section-body">
+          <div class="trap-block">
+            <div class="trap-title">⚠ Energy-First ≠ AI-First: The Vertical Integration Risk</div>
+            <div class="trap-body">Crusoe's energy-first architecture is its primary differentiation and its primary risk. The company's vertically integrated model — from power generation to GPU cluster — means that infrastructure buildout timelines are tied to energy procurement, permitting, and grid interconnect timelines, not just hardware availability. The Abilene, TX campus (1.2 GW) is a multi-year construction project dependent on Blue Owl/Primary Digital JV financing and gas turbine supply chains from GE Vernova. Capacity announced is not capacity available. At enterprise procurement discussions, confirm exact in-production capacity in the specific region needed — not announced or projected capacity.</div>
+            <div class="trap-probe">Probe: "For the capacity we're discussing — specifically in [region], on [GPU type] — can you confirm this is in-production today, with an SLA, not in a build-out phase?"</div>
+          </div>
+          <div class="trap-block">
+            <div class="trap-title">⚠ MemoryAlloy Inference Lock-In Trap</div>
+            <div class="trap-body">Crusoe's proprietary MemoryAlloy inference engine (acquired via Atero in 2025) uses GPU memory optimization techniques that are tightly coupled to Crusoe's infrastructure. Performance benchmarks showing 9.9x faster time-to-first-token are impressive, but they measure Crusoe's optimized stack on Crusoe's hardware — not a portable capability. Organizations building inference pipelines on MemoryAlloy cannot easily benchmark against other providers or migrate without rebuilding their inference serving layer. Ask Crusoe how MemoryAlloy performance compares running the same model with vLLM or TensorRT-LLM on equivalent NVIDIA hardware.</div>
+            <div class="trap-probe">Probe: "Can you show us benchmark results for MemoryAlloy vs. vLLM on H200 for the same model — without MemoryAlloy-specific hardware optimizations?"</div>
+          </div>
+          <div class="trap-block">
+            <div class="trap-title">⚠ Flare Gas Origin Story & ESG Scrutiny</div>
+            <div class="trap-body">Crusoe's original business model captured waste methane from oil field flaring operations — praised as innovative but now under ESG scrutiny. While Crusoe has pivoted toward renewables and divested its bitcoin mining unit, some ESG-conscious enterprises and sovereign wealth fund LPs may require assurance that their AI workloads are not running on gas-fired compute marketed as "green." Crusoe's Power Peninsula™ blends sources — transparency into the specific energy mix powering a given deployment is not always available.</div>
+            <div class="trap-probe">Probe: "For our specific deployment, can you provide documentation on the energy mix powering our GPU cluster — including the percentage from natural gas combustion?"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-green">🛡</div>
+          <div class="section-title">Technical Rebuttals</div>
+          <div class="section-subtitle">Countering Crusoe FUD Against Nebius</div>
+        </div>
+        <div class="section-body">
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Crusoe is more cost-efficient — up to 81% lower than hyperscalers."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> The 81% comparison is against hyperscalers like AWS and Azure — not against Nebius. SemiAnalysis's commissioned TCO study across three real-world AI workloads (large LLM pre-training, multimodal RL research, production inference) found Nebius delivers the lowest TCO of all infrastructure providers tested. Ask Crusoe to provide a head-to-head TCO comparison against Nebius specifically, with the same GPU type and configuration.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Crusoe's MemoryAlloy inference is 9.9x faster than alternatives."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> MemoryAlloy benchmarks are self-reported and measured on Crusoe's proprietary hardware/software stack. Nebius's inference platform is built on NVIDIA NIM, Triton, and TensorRT-LLM — open standards with independent MLPerf benchmarks. Nebius's leading MLPerf v5.1 results are third-party validated. Additionally, open-standard tooling ensures portability and eliminates inference engine vendor lock-in.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Crusoe has OpenAI and Oracle as customers — it's production-proven."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius counts Brave Search (11M+ daily AI queries, near-100% GPU utilization), JetBrains, Decart, CentML, and TheStage AI among its customers. Brave's deployment — real-time AI summaries with strict privacy standards at scale — is a demanding production reference. The NVIDIA $2B strategic investment is a far stronger validation signal than any customer list: NVIDIA chose to deploy their most advanced hardware (Rubin, Vera CPUs, BlueField) on Nebius first.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Crusoe's sustainability story is better — we have ESG requirements."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius's Helsinki data center operates in one of Europe's most renewable-energy-rich regions (Nordic hydro and wind). EU data centers inherently benefit from ENTSO-E grid renewable content disclosures and EU Taxonomy alignment. Nebius's renewable credentials are tied to verifiable EU energy market data — not proprietary Power Peninsula™ blended sourcing where the exact gas/renewable split is opaque. For ESG reporting, verifiability matters as much as the claim.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"Crusoe AutoClusters provide better fault tolerance than Nebius."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius provides topology-aware job scheduling with integrated observability, managed orchestrators, and documented APIs that proactively handle node failures. Nebius's Soperator for Slurm includes health check integration (DCGM-equivalent), prolog/epilog support, and GPU Direct RDMA validation by default. AutoClusters is a compelling feature — ask Crusoe what the automatic node swapping latency SLA is and whether it preserves checkpoint state during a swap.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-purple">🔌</div>
+          <div class="section-title">Integration Playbook</div>
+          <div class="section-subtitle">Positioning Nebius vs. Crusoe in Enterprise Evaluations</div>
+        </div>
+        <div class="section-body">
+          <div class="callout callout-yellow mb-20">
+            <strong>Competitive Context:</strong> Crusoe deals often surface in energy-conscious enterprises, US-based AI labs, and organizations with OpenAI/Oracle ecosystem integrations. Lead with compliance differentiation (ISO 27001, HIPAA, GDPR) and EU data residency before engaging on technical specs.
+          </div>
+          <div class="label-sm">Nebius Integration Points vs. Crusoe Stack</div>
+          <div class="integration-stack">
+            <span class="stack-chip nebius-native">NVIDIA NIM (open standard)</span>
+            <span class="stack-chip nebius-native">Triton Inference Server</span>
+            <span class="stack-chip nebius-native">TensorRT-LLM</span>
+            <span class="stack-chip nebius-native">vLLM</span>
+            <span class="stack-chip nebius-native">Soperator (open-source Slurm)</span>
+            <span class="stack-chip nebius-native">Kubernetes (managed)</span>
+            <span class="stack-chip nebius-native">GDPR-native DPA templates</span>
+            <span class="stack-chip nebius-native">ISO 27001 cert docs</span>
+            <span class="stack-chip nebius-native">HIPAA attestation</span>
+            <span class="stack-chip">Saturn Cloud compatible</span>
+            <span class="stack-chip">Weights & Biases</span>
+            <span class="stack-chip">MLflow</span>
+          </div>
+          <hr class="divider" />
+          <div class="integration-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Compliance Documentation Package</div>
+              <div class="step-desc">Lead the evaluation with Nebius's compliance portfolio: SOC 2 Type II, ISO 27001, HIPAA, GDPR DPA. Submit to the prospect's security and legal teams in parallel with the technical evaluation. This often creates an irreversible advantage in regulated industries.</div>
+            </div>
+            <div class="step-time">Day 1</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Benchmark on Equivalent Hardware</div>
+              <div class="step-desc">Offer to benchmark the prospect's actual workload on Nebius H200 or GB200/GB300 hardware using standard tooling (vLLM, TRT-LLM). Compare directly against Crusoe's published MemoryAlloy benchmarks using the same model and token counts.</div>
+            </div>
+            <div class="step-time">Day 2–5</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">TCO Analysis with SemiAnalysis Methodology</div>
+              <div class="step-desc">Use Nebius's commissioned SemiAnalysis TCO framework to model the prospect's specific workload (training vs. inference vs. mixed). Include compute, storage, egress, and FTE overhead. Compare against Crusoe's published rates for equivalent configurations.</div>
+            </div>
+            <div class="step-time">Day 3–7</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">EU Data Residency Architecture Review</div>
+              <div class="step-desc">For any prospect with EU data exposure: document the data flow architecture showing EU-resident processing in Nebius Helsinki/Paris DCs. Prepare a GDPR Transfer Impact Assessment showing zero US data transfer for EU-origin training data.</div>
+            </div>
+            <div class="step-time">Day 5–10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-blue">🔍</div>
+          <div class="section-title">Discovery Questions</div>
+          <div class="section-subtitle">Surfacing Crusoe's Regulatory and Technical Gaps</div>
+        </div>
+        <div class="section-body">
+          <ul class="dq-list">
+            <li>Does your organization process any EU personal data for AI training, fine-tuning, or inference? Do you have a legal mechanism for transferring this data to US-based compute?</li>
+            <li>Does your enterprise security policy, insurance requirements, or customer contracts require ISO 27001 or HIPAA-compliant compute infrastructure?</li>
+            <li>Have you evaluated the portability of Crusoe's MemoryAlloy inference engine — if you need to migrate or benchmark on alternative infrastructure, can you replicate your inference pipeline?</li>
+            <li>Can Crusoe provide documentation specifically showing the energy source mix (by percentage) for your specific deployment region today?</li>
+            <li>For the Crusoe capacity you're considering — is that in-production GPU capacity today, or is it part of a build-out under the Abilene or Wyoming data center projects?</li>
+            <li>Are you evaluating AMD MI300X/MI355X as a requirement, or is NVIDIA CUDA compatibility and ecosystem maturity more important for your workload?</li>
+            <li>What is your model inference serving stack today — are you using vLLM, TRT-LLM, or a vendor-proprietary engine? How important is inference portability?</li>
+            <li>Does your CFO or legal team require that AI infrastructure providers have ISO 27001 certification as a mandatory contractual term?</li>
+          </ul>
+          <div class="win-themes">
+            <div class="win-theme">
+              <div class="win-theme-icon">🌍</div>
+              <div class="win-theme-title">EU Data Residency</div>
+              <div class="win-theme-desc">Win when GDPR data sovereignty is non-negotiable</div>
+            </div>
+            <div class="win-theme">
+              <div class="win-theme-icon">📋</div>
+              <div class="win-theme-title">ISO 27001 / HIPAA</div>
+              <div class="win-theme-desc">Win in regulated industries with mandatory certifications</div>
+            </div>
+            <div class="win-theme">
+              <div class="win-theme-icon">🔓</div>
+              <div class="win-theme-title">Open Standards</div>
+              <div class="win-theme-desc">Win when inference portability matters over proprietary lock-in</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end crusoe panel -->
+
+  <!-- ═══════ RUNPOD ═══════ -->
+  <div class="tab-panel" id="panel-runpod">
+    <div class="comp-banner" data-comp="runpod">
+      <div>
+        <div class="comp-name">RunPod</div>
+        <div class="comp-tagline">Developer-first community GPU marketplace · 500,000+ developers · 31 regions · Per-second billing · Consumer-to-professional compute spectrum</div>
+      </div>
+      <div class="comp-pills">
+        <span class="pill pill-danger">No Enterprise Compliance</span>
+        <span class="pill pill-danger">Community Cloud Reliability</span>
+        <span class="pill pill-warn">Limited Multi-Node Support</span>
+        <span class="pill pill-ok">Competitive Spot Pricing</span>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-blue">📊</div>
+          <div class="section-title">Tech Spec Gaps</div>
+          <div class="section-subtitle">Side-by-Side Feature Comparison</div>
+        </div>
+        <div class="section-body">
+          <table class="comp-table">
+            <thead>
+              <tr>
+                <th>Capability</th>
+                <th class="th-nebius">Nebius</th>
+                <th>RunPod</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>GPU Generation (Latest)</td><td><span class="chk-yes">✓</span> GB300, B300, B200, H200, H100</td><td><span class="chk-par">~</span> H100, A100, RTX 4090; Blackwell limited</td></tr>
+              <tr><td>InfiniBand Interconnect</td><td><span class="chk-yes">✓</span> 800 Gbps non-blocking</td><td><span class="chk-no">✗</span> Not offered in Community Cloud</td></tr>
+              <tr><td>Multi-Node Training at Scale</td><td><span class="chk-yes">✓</span> Thousands of GPUs w/ IB fabric</td><td><span class="chk-no">✗</span> Limited; Instant Clusters available but constrained</td></tr>
+              <tr><td>SOC 2 Type II</td><td><span class="chk-yes">✓</span></td><td><span class="chk-no">✗</span> Not certified</td></tr>
+              <tr><td>ISO 27001</td><td><span class="chk-yes">✓</span></td><td><span class="chk-no">✗</span> Not certified</td></tr>
+              <tr><td>HIPAA</td><td><span class="chk-yes">✓</span></td><td><span class="chk-no">✗</span> Not certified</td></tr>
+              <tr><td>GDPR / EU Data Residency</td><td><span class="chk-yes">✓</span> Helsinki, Paris</td><td><span class="chk-par">~</span> EU regions available; not GDPR-certified</td></tr>
+              <tr><td>Managed Kubernetes</td><td><span class="chk-yes">✓</span> Full managed K8s</td><td><span class="chk-no">✗</span> Not offered</td></tr>
+              <tr><td>Managed Slurm</td><td><span class="chk-yes">✓</span> Soperator</td><td><span class="chk-no">✗</span> Not offered</td></tr>
+              <tr><td>Uptime SLA</td><td><span class="chk-yes">✓</span> Enterprise SLA</td><td><span class="chk-no">✗</span> Community Cloud: best-effort; variable uptime</td></tr>
+              <tr><td>Dedicated Node Isolation</td><td><span class="chk-yes">✓</span> Tenant-level isolation standard</td><td><span class="chk-par">~</span> Secure Cloud (datacenter); Community Cloud is shared</td></tr>
+              <tr><td>Shared Filesystem Throughput</td><td><span class="chk-yes">✓</span> 1 TB/s read (VAST Data)</td><td><span class="chk-no">✗</span> Local NVMe per Pod; no high-perf shared filesystem</td></tr>
+              <tr><td>Observability Stack</td><td><span class="chk-yes">✓</span> Integrated</td><td><span class="chk-no">✗</span> Basic metrics; 3rd-party required</td></tr>
+              <tr><td>Dedicated SA Support</td><td><span class="chk-yes">✓</span> Free for multi-node</td><td><span class="chk-no">✗</span> Community support; limited enterprise tier</td></tr>
+              <tr><td>Free Egress</td><td><span class="chk-yes">✓</span></td><td><span class="chk-yes">✓</span></td></tr>
+            </tbody>
+          </table>
+          <div class="callout callout-red mt-12">
+            <strong>Critical Gap:</strong> RunPod lacks SOC 2, ISO 27001, and HIPAA certifications entirely. Any enterprise prospect mentioning procurement security reviews, insurance requirements, or regulated data workloads disqualifies RunPod immediately. This is the fastest close for Nebius in any RunPod-competitive deal.
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-yellow">⚠</div>
+          <div class="section-title">Implementation Risk</div>
+          <div class="section-subtitle">Why RunPod Fails at Enterprise Scale</div>
+        </div>
+        <div class="section-body">
+          <div class="risk-row">
+            <div class="risk-badge risk-high">HIGH</div>
+            <div class="risk-content">
+              <div class="risk-title">Zero Enterprise Compliance Certifications</div>
+              <div class="risk-desc">RunPod does not hold SOC 2, ISO 27001, or HIPAA certifications as of April 2026. Enterprise procurement teams in technology, healthcare, financial services, and government cannot pass vendor security assessments with RunPod. This is not a gap that can be contractually waived — it requires certifications RunPod does not currently have.</div>
+              <div class="risk-nebius">→ Nebius holds SOC 2 Type II, ISO 27001, HIPAA, and GDPR certifications. Compliance documentation is available on request with no friction.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-high">HIGH</div>
+            <div class="risk-content">
+              <div class="risk-title">Community Cloud Reliability — Not Enterprise-Grade</div>
+              <div class="risk-desc">RunPod's Community Cloud aggregates GPU supply from third-party providers in various data centers. Uptime, node consistency, and hardware quality vary by provider. Community analysis consistently notes that Community Cloud providers have lower uptime than dedicated data centers, and that reliability varies significantly by region and GPU type. For production AI workloads, this variability is unacceptable.</div>
+              <div class="risk-nebius">→ Nebius operates all compute in owned/leased data center infrastructure with enterprise-grade redundancy. All hardware is first-party verified NVIDIA systems with NVLink and certified InfiniBand fabric.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-high">HIGH</div>
+            <div class="risk-content">
+              <div class="risk-title">No High-Performance Shared Filesystem</div>
+              <div class="risk-desc">RunPod's architecture provides local NVMe storage per Pod. There is no high-performance shared filesystem equivalent to Nebius's VAST Data integration (1 TB/s read throughput). For multi-node training workloads where all nodes need concurrent access to the same dataset, RunPod requires custom data distribution architectures that introduce significant engineering overhead and I/O bottlenecks.</div>
+              <div class="risk-nebius">→ Nebius delivers 1 TB/s shared filesystem read throughput and 2 GB/s per GPU for object storage, engineered specifically for large-scale distributed training where data loading is the bottleneck.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-high">HIGH</div>
+            <div class="risk-content">
+              <div class="risk-title">No InfiniBand Fabric for Distributed Training</div>
+              <div class="risk-desc">RunPod's Community Cloud does not offer InfiniBand interconnect. For distributed training across multiple GPUs and nodes, communication bandwidth is the ceiling on training efficiency. Without InfiniBand (or RoCE), all-reduce operations in distributed training degrade severely beyond single-node training — making RunPod unsuitable for frontier model training at scale.</div>
+              <div class="risk-nebius">→ Nebius provides non-blocking 800 Gbps InfiniBand (Quantum-X800) interconnect across all multi-node clusters — the fastest InfiniBand fabric available globally from any cloud provider today.</div>
+            </div>
+          </div>
+          <div class="risk-row">
+            <div class="risk-badge risk-med">MED</div>
+            <div class="risk-content">
+              <div class="risk-title">Documentation and Tooling Maturity</div>
+              <div class="risk-desc">Independent assessments consistently note that RunPod's documentation and tooling are "less mature than established providers." Enterprise teams require production-grade API documentation, IaC templates, and SLA-backed support — all of which are gap areas for RunPod at enterprise scale.</div>
+              <div class="risk-nebius">→ Nebius provides Terraform recipes, detailed tutorials, CLI, console, and documented APIs with 24/7 expert support for enterprise workloads.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-red">🪤</div>
+          <div class="section-title">Architectural "Trap"</div>
+          <div class="section-subtitle">RunPod's Hidden Structural Limitations</div>
+        </div>
+        <div class="section-body">
+          <div class="trap-block">
+            <div class="trap-title">⚠ The Community Cloud Multi-Tenancy Trap</div>
+            <div class="trap-body">RunPod's Community Cloud is a marketplace of third-party GPU providers. "Multi-tenancy" in this context means that the underlying host could be a crypto miner, a data center co-tenant, or an individual with a GPU rig — all sharing hypervisor infrastructure without the network isolation controls, firmware standards, and physical security posture of an enterprise data center. InfiniBand Partition Keys, VLAN segregation, and RDMA fabric isolation are not standard across Community Cloud hosts. This is fundamentally incompatible with enterprise security requirements for sensitive AI workloads.</div>
+            <div class="trap-probe">Probe: "For Community Cloud instances — can RunPod provide a third-party security attestation for the specific host data center, network isolation controls, and firmware standards? Or is this best-effort based on host self-certification?"</div>
+          </div>
+          <div class="trap-block">
+            <div class="trap-title">⚠ The "Instant Clusters" Scale Fiction</div>
+            <div class="trap-body">RunPod markets "Instant Clusters" for multi-GPU training. In practice, RunPod's multi-node capabilities are limited in scale and not backed by InfiniBand interconnect in Community Cloud. The all-reduce communication bandwidth between Pods depends on the underlying network — which in Community Cloud is ethernet-based, not InfiniBand. For models that require 64+ GPUs with high all-reduce bandwidth (transformers, multimodal models, RLHF at scale), RunPod's "clusters" are a marketing label on infrastructure that cannot support the communication patterns required.</div>
+            <div class="trap-probe">Probe: "For a 256-GPU all-reduce training run at FP16, what is the all-reduce bandwidth between nodes in your Instant Clusters? Is this InfiniBand, RoCE, or standard ethernet — and what is the measured collective communication throughput?"</div>
+          </div>
+          <div class="trap-block">
+            <div class="trap-title">⚠ Storage Architecture Prevents Scale</div>
+            <div class="trap-body">RunPod's Pod-local storage architecture (NVMe per Pod) creates a fundamental architectural incompatibility with large-scale distributed training. In distributed training, all GPU nodes must simultaneously read from the same dataset. Without a high-performance shared filesystem, this requires either (1) copying the full dataset to each node's local storage (multiplied storage cost, slow setup), (2) using network-attached object storage (bandwidth-limited, adds latency to data loading), or (3) pre-staging data per Pod (complex orchestration). This problem compounds as model size grows and dataset size grows.</div>
+            <div class="trap-probe">Probe: "For a 10 TB training dataset accessed by 64 GPU nodes simultaneously — how does RunPod's storage architecture handle the concurrent read workload? What is the measured dataset loading throughput per node?"</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-green">🛡</div>
+          <div class="section-title">Technical Rebuttals</div>
+          <div class="section-subtitle">Countering RunPod FUD Against Nebius</div>
+        </div>
+        <div class="section-body">
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"RunPod is much cheaper — we can't justify Nebius pricing."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> RunPod's spot pricing (as low as $0.34/hr for RTX 4090, $1.99/hr for H100) is lower than Nebius on a per-GPU-hour basis. But this comparison ignores: (1) lack of InfiniBand — distributed training jobs require significantly more wall-clock time, increasing total cost; (2) storage limitations — engineering workarounds add FTE cost; (3) compliance — RunPod cannot be used for regulated data, adding legal liability cost; (4) reliability — failed jobs and spot interruptions on Community Cloud require re-runs. SemiAnalysis TCO analysis shows Nebius lowest total cost when these factors are included.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"RunPod has 500,000 developers using it — it's obviously good enough."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> RunPod's user base is primarily individual developers, research students, and small ML teams doing single-GPU inference and experimentation. Enterprise AI teams with compliance requirements, multi-node training needs, and production SLAs represent a fundamentally different workload profile. RunPod's own positioning acknowledges this: it targets "individual developers, small ML teams, rapid prototyping, and inference serving" — not enterprise-grade multi-node training. The use case mismatch is by design, not a deficiency in Nebius.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"RunPod's per-second billing gives us more flexibility."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Nebius offers on-demand pricing with long-term commitment discounts up to 35% and Capacity Blocks for reserved resource planning. Per-second billing is a billing model convenience — it doesn't address the deeper architectural requirements of enterprise AI: InfiniBand fabric, shared filesystem throughput, managed orchestration, compliance certifications, and tenant isolation. Per-second billing on infrastructure that can't run your workload reliably is not a feature.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"We use RunPod for inference endpoints already — it works fine."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> Single-GPU inference on RunPod is a legitimate use case, and we agree it works for simple deployments. The question is what happens as you scale: multi-GPU inference for large models (70B+), guaranteed SLA for production traffic, HIPAA compliance for any sensitive user data, and cost predictability at scale. RunPod's inference endpoints are best-effort with Community Cloud reliability. Nebius provides managed inference with per-token billing, SLA guarantees, and NVIDIA Triton for production-grade serving.</div>
+          </div>
+          <div class="rebuttal-block">
+            <div class="rebuttal-fud">"RunPod has 31 regions — more than Nebius."</div>
+            <div class="rebuttal-ans"><strong>Rebuttal:</strong> RunPod's "31 regions" include Community Cloud hosts — third-party data centers with variable security, uptime, and hardware standards. Nebius's fewer but owned/leased data centers provide consistent, enterprise-grade performance and compliance guarantees across every region. One certified, SLA-backed data center with 800G InfiniBand is worth more to an enterprise production AI team than 31 regions with variable uptime and no InfiniBand.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-grid">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-purple">🔌</div>
+          <div class="section-title">Integration Playbook</div>
+          <div class="section-subtitle">Graduating RunPod Users to Enterprise Nebius Deployments</div>
+        </div>
+        <div class="section-body">
+          <div class="callout callout-yellow mb-20">
+            <strong>Opportunity Pattern:</strong> RunPod deals almost always surface in organizations where developers made a self-service GPU decision. The enterprise buyer (CISO, CTO, procurement) often has not approved RunPod formally. This creates a "compliance discovery" opportunity — surface the compliance gap and reposition Nebius as the enterprise-approved upgrade path.
+          </div>
+          <div class="minefield">
+            <div class="mine-box">
+              <div class="mine-label">⚠ Compliance Discovery</div>
+              <div class="mine-text">Ask: "Has RunPod passed your InfoSec vendor review? Do you have a SOC 2 report from RunPod?"</div>
+              <div class="mine-win">Win: Formal procurement almost always requires SOC 2 — RunPod doesn't have it.</div>
+            </div>
+            <div class="mine-box">
+              <div class="mine-label">⚠ Scale Discovery</div>
+              <div class="mine-text">Ask: "What GPU count do your largest training runs use? Do you need InfiniBand between nodes?"</div>
+              <div class="mine-win">Win: Any multi-node job requiring IB is impossible on Community Cloud.</div>
+            </div>
+            <div class="mine-box">
+              <div class="mine-label">⚠ Data Sensitivity Discovery</div>
+              <div class="mine-text">Ask: "Does any of your training data include user PII, health records, or financial data?"</div>
+              <div class="mine-win">Win: Regulated data on RunPod Community Cloud is a legal/compliance violation waiting to happen.</div>
+            </div>
+            <div class="mine-box">
+              <div class="mine-label">⚠ Budget Discovery</div>
+              <div class="mine-text">Ask: "Have you calculated total cost including failed job retries, engineering overhead for storage workarounds, and spot interruptions?"</div>
+              <div class="mine-win">Win: TCO analysis consistently shows Nebius competitive when true costs are included.</div>
+            </div>
+          </div>
+          <hr class="divider" />
+          <div class="integration-step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+              <div class="step-title">Container & Environment Migration</div>
+              <div class="step-desc">RunPod workloads run in Docker containers. These are fully portable to Nebius with no code changes. Export container images, push to Nebius container registry. All CUDA versions and frameworks (PyTorch, TF, HuggingFace) work identically.</div>
+            </div>
+            <div class="step-time">Day 1</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+              <div class="step-title">Provision Managed Kubernetes or Slurm</div>
+              <div class="step-desc">Unlike RunPod's Pod-based model, Nebius provisions full managed Kubernetes or Slurm clusters. SA team assists with initial cluster sizing. Multi-node jobs with InfiniBand fabric are configured and validated during onboarding.</div>
+            </div>
+            <div class="step-time">Day 1–3</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+              <div class="step-title">Migrate Storage to Shared Filesystem</div>
+              <div class="step-desc">Replace RunPod's local NVMe storage architecture with Nebius's VAST Data shared filesystem (1 TB/s read). Datasets and checkpoints move to shared storage, enabling true multi-node distributed training without data staging complexity.</div>
+            </div>
+            <div class="step-time">Day 2–5</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">4</div>
+            <div class="step-content">
+              <div class="step-title">Compliance Package for Enterprise Procurement</div>
+              <div class="step-desc">Provide SOC 2 Type II, ISO 27001, HIPAA, and GDPR documentation to security and legal teams. This formalizes Nebius as the enterprise-approved GPU cloud vendor — often necessary to unlock larger budgets currently unavailable to RunPod deployments.</div>
+            </div>
+            <div class="step-time">Day 3–7</div>
+          </div>
+          <div class="integration-step">
+            <div class="step-num">5</div>
+            <div class="step-content">
+              <div class="step-title">Run Parallel Benchmark Proving Performance Parity or Win</div>
+              <div class="step-desc">Run the customer's existing training workload on both RunPod (if possible) and Nebius in parallel. Measure wall-clock time, cost per training step, and dataset loading throughput. Nebius's InfiniBand advantage becomes measurable with multi-GPU jobs.</div>
+            </div>
+            <div class="step-time">Day 5–10</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-icon icon-blue">🔍</div>
+          <div class="section-title">Discovery Questions</div>
+          <div class="section-subtitle">The RunPod Qualification Playbook</div>
+        </div>
+        <div class="section-body">
+          <ul class="dq-list">
+            <li>Has your CISO or InfoSec team formally approved RunPod as a vendor? Have you reviewed RunPod's SOC 2 certification — are you aware they do not currently hold one?</li>
+            <li>Do any of your AI workloads involve personal data, health data, financial records, or any data subject to HIPAA, SOC 2, or GDPR compliance requirements?</li>
+            <li>What is the largest multi-GPU training run you need to execute? At what GPU count does your workload require InfiniBand-class interconnect between nodes?</li>
+            <li>Have you experienced failed training jobs on RunPod Community Cloud due to node failures or spot interruptions? What was the cost in re-run compute and engineering time?</li>
+            <li>For your training datasets (>100 GB), how do you currently handle data loading across multiple GPU nodes simultaneously? Are you experiencing I/O bottlenecks?</li>
+            <li>Does your enterprise have a formal cloud vendor approval process that requires SLAs, security attestations, and data processing agreements?</li>
+            <li>What is your current RunPod monthly spend, and has your procurement or finance team reviewed this as a formal contract, or is it on a personal or team credit card?</li>
+            <li>As you move from prototype to production serving, what uptime SLA do you need for your inference endpoints, and does RunPod provide that contractually?</li>
+          </ul>
+          <div class="win-themes">
+            <div class="win-theme">
+              <div class="win-theme-icon">🏢</div>
+              <div class="win-theme-title">Enterprise Approval</div>
+              <div class="win-theme-desc">Win when formal procurement requires compliance certs RunPod lacks</div>
+            </div>
+            <div class="win-theme">
+              <div class="win-theme-icon">🔗</div>
+              <div class="win-theme-title">Multi-Node Scale</div>
+              <div class="win-theme-desc">Win when distributed training requires InfiniBand and shared storage</div>
+            </div>
+            <div class="win-theme">
+              <div class="win-theme-icon">⬆</div>
+              <div class="win-theme-title">Prototype→Production</div>
+              <div class="win-theme-desc">Win when teams need to move from dev experimentation to SLA-backed production</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div><!-- end runpod panel -->
+
+</div><!-- end tabs-wrapper -->
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="site-footer">
+  <div class="footer-note">
+    <span class="badge badge-conf">CONFIDENTIAL</span>
+    <span>Nebius Revenue Enablement · Solutions Architect Use Only</span>
+  </div>
+  <div>
+    Data compiled from public sources, SemiAnalysis, ClusterMAX ratings, and market analysis · Q1–Q2 2026 · NASDAQ: NBIS
+  </div>
+</footer>
+
+<script>
+  // Tab navigation
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabPanels = document.querySelectorAll('.tab-panel');
+
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab;
+
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabPanels.forEach(p => p.classList.remove('active'));
+
+      btn.classList.add('active');
+      document.getElementById('panel-' + target).classList.add('active');
+
+      // Scroll to top of tabs
+      document.querySelector('.tabs-wrapper').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+</script>
+</body>
+</html>

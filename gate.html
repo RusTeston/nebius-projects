@@ -103,8 +103,20 @@
         <p class="gate-text-secondary" style="color:#ffffff;font-weight:700;">
             All content will be removed following the conclusion of the interview process.
         </p>
-        <a href="projects.html" class="gate-btn">Acknowledge & Continue</a>
+        <a href="projects.html" class="gate-btn" onclick="setAcknowledged()">Acknowledge & Continue</a>
         <div class="gate-footer">© 2026 Rus Teston</div>
     </div>
+
+    <script>
+        function setAcknowledged() {
+            var d = new Date();
+            d.setTime(d.getTime() + (7 * 24 * 60 * 60 * 1000));
+            document.cookie = "nebius_ack=true;expires=" + d.toUTCString() + ";path=/";
+        }
+
+        if (document.cookie.indexOf('nebius_ack=true') !== -1) {
+            window.location.replace('projects.html');
+        }
+    </script>
 </body>
 </html>

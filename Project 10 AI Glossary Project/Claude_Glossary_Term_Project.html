@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI & Infrastructure Glossary — Plain-English Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0C1A3A;
+  --surface: #10224A;
+  --surface-2: #162C52;
+  --border: #1E3A5C;
+  --border-bright: #2A4D70;
+  --text: #F0F6FF;
+  --muted: #5A8AAE;
+  --dim: #3A6080;
+  --gold: #f0c060;
+  --teal: #00C853;
+  --blue: #5ba8ff;
+  --pink: #ff6eb4;
+  --term-bg: #10224A;
+  --header-bg: #0C1A3A;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: linear-gradient(180deg, #0C1A3A 0%, #0A3050 40%, #0E3558 100%);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ── BACKGROUND GRID ── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(91,168,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(91,168,255,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  padding: 56px 40px 44px;
+  max-width: 1500px;
+  margin: 0 auto;
+  z-index: 1;
+}
+.hero-eyebrow {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+}
+.hero h1 {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(36px, 5.5vw, 68px);
+  font-weight: 800;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+.hero h1 .line-teal { color: var(--teal); }
+.hero h1 .line-gold { color: var(--gold); }
+.hero-sub {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 680px;
+  line-height: 1.65;
+}
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.hero-stat-num {
+  font-family: 'Inter', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--teal);
+}
+.hero-stat-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ── CONTROLS ── */
+.controls {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(12,26,58,0.94);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 40px;
+  max-width: 100%;
+}
+.controls-inner { max-width: 1500px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+
+.search-row { display: flex; gap: 10px; align-items: center; }
+.search-wrap {
+  position: relative;
+  flex: 1;
+}
+.search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--dim);
+  font-size: 16px;
+  pointer-events: none;
+}
+#searchInput {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 15px;
+  font-family: inherit;
+  transition: border-color 0.2s;
+  outline: none;
+}
+#searchInput:focus { border-color: var(--blue); }
+#searchInput::placeholder { color: var(--dim); }
+
+#clearBtn {
+  padding: 12px 20px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+#clearBtn:hover { border-color: var(--border-bright); color: var(--text); }
+
+.result-meta { font-size: 13px; color: var(--muted); }
+.result-meta strong { color: var(--teal); }
+
+/* ── A-Z PILLS ── */
+.az {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.az-btn {
+  min-width: 38px;
+  height: 34px;
+  padding: 0 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--muted);
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.az-btn:hover { border-color: var(--border-bright); color: var(--text); background: var(--surface-2); }
+.az-btn.active {
+  background: rgba(255,77,77,0.2);
+  border-color: rgba(255,77,77,0.5);
+  color: #FF4D4D;
+}
+.az-btn.empty { opacity: 0.25; pointer-events: none; }
+
+/* ── CONTENT ── */
+.content {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 28px 40px 64px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── LETTER SECTIONS ── */
+.letter-section { margin-bottom: 36px; }
+.letter-heading {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.letter-badge {
+  font-family: 'Inter', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  color: #FF4D4D;
+  line-height: 1;
+  width: 52px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.letter-count {
+  font-size: 12px;
+  color: var(--dim);
+  padding: 3px 10px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+/* ── TABLE ── */
+.table-wrap {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--surface);
+}
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  background: var(--header-bg);
+  color: var(--teal);
+  text-align: left;
+  padding: 12px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+}
+thead th:first-child { width: 190px; }
+thead th:nth-child(2) { width: 28%; }
+thead th:nth-child(3) { width: 28%; }
+
+tbody td {
+  vertical-align: top;
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(30,45,71,0.6);
+  font-size: 14px;
+  line-height: 1.55;
+  color: #c8d8f0;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr { transition: background 0.1s; }
+tbody tr:hover td { background: rgba(56,232,200,0.04); }
+
+.cell-term {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text);
+  white-space: nowrap;
+}
+.cell-term .term-badge {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 9px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  padding: 2px 6px;
+  border-radius: 4px;
+  vertical-align: middle;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.badge-new { background: rgba(56,232,200,0.15); color: var(--teal); border: 1px solid rgba(56,232,200,0.3); }
+
+.cell-analogy { color: #a8c8e8; font-style: italic; }
+.cell-business { color: #b0d0b0; }
+
+/* ── HIGHLIGHT ── */
+mark {
+  background: rgba(240,192,96,0.28);
+  color: var(--gold);
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* ── FOOTER ── */
+.footer {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 40px 56px;
+  position: relative;
+  z-index: 1;
+}
+.footer-inner {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 28px;
+  background: var(--surface);
+}
+.footer-inner h3 {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 14px;
+}
+.sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.source-chip {
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.source-chip:hover { border-color: var(--border-bright); color: var(--blue); }
+
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--dim);
+  font-size: 15px;
+}
+.no-results strong { display: block; font-size: 24px; margin-bottom: 8px; color: var(--muted); }
+
+.hidden { display: none !important; }
+
+@media (max-width: 900px) {
+  .hero, .content, .footer { padding-left: 20px; padding-right: 20px; }
+  .controls { padding-left: 20px; padding-right: 20px; }
+  .table-wrap { overflow-x: auto; }
+  table { min-width: 900px; }
+  thead th:first-child { width: 160px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-eyebrow">▸ Plain-English Reference</div>
+  <h1>
+    AI &amp; Infrastructure<br>
+    <span class="line-teal">Glossary</span> —
+    <span class="line-gold">Decoded</span>
+  </h1>
+  <p class="hero-sub">Every technical term from AI infrastructure, cloud platforms, containers, and machine learning ops — explained in plain English with real-world analogies any business person can understand.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><span class="hero-stat-num" id="totalCount">0</span><span class="hero-stat-label">Total Terms</span></div>
+    <div class="hero-stat"><span class="hero-stat-num" id="shownCount">0</span><span class="hero-stat-label">Shown</span></div>
+    <div class="hero-stat"><span class="hero-stat-num">A–Z</span><span class="hero-stat-label">Indexed</span></div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="controls-inner">
+    <div class="search-row">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input id="searchInput" type="search" placeholder="Search: GPU, inference, Kubernetes, tokenization, RAG, LLM…" autocomplete="off" />
+      </div>
+      <button id="clearBtn" type="button">✕ Clear</button>
+    </div>
+    <div class="az" id="azControls">
+      <button class="az-btn active" data-letter="ALL">All</button>
+      <button class="az-btn" data-letter="A">A</button><button class="az-btn" data-letter="B">B</button><button class="az-btn" data-letter="C">C</button><button class="az-btn" data-letter="D">D</button><button class="az-btn" data-letter="E">E</button><button class="az-btn" data-letter="F">F</button><button class="az-btn" data-letter="G">G</button><button class="az-btn" data-letter="H">H</button><button class="az-btn" data-letter="I">I</button><button class="az-btn" data-letter="J">J</button><button class="az-btn" data-letter="K">K</button><button class="az-btn" data-letter="L">L</button><button class="az-btn" data-letter="M">M</button><button class="az-btn" data-letter="N">N</button><button class="az-btn" data-letter="O">O</button><button class="az-btn" data-letter="P">P</button><button class="az-btn" data-letter="Q">Q</button><button class="az-btn" data-letter="R">R</button><button class="az-btn" data-letter="S">S</button><button class="az-btn" data-letter="T">T</button><button class="az-btn" data-letter="U">U</button><button class="az-btn" data-letter="V">V</button><button class="az-btn" data-letter="W">W</button><button class="az-btn" data-letter="X">X</button><button class="az-btn" data-letter="Y">Y</button><button class="az-btn" data-letter="Z">Z</button>
+    </div>
+  </div>
+</div>
+
+<div class="content" id="glossaryContent">
+
+<!-- A -->
+<section class="letter-section" data-letter="A" id="section-A">
+  <div class="letter-heading"><div class="letter-badge">A</div><span class="letter-count" id="count-A"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="A" data-search="a/b testing model comparison production traffic"><td class="cell-term">A/B Testing</td><td>A method of comparing two versions of a model or system in production to see which performs better on real traffic.</td><td class="cell-analogy">Like trying two sales scripts with different customers to see which one closes more deals.</td><td class="cell-business">Reduces guesswork and improves model quality, conversion, or user experience before a full rollout.</td></tr>
+      <tr class="term-row" data-letter="A" data-search="accelerator hardware gpu tpu specialized chip compute"><td class="cell-term">Accelerator <span class="term-badge badge-new">New</span></td><td>Specialized hardware—such as a GPU or TPU—designed to speed up specific compute tasks like matrix math used in AI training.</td><td class="cell-analogy">Like swapping a regular kitchen knife for a professional mandoline slicer: the same task, done 100× faster.</td><td class="cell-business">Cuts training and inference time dramatically, reducing cost and time-to-market for AI products.</td></tr>
+      <tr class="term-row" data-letter="A" data-search="agent agentic ai autonomous tool use planning"><td class="cell-term">Agent (AI) <span class="term-badge badge-new">New</span></td><td>An AI system that takes sequences of actions autonomously—browsing the web, calling tools, or writing code—to complete a goal.</td><td class="cell-analogy">Like a personal assistant who doesn't just answer questions but actually books flights and sends emails on your behalf.</td><td class="cell-business">Enables automation of complex multi-step business tasks that previously required human operators.</td></tr>
+      <tr class="term-row" data-letter="A" data-search="apache spark distributed data processing analytics"><td class="cell-term">Apache Spark</td><td>A distributed data processing engine for large-scale analytics and data engineering workloads.</td><td class="cell-analogy">Like a warehouse crew splitting a huge sorting job across many workers at once.</td><td class="cell-business">Speeds up large data preparation and analytics jobs that feed AI and reporting.</td></tr>
+      <tr class="term-row" data-letter="A" data-search="api application programming interface rest endpoint"><td class="cell-term">API</td><td>Application Programming Interface: a defined way for software systems to send requests to and receive responses from another service.</td><td class="cell-analogy">Like a restaurant menu and waiter: you order in a standard way and the kitchen delivers it.</td><td class="cell-business">Lets teams connect apps, automate workflows, and use AI services without manual steps.</td></tr>
+      <tr class="term-row" data-letter="A" data-search="attention mechanism transformer self-attention key query value"><td class="cell-term">Attention Mechanism <span class="term-badge badge-new">New</span></td><td>A component inside transformer models that lets the model focus on relevant parts of the input when generating each output token.</td><td class="cell-analogy">Like a reader who highlights the most important sentences before answering a quiz question.</td><td class="cell-business">Is the core innovation that makes large language models powerful enough for complex reasoning and generation.</td></tr>
+      <tr class="term-row" data-letter="A" data-search="autoscaling automatic scaling resources demand"><td class="cell-term">Autoscaling</td><td>The automatic increase or decrease of computing resources based on workload demand.</td><td class="cell-analogy">Like opening more checkout lanes when the store gets busy, then closing them when traffic drops.</td><td class="cell-business">Helps control cost while maintaining performance during traffic spikes.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- B -->
+<section class="letter-section" data-letter="B" id="section-B">
+  <div class="letter-heading"><div class="letter-badge">B</div><span class="letter-count" id="count-B"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="B" data-search="batch inference bulk prediction offline scoring"><td class="cell-term">Batch Inference</td><td>Running model predictions on a large collection of data items as a job rather than responding one request at a time.</td><td class="cell-analogy">Like grading a whole stack of tests overnight instead of answering one student at a time.</td><td class="cell-business">Useful for offline scoring, reporting, content processing, and other non-real-time tasks.</td></tr>
+      <tr class="term-row" data-letter="B" data-search="batch job background task non-interactive processing"><td class="cell-term">Batch Job</td><td>A non-interactive task that runs to completion and usually processes data or compute work in the background.</td><td class="cell-analogy">Like dropping off laundry and picking it up when the cleaning is done.</td><td class="cell-business">Ideal for scheduled processing, training, evaluation, and large one-time workloads.</td></tr>
+      <tr class="term-row" data-letter="B" data-search="batch script shell script resource slurm job definition"><td class="cell-term">Batch Script</td><td>A shell script that defines how a batch job should run, including commands and requested resources.</td><td class="cell-analogy">Like a written work order telling a crew exactly what to do and what tools they need.</td><td class="cell-business">Makes compute jobs repeatable, consistent, and easier to automate.</td></tr>
+      <tr class="term-row" data-letter="B" data-search="blackwell gpu nvidia hardware accelerator generation"><td class="cell-term">Blackwell GPU</td><td>NVIDIA's Blackwell generation of accelerated computing hardware referenced for self-service AI clusters.</td><td class="cell-analogy">Like a newer, faster engine model in the same family of sports cars.</td><td class="cell-business">Offers more performance for advanced model training and inference workloads.</td></tr>
+      <tr class="term-row" data-letter="B" data-search="blueprint nvidia packaged workflow prebuilt starter"><td class="cell-term">Blueprint</td><td>In NVIDIA Blueprint, a packaged workflow combining multiple AI steps into a ready starting point.</td><td class="cell-analogy">Like a meal kit that includes the ingredients and recipe for a complex dinner.</td><td class="cell-business">Speeds up deployment by giving teams a preassembled workflow instead of starting from scratch.</td></tr>
+      <tr class="term-row" data-letter="B" data-search="boot disk image vm operating system prebuilt template"><td class="cell-term">Boot Disk Image</td><td>A prebuilt disk template used to start a virtual machine with a chosen operating system and software stack.</td><td class="cell-analogy">Like buying a laptop with the operating system and core apps already installed.</td><td class="cell-business">Cuts setup time and helps standardize environments across teams.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- C -->
+<section class="letter-section" data-letter="C" id="section-C">
+  <div class="letter-heading"><div class="letter-badge">C</div><span class="letter-count" id="count-C"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="C" data-search="checkpoint model save training snapshot resume"><td class="cell-term">Checkpoint <span class="term-badge badge-new">New</span></td><td>A saved snapshot of a model's weights at a point during training so work can be resumed or the model version reused later.</td><td class="cell-analogy">Like hitting "Save" in a video game so you don't lose hours of progress if something goes wrong.</td><td class="cell-business">Protects expensive training runs from loss and enables teams to roll back to earlier, better-performing model versions.</td></tr>
+      <tr class="term-row" data-letter="C" data-search="cli command line interface text terminal manage resources"><td class="cell-term">CLI</td><td>Command-Line Interface: a text-based way to create, inspect, and manage cloud resources.</td><td class="cell-analogy">Like giving precise instructions at a drive-through speaker instead of tapping buttons on a kiosk.</td><td class="cell-business">Useful for automation, scripting, repeatability, and fast power-user workflows.</td></tr>
+      <tr class="term-row" data-letter="C" data-search="cluster group connected compute resources nodes parallel"><td class="cell-term">Cluster</td><td>A group of connected compute resources that work together as one system.</td><td class="cell-analogy">Like a team of workers assigned to one big project instead of one person doing it all.</td><td class="cell-business">Enables scale, resilience, and parallel processing for demanding AI jobs.</td></tr>
+      <tr class="term-row" data-letter="C" data-search="context window tokens input length llm limit"><td class="cell-term">Context Window <span class="term-badge badge-new">New</span></td><td>The maximum number of tokens (words/pieces) a language model can read and consider at one time when generating a response.</td><td class="cell-analogy">Like the width of a desk — it determines how many pages you can spread out and reference at once while working.</td><td class="cell-business">Larger context windows let AI handle longer documents, conversations, and code files without losing information.</td></tr>
+      <tr class="term-row" data-letter="C" data-search="container lightweight package application software portable"><td class="cell-term">Container</td><td>A lightweight package that includes an application and all the software it needs to run consistently across environments.</td><td class="cell-analogy">Like packing a food order in a sealed box with everything needed inside.</td><td class="cell-business">Improves portability, consistency, and deployment speed.</td></tr>
+      <tr class="term-row" data-letter="C" data-search="containerized application packaged docker kubernetes run"><td class="cell-term">Containerized Application</td><td>An application packaged and run inside a container.</td><td class="cell-analogy">Like shipping a mobile coffee stand that arrives with the espresso machine and supplies already inside.</td><td class="cell-business">Makes software easier to move between laptops, servers, and cloud platforms.</td></tr>
+      <tr class="term-row" data-letter="C" data-search="controller node slurm soperator scheduling orchestration manager"><td class="cell-term">Controller Node</td><td>In a Slurm/Soperator setup, the node that manages scheduling and orchestration of jobs.</td><td class="cell-analogy">Like an air traffic controller directing planes to the right runways and gates.</td><td class="cell-business">Coordinates work so jobs start in the right place at the right time.</td></tr>
+      <tr class="term-row" data-letter="C" data-search="cpu central processing unit general purpose chip processor"><td class="cell-term">CPU <span class="term-badge badge-new">New</span></td><td>Central Processing Unit: the general-purpose processor in a computer that handles most instructions and logic sequentially.</td><td class="cell-analogy">Like a single brilliant chef who can cook anything but can only work on one dish at a time.</td><td class="cell-business">Handles coordination, business logic, and lighter workloads; GPU handles the heavy parallel math for AI.</td></tr>
+      <tr class="term-row" data-letter="C" data-search="cuda nvidia parallel computing platform gpu programming model"><td class="cell-term">CUDA</td><td>NVIDIA's parallel computing platform and programming model for running workloads on GPUs.</td><td class="cell-analogy">Like giving chefs a special kitchen layout so they can cook many dishes at once very efficiently.</td><td class="cell-business">Lets developers accelerate training, inference, and scientific computing on NVIDIA GPUs.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- D -->
+<section class="letter-section" data-letter="D" id="section-D">
+  <div class="letter-heading"><div class="letter-badge">D</div><span class="letter-count" id="count-D"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="D" data-search="data lake raw storage unstructured data repository analytics"><td class="cell-term">Data Lake <span class="term-badge badge-new">New</span></td><td>A centralized repository that stores raw, unstructured, and structured data at any scale until it is needed for analysis or training.</td><td class="cell-analogy">Like a massive warehouse where you toss everything you own — you can find and use anything later, but it takes some digging.</td><td class="cell-business">Enables organizations to capture all data now and decide how to use it for AI or analytics later.</td></tr>
+      <tr class="term-row" data-letter="D" data-search="data pipeline etl preprocessing flow ingestion transform"><td class="cell-term">Data Pipeline <span class="term-badge badge-new">New</span></td><td>An automated series of steps that moves, transforms, and loads data from its source to its destination for use in AI or analytics.</td><td class="cell-analogy">Like an assembly line that takes raw materials at one end and delivers finished, packaged products at the other.</td><td class="cell-business">Ensures clean, timely data reaches training and inference systems without manual intervention.</td></tr>
+      <tr class="term-row" data-letter="D" data-search="data preprocessing cleaning transforming organizing raw input training"><td class="cell-term">Data Preprocessing</td><td>Cleaning, transforming, and organizing raw data before using it for training or inference.</td><td class="cell-analogy">Like washing, peeling, and chopping ingredients before cooking.</td><td class="cell-business">Improves model accuracy and reliability by feeding cleaner input into the pipeline.</td></tr>
+      <tr class="term-row" data-letter="D" data-search="deployment release model production serving infrastructure"><td class="cell-term">Deployment <span class="term-badge badge-new">New</span></td><td>The process of releasing a trained model or application into a production environment where real users or systems can access it.</td><td class="cell-analogy">Like opening a restaurant after months of recipe testing — the kitchen is finally serving real customers.</td><td class="cell-business">Turns model development into business value by making AI accessible to end users or downstream systems.</td></tr>
+      <tr class="term-row" data-letter="D" data-search="device plugin kubernetes gpu hardware expose containers"><td class="cell-term">Device Plugin</td><td>A Kubernetes component that exposes specialized hardware, such as GPUs, to workloads running in the cluster.</td><td class="cell-analogy">Like a valet system that tells guests which specialty vehicles are actually available.</td><td class="cell-business">Allows containers to use scarce hardware resources in a controlled way.</td></tr>
+      <tr class="term-row" data-letter="D" data-search="distributed training multi-gpu multi-machine parallel training speed"><td class="cell-term">Distributed Training</td><td>Training a model across multiple GPUs or machines working together.</td><td class="cell-analogy">Like several construction crews building different parts of the same stadium at the same time.</td><td class="cell-business">Shortens training time for large models and datasets.</td></tr>
+      <tr class="term-row" data-letter="D" data-search="docker container platform packaging image registry"><td class="cell-term">Docker</td><td>A widely used container platform for building, packaging, and running containerized applications.</td><td class="cell-analogy">Like a standard brand of shipping container that works on many trucks, ships, and ports.</td><td class="cell-business">Makes application packaging and deployment more predictable and portable.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- E -->
+<section class="letter-section" data-letter="E" id="section-E">
+  <div class="letter-heading"><div class="letter-badge">E</div><span class="letter-count" id="count-E"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="E" data-search="embedding vector representation semantic search similarity"><td class="cell-term">Embedding <span class="term-badge badge-new">New</span></td><td>A numerical vector that represents text, images, or other data in a way that captures meaning, so similar things end up near each other mathematically.</td><td class="cell-analogy">Like converting book summaries into GPS coordinates — books with similar themes end up geographically close together on a map.</td><td class="cell-business">Powers semantic search, recommendation engines, and retrieval-augmented AI by enabling similarity comparisons.</td></tr>
+      <tr class="term-row" data-letter="E" data-search="endpoint serverless ai service request response inference live"><td class="cell-term">Endpoint</td><td>In Serverless AI, an interactive service that listens for requests and returns model responses until stopped.</td><td class="cell-analogy">Like a staffed service desk that stays open to answer incoming questions.</td><td class="cell-business">Supports real-time AI experiences such as chat, search, and live predictions.</td></tr>
+      <tr class="term-row" data-letter="E" data-search="epoch training iteration full dataset pass learning cycle"><td class="cell-term">Epoch <span class="term-badge badge-new">New</span></td><td>One complete pass through the entire training dataset by the model during the learning process.</td><td class="cell-analogy">Like reading a textbook from cover to cover once — multiple epochs means reading it multiple times to absorb more.</td><td class="cell-business">More epochs improve model accuracy up to a point; too many cause overfitting, so monitoring epochs is essential.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- F -->
+<section class="letter-section" data-letter="F" id="section-F">
+  <div class="letter-heading"><div class="letter-badge">F</div><span class="letter-count" id="count-F"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="F" data-search="fault tolerance resilience failover high availability uptime"><td class="cell-term">Fault Tolerance</td><td>The ability of a system to keep operating even when some parts fail.</td><td class="cell-analogy">Like a restaurant staying open because another cook can step in when one calls out sick.</td><td class="cell-business">Improves uptime and user trust by reducing outages.</td></tr>
+      <tr class="term-row" data-letter="F" data-search="fine-tuning adapt pretrained model domain specific dataset task"><td class="cell-term">Fine-Tuning</td><td>Adapting a pre-trained model to a narrower task or dataset by continuing training on new examples.</td><td class="cell-analogy">Like taking a general athlete and coaching them for one specific sport.</td><td class="cell-business">Improves relevance and quality for a company's specific use case.</td></tr>
+      <tr class="term-row" data-letter="F" data-search="foundation model large pretrained base llm general purpose"><td class="cell-term">Foundation Model <span class="term-badge badge-new">New</span></td><td>A large model trained on broad data at scale that can be adapted to many downstream tasks through fine-tuning or prompting.</td><td class="cell-analogy">Like a general-purpose Swiss Army knife — it does many things reasonably well out of the box.</td><td class="cell-business">Reduces the cost of building AI capabilities by letting businesses start from a powerful, reusable base instead of training from scratch.</td></tr>
+      <tr class="term-row" data-letter="F" data-search="framework software structure reusable components build apps pytorch tensorflow"><td class="cell-term">Framework</td><td>A reusable software foundation that provides structure and common components for building applications.</td><td class="cell-analogy">Like the frame of a house that gives builders a standard structure to work with.</td><td class="cell-business">Speeds development and reduces custom reinvention.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- G -->
+<section class="letter-section" data-letter="G" id="section-G">
+  <div class="letter-heading"><div class="letter-badge">G</div><span class="letter-count" id="count-G"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="G" data-search="genai generative ai create text image code audio content"><td class="cell-term">GenAI</td><td>Generative AI: systems that create new content such as text, images, code, or audio.</td><td class="cell-analogy">Like a creative assistant that drafts new material instead of only retrieving old files.</td><td class="cell-business">Enables products like copilots, chatbots, content tools, and design assistants.</td></tr>
+      <tr class="term-row" data-letter="G" data-search="glusterfs distributed file system shared storage cluster nodes"><td class="cell-term">GlusterFS</td><td>A distributed file system referenced by Nebius solution examples for shared storage across cluster nodes.</td><td class="cell-analogy">Like a shared company filing room that many teams can access from different offices.</td><td class="cell-business">Helps multiple machines read and write shared data needed by training jobs.</td></tr>
+      <tr class="term-row" data-letter="G" data-search="gpu graphics processing unit parallel hardware ai accelerator chips"><td class="cell-term">GPU</td><td>Graphics Processing Unit: a processor built to handle many calculations in parallel, making it well suited for AI workloads.</td><td class="cell-analogy">Like having hundreds of prep cooks working at once instead of one chef doing everything.</td><td class="cell-business">Accelerates training, inference, and data processing workloads that would be too slow on general-purpose chips.</td></tr>
+      <tr class="term-row" data-letter="G" data-search="gpu cluster machines nodes gpu connected heavy workloads training"><td class="cell-term">GPU Cluster</td><td>A cluster of machines or nodes equipped with GPUs and connected to work together on heavy workloads.</td><td class="cell-analogy">Like a fleet of tow trucks working the same major recovery job.</td><td class="cell-business">Provides the scale needed for large model training and high-throughput inference.</td></tr>
+      <tr class="term-row" data-letter="G" data-search="gpu driver system software operating communicate hardware stable"><td class="cell-term">GPU Driver</td><td>System software that lets the operating system and applications communicate correctly with the GPU.</td><td class="cell-analogy">Like the translator between the driver and a very specialized race car.</td><td class="cell-business">Required to make GPU hardware usable and stable for AI workloads.</td></tr>
+      <tr class="term-row" data-letter="G" data-search="grafana visualization dashboard metrics monitoring observability"><td class="cell-term">Grafana</td><td>A visualization tool used for dashboards that display metrics and system health.</td><td class="cell-analogy">Like a control-room wall of gauges and screens showing how the factory is running.</td><td class="cell-business">Helps teams monitor performance, spot anomalies, and troubleshoot faster.</td></tr>
+      <tr class="term-row" data-letter="G" data-search="guardrails safety filters content policy model output restrictions"><td class="cell-term">Guardrails <span class="term-badge badge-new">New</span></td><td>Rules, filters, or checks placed around an AI model to prevent it from generating harmful, off-topic, or policy-violating outputs.</td><td class="cell-analogy">Like the bumpers in bumper bowling — they guide the ball and stop it from going somewhere it shouldn't.</td><td class="cell-business">Protects brand, users, and legal compliance by keeping AI outputs within acceptable boundaries.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- H -->
+<section class="letter-section" data-letter="H" id="section-H">
+  <div class="letter-heading"><div class="letter-badge">H</div><span class="letter-count" id="count-H"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="H" data-search="hallucination ai fabrication wrong confident incorrect output llm"><td class="cell-term">Hallucination <span class="term-badge badge-new">New</span></td><td>When an AI model confidently generates text that sounds plausible but is factually wrong or entirely made up.</td><td class="cell-analogy">Like a tour guide confidently describing landmarks that don't exist — spoken fluently and convincingly.</td><td class="cell-business">One of the biggest risks in enterprise AI deployment; mitigated by grounding models in real data via RAG or fact-checking layers.</td></tr>
+      <tr class="term-row" data-letter="H" data-search="helm kubernetes package manager chart templates deploy apps"><td class="cell-term">Helm <span class="term-badge badge-new">New</span></td><td>A package manager for Kubernetes that bundles application definitions into reusable "charts" for easy deployment.</td><td class="cell-analogy">Like an App Store for Kubernetes — instead of building everything from scratch, you install pre-packaged software bundles.</td><td class="cell-business">Speeds up and standardizes how teams deploy complex applications and AI infrastructure components to Kubernetes.</td></tr>
+      <tr class="term-row" data-letter="H" data-search="high availability design uptime minimal downtime resilience redundancy"><td class="cell-term">High Availability</td><td>A design goal in which services are built to remain accessible with minimal downtime.</td><td class="cell-analogy">Like keeping a spare generator ready so the lights stay on when the power fails.</td><td class="cell-business">Protects revenue and operations by reducing service interruption.</td></tr>
+      <tr class="term-row" data-letter="H" data-search="horovod distributed deep learning training framework multi-gpu"><td class="cell-term">Horovod <span class="term-badge badge-new">New</span></td><td>An open-source distributed deep learning training framework that helps scale model training across many GPUs.</td><td class="cell-analogy">Like a relay race where each runner carries the baton for their leg — each GPU trains on part of the data and passes results to the others.</td><td class="cell-business">Reduces training time for large models by efficiently coordinating work across dozens or hundreds of GPUs.</td></tr>
+      <tr class="term-row" data-letter="H" data-search="hpc high performance computing parallel powerful systems scientific"><td class="cell-term">HPC</td><td>High-Performance Computing: the use of powerful, often parallel systems to solve compute-intensive problems.</td><td class="cell-analogy">Like using an industrial bakery instead of a home oven when you need ten thousand loaves.</td><td class="cell-business">Supports large simulations, scientific workloads, and massive model training runs.</td></tr>
+      <tr class="term-row" data-letter="H" data-search="hyperparameter tuning learning rate configuration model training settings"><td class="cell-term">Hyperparameter <span class="term-badge badge-new">New</span></td><td>A configuration value set before training begins — such as learning rate or batch size — that controls how the model learns.</td><td class="cell-analogy">Like the temperature and baking time settings you choose before putting bread in the oven — they shape the result without being part of the dough.</td><td class="cell-business">Tuning hyperparameters can dramatically improve model performance, and cloud platforms automate this search to save time.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- I -->
+<section class="letter-section" data-letter="I" id="section-I">
+  <div class="letter-heading"><div class="letter-badge">I</div><span class="letter-count" id="count-I"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="I" data-search="iac infrastructure as code terraform definition automated provision"><td class="cell-term">Infrastructure as Code (IaC) <span class="term-badge badge-new">New</span></td><td>The practice of defining and managing cloud infrastructure through machine-readable configuration files instead of manual setup.</td><td class="cell-analogy">Like a detailed recipe that automatically instructs a robot kitchen to cook the same meal perfectly every time.</td><td class="cell-business">Enables repeatable, auditable, version-controlled infrastructure deployments that reduce human error.</td></tr>
+      <tr class="term-row" data-letter="I" data-search="inference prediction output generation model serving production"><td class="cell-term">Inference</td><td>Using a trained model to generate predictions or outputs from new input data.</td><td class="cell-analogy">Like asking an experienced mechanic to identify a problem after years of training.</td><td class="cell-business">Turns trained models into usable products and business decisions.</td></tr>
+      <tr class="term-row" data-letter="I" data-search="infiniband high throughput low latency networking hpc compute connect"><td class="cell-term">InfiniBand</td><td>A high-throughput, low-latency networking technology used to connect systems for demanding compute workloads.</td><td class="cell-analogy">Like replacing neighborhood roads with a private high-speed express lane between factories.</td><td class="cell-business">Helps large GPU workloads exchange data faster, improving multi-node performance.</td></tr>
+      <tr class="term-row" data-letter="I" data-search="interactive workload real-time request live service running persistent"><td class="cell-term">Interactive Workload</td><td>A workload that stays running and responds to incoming requests in real time.</td><td class="cell-analogy">Like a help desk agent who stays at the phone waiting for calls.</td><td class="cell-business">Supports user-facing services where fast response matters.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- J -->
+<section class="letter-section" data-letter="J" id="section-J">
+  <div class="letter-heading"><div class="letter-badge">J</div><span class="letter-count" id="count-J"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="J" data-search="job allocation slurm compute resources reserved booking"><td class="cell-term">Job Allocation</td><td>The set of compute resources reserved by Slurm for a submitted job.</td><td class="cell-analogy">Like booking a meeting room, projector, and staff before an event starts.</td><td class="cell-business">Ensures the required resources are ready before the job runs.</td></tr>
+      <tr class="term-row" data-letter="J" data-search="job queue scheduler priority waiting pending execution order"><td class="cell-term">Job Queue <span class="term-badge badge-new">New</span></td><td>The ordered list of submitted compute jobs waiting for resources to become available before they can begin running.</td><td class="cell-analogy">Like a numbered ticket system at a deli — your job is assigned a number and gets called when it's its turn.</td><td class="cell-business">Enables fair, priority-based sharing of expensive GPU resources across multiple teams or projects.</td></tr>
+      <tr class="term-row" data-letter="J" data-search="job scheduler software decisions when where run compute resources"><td class="cell-term">Job Scheduler</td><td>Software that decides when and where compute jobs should run based on rules and available resources.</td><td class="cell-analogy">Like a dispatcher assigning delivery routes to available drivers.</td><td class="cell-business">Improves utilization, fairness, and throughput in shared compute environments.</td></tr>
+      <tr class="term-row" data-letter="J" data-search="jupyter notebook interactive code python data science analysis"><td class="cell-term">Jupyter Notebook <span class="term-badge badge-new">New</span></td><td>An interactive web-based environment where data scientists and developers can write and run code, visualize results, and document their work in one place.</td><td class="cell-analogy">Like a live science lab notebook where you can run experiments and record results on the same page.</td><td class="cell-business">Accelerates AI experimentation and model prototyping, and makes analytical work shareable across teams.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- K -->
+<section class="letter-section" data-letter="K" id="section-K">
+  <div class="letter-heading"><div class="letter-badge">K</div><span class="letter-count" id="count-K"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="K" data-search="kubectl command line tool kubernetes manage cluster resources inspect"><td class="cell-term">kubectl</td><td>The native command-line tool used to work with Kubernetes clusters.</td><td class="cell-analogy">Like the remote control for a very large machine room.</td><td class="cell-business">Lets engineers inspect, update, and troubleshoot Kubernetes resources efficiently.</td></tr>
+      <tr class="term-row" data-letter="K" data-search="kubernetes orchestration containerized applications deploy scale manage pods"><td class="cell-term">Kubernetes</td><td>An orchestration platform for deploying, scaling, and managing containerized applications.</td><td class="cell-analogy">Like an operations manager who decides where each shipping container goes and replaces broken trucks automatically.</td><td class="cell-business">Helps companies run AI and application workloads reliably at scale.</td></tr>
+      <tr class="term-row" data-letter="K" data-search="kv cache key value cache transformer inference speed memory"><td class="cell-term">KV Cache <span class="term-badge badge-new">New</span></td><td>A memory optimization in transformer inference that stores previously computed key-value pairs to avoid redundant recalculation on each new token.</td><td class="cell-analogy">Like a student keeping scratch work on the side of the page so they don't have to redo calculations every time they need the same number.</td><td class="cell-business">Dramatically speeds up inference for long conversations and documents, reducing cost per query.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- L -->
+<section class="letter-section" data-letter="L" id="section-L">
+  <div class="letter-heading"><div class="letter-badge">L</div><span class="letter-count" id="count-L"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="L" data-search="latency response time delay speed request milliseconds real-time"><td class="cell-term">Latency <span class="term-badge badge-new">New</span></td><td>The time it takes for a system to respond to a request — from when input is sent to when output is received.</td><td class="cell-analogy">Like the wait between pressing the elevator button and the doors opening.</td><td class="cell-business">Low latency is critical for interactive AI applications; high latency degrades user experience and revenue.</td></tr>
+      <tr class="term-row" data-letter="L" data-search="llama large language model meta family base pretrained"><td class="cell-term">Llama</td><td>A family of large language models referenced in Nebius fine-tuning examples.</td><td class="cell-analogy">Like a pre-trained writer you can coach for your specific brand voice.</td><td class="cell-business">Serves as a base model for custom AI assistants and other language applications.</td></tr>
+      <tr class="term-row" data-letter="L" data-search="llm large language model gpt text generation nlp"><td class="cell-term">LLM <span class="term-badge badge-new">New</span></td><td>Large Language Model: an AI model trained on vast text data that can understand and generate human language for a wide variety of tasks.</td><td class="cell-analogy">Like a very well-read colleague who has processed millions of books, articles, and conversations and can discuss almost any topic.</td><td class="cell-business">Powers chatbots, copilots, summarization, coding assistants, and countless enterprise automation use cases.</td></tr>
+      <tr class="term-row" data-letter="L" data-search="login node slurm cluster submit jobs entry controlled access"><td class="cell-term">Login Node</td><td>In a Slurm cluster, a node that users access to submit jobs and work with the environment.</td><td class="cell-analogy">Like the front desk and lobby where visitors arrive before going deeper into the building.</td><td class="cell-business">Provides a controlled entry point for users and workflows.</td></tr>
+      <tr class="term-row" data-letter="L" data-search="logql query language loki logs search analyze pattern"><td class="cell-term">LogQL</td><td>A query language used for searching and analyzing logs in Loki-style systems.</td><td class="cell-analogy">Like a detective's search grammar for finding the right clues in a mountain of notes.</td><td class="cell-business">Helps teams quickly find errors, patterns, and operational signals in logs.</td></tr>
+      <tr class="term-row" data-letter="L" data-search="loki log aggregation grafana store query search incidents"><td class="cell-term">Loki</td><td>A log aggregation system often used alongside Grafana for storing and querying logs.</td><td class="cell-analogy">Like a searchable archive room for every machine and app message in the building.</td><td class="cell-business">Makes it easier to investigate incidents and understand system behavior.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- M -->
+<section class="letter-section" data-letter="M" id="section-M">
+  <div class="letter-heading"><div class="letter-badge">M</div><span class="letter-count" id="count-M"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="M" data-search="managed kubernetes nebius service operate cluster less overhead"><td class="cell-term">Managed Kubernetes</td><td>Nebius's managed service for deploying and operating Kubernetes clusters with less manual overhead.</td><td class="cell-analogy">Like renting a serviced office where building management handles the plumbing and power.</td><td class="cell-business">Lets teams focus on applications instead of running every part of the cluster themselves.</td></tr>
+      <tr class="term-row" data-letter="M" data-search="microservice architecture small independent service api communication decomposed"><td class="cell-term">Microservice <span class="term-badge badge-new">New</span></td><td>A software design pattern where an application is broken into small, independent services that communicate via APIs.</td><td class="cell-analogy">Like a food hall where each stall specializes in one cuisine — each works independently but they all serve the same customers.</td><td class="cell-business">Allows AI components like inference, preprocessing, and logging to be scaled, updated, and maintained independently.</td></tr>
+      <tr class="term-row" data-letter="M" data-search="mlflow open source manage machine learning experiments lifecycle tracking"><td class="cell-term">MLflow</td><td>An open-source platform for managing machine learning experiments and model lifecycle tasks.</td><td class="cell-analogy">Like a lab notebook mixed with a project tracker for model work.</td><td class="cell-business">Improves experiment tracking, reproducibility, and collaboration.</td></tr>
+      <tr class="term-row" data-letter="M" data-search="ml ai workload computing task training inference preprocessing evaluation"><td class="cell-term">ML/AI Workload</td><td>A computing task related to machine learning or AI, such as training, inference, preprocessing, or evaluation.</td><td class="cell-analogy">Like the collection of jobs in a movie studio: filming, editing, sound, and release.</td><td class="cell-business">Helps teams categorize and optimize the kinds of compute work they run.</td></tr>
+      <tr class="term-row" data-letter="M" data-search="mlops machine learning operations devops pipeline production automation"><td class="cell-term">MLOps <span class="term-badge badge-new">New</span></td><td>Machine Learning Operations: the practices and tools for deploying, monitoring, and maintaining ML models in production reliably.</td><td class="cell-analogy">Like having a dedicated pit crew for race cars — they keep the car running, swap tires, and ensure it stays competitive lap after lap.</td><td class="cell-business">Bridges the gap between model development and production, reducing the time and risk of getting AI into business systems.</td></tr>
+      <tr class="term-row" data-letter="M" data-search="model evaluation testing performance measure dataset quality governance"><td class="cell-term">Model Evaluation</td><td>Testing a model to measure how well it performs on defined tasks or datasets.</td><td class="cell-analogy">Like giving a student a final exam after months of study.</td><td class="cell-business">Prevents weak models from reaching customers and supports governance.</td></tr>
+      <tr class="term-row" data-letter="M" data-search="model registry version store artifact track deployment lineage"><td class="cell-term">Model Registry <span class="term-badge badge-new">New</span></td><td>A centralized store where trained model versions are tracked, versioned, and managed across their lifecycle.</td><td class="cell-analogy">Like a library catalog — each book (model) is catalogued with its edition, where it came from, and who checked it out.</td><td class="cell-business">Ensures teams can trace model lineage, roll back to stable versions, and comply with AI governance requirements.</td></tr>
+      <tr class="term-row" data-letter="M" data-search="monitoring collect metrics events health infrastructure applications"><td class="cell-term">Monitoring</td><td>Collecting and viewing metrics, events, and health data about infrastructure and applications.</td><td class="cell-analogy">Like checking vital signs on a hospital monitor.</td><td class="cell-business">Helps teams detect issues early and keep services reliable.</td></tr>
+      <tr class="term-row" data-letter="M" data-search="multi-host training multiple machines server distributed large scale"><td class="cell-term">Multi-Host Training</td><td>Training that spans multiple machines rather than a single server.</td><td class="cell-analogy">Like splitting a giant warehouse order across several fulfillment centers.</td><td class="cell-business">Needed when one machine does not have enough compute or memory for the job.</td></tr>
+      <tr class="term-row" data-letter="M" data-search="multi-node workload job cluster nodes production plan large"><td class="cell-term">Multi-Node Workload</td><td>A job that runs across multiple nodes in a cluster.</td><td class="cell-analogy">Like a film production spread across several stages but following one production plan.</td><td class="cell-business">Allows larger or faster processing than a single node can provide.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- N -->
+<section class="letter-section" data-letter="N" id="section-N">
+  <div class="letter-heading"><div class="letter-badge">N</div><span class="letter-count" id="count-N"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="N" data-search="namespace kubernetes isolation resource logical boundary team"><td class="cell-term">Namespace <span class="term-badge badge-new">New</span></td><td>A virtual partition inside a Kubernetes cluster that isolates resources, allowing multiple teams or environments to share the same cluster safely.</td><td class="cell-analogy">Like separate floors in a shared office building — different companies share the structure but have their own locked space.</td><td class="cell-business">Enables safe multi-tenant cluster usage and helps enforce resource quotas and access controls per team.</td></tr>
+      <tr class="term-row" data-letter="N" data-search="nebius ai cloud platform gpu computing services infrastructure"><td class="cell-term">Nebius AI Cloud <span class="term-badge badge-new">New</span></td><td>A cloud platform purpose-built for AI workloads, offering GPU compute, managed Kubernetes, Slurm-based HPC, and AI-focused infrastructure services.</td><td class="cell-analogy">Like a specialty workshop fully equipped for auto restoration — built specifically for that craft, not a general rental space.</td><td class="cell-business">Provides AI and ML teams with optimized, cost-effective infrastructure without managing raw hardware.</td></tr>
+      <tr class="term-row" data-letter="N" data-search="nim nvidia inference microservice container optimized model serving"><td class="cell-term">NIM (NVIDIA) <span class="term-badge badge-new">New</span></td><td>NVIDIA Inference Microservices: containerized, optimized model servers that make it easy to deploy AI models at production scale.</td><td class="cell-analogy">Like a pre-assembled, road-tested food truck — the engine, kitchen, and menu are ready; you just choose where to park it.</td><td class="cell-business">Speeds time-to-production for AI inference by providing optimized serving containers from NVIDIA.</td></tr>
+      <tr class="term-row" data-letter="N" data-search="node single machine compute instance cluster building block"><td class="cell-term">Node</td><td>A single machine or compute instance that participates in a cluster.</td><td class="cell-analogy">Like one employee on a larger team.</td><td class="cell-business">Serves as a building block for scalable systems.</td></tr>
+      <tr class="term-row" data-letter="N" data-search="node group kubernetes set similar managed scale consistent department"><td class="cell-term">Node Group</td><td>A set of similar nodes managed together inside a Kubernetes cluster.</td><td class="cell-analogy">Like a department made up of employees with the same role and equipment.</td><td class="cell-business">Makes it easier to scale and manage groups of machines consistently.</td></tr>
+      <tr class="term-row" data-letter="N" data-search="nvlink nvidia interconnect high speed data gpus share performance"><td class="cell-term">NVLink</td><td>NVIDIA's high-speed interconnect for moving data efficiently between GPUs.</td><td class="cell-analogy">Like a private hallway between offices instead of sending everything through the public street.</td><td class="cell-business">Improves performance when multiple GPUs need to share data rapidly.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- O -->
+<section class="letter-section" data-letter="O" id="section-O">
+  <div class="letter-heading"><div class="letter-badge">O</div><span class="letter-count" id="count-O"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="O" data-search="object storage s3 blobs files cloud unstructured scalable"><td class="cell-term">Object Storage <span class="term-badge badge-new">New</span></td><td>A type of cloud storage that keeps data as discrete objects (files + metadata) in a flat namespace, ideal for large unstructured data like datasets and model artifacts.</td><td class="cell-analogy">Like a massive self-storage facility where each unit is labeled with a unique number — you can retrieve any item instantly if you know its number.</td><td class="cell-business">Cost-effective way to store huge training datasets, model checkpoints, and output files at scale.</td></tr>
+      <tr class="term-row" data-letter="O" data-search="observability metrics logs traces health system understanding signals"><td class="cell-term">Observability</td><td>The practice of understanding system health by using metrics, logs, traces, and related signals.</td><td class="cell-analogy">Like not just checking that a car is on, but also having the dashboard, service log, and engine diagnostics.</td><td class="cell-business">Speeds troubleshooting and improves operational reliability.</td></tr>
+      <tr class="term-row" data-letter="O" data-search="operator kubernetes automate deployment lifecycle complex applications manage"><td class="cell-term">Operator</td><td>In Kubernetes, software that automates the deployment and lifecycle management of complex applications.</td><td class="cell-analogy">Like a specialist caretaker who knows how to install, tune, heal, and upgrade a specific machine.</td><td class="cell-business">Reduces manual administration and enforces best practices.</td></tr>
+      <tr class="term-row" data-letter="O" data-search="orchestration coordinating compute resources workloads order place conductor"><td class="cell-term">Orchestration</td><td>Coordinating many compute resources and workloads so they run in the right place and order.</td><td class="cell-analogy">Like a conductor keeping an orchestra in sync.</td><td class="cell-business">Essential for scaling AI systems efficiently and reliably.</td></tr>
+      <tr class="term-row" data-letter="O" data-search="overfitting training memorize generalize poor test performance model"><td class="cell-term">Overfitting <span class="term-badge badge-new">New</span></td><td>When a model learns training data too precisely — including its noise — and fails to generalize to new, unseen data.</td><td class="cell-analogy">Like a student who memorizes every practice test answer verbatim but can't solve a slightly rephrased question on the real exam.</td><td class="cell-business">A common AI quality failure; avoided with techniques like regularization, dropout, and proper data splitting.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- P -->
+<section class="letter-section" data-letter="P" id="section-P">
+  <div class="letter-heading"><div class="letter-badge">P</div><span class="letter-count" id="count-P"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="P" data-search="parallel computing processors cores problem simultaneously speed runtime"><td class="cell-term">Parallel Computing</td><td>Using many processors or cores at the same time to solve parts of a problem together.</td><td class="cell-analogy">Like having many people assemble different sections of the same puzzle simultaneously.</td><td class="cell-business">Cuts runtime for large workloads and makes advanced AI feasible.</td></tr>
+      <tr class="term-row" data-letter="P" data-search="parameter model weight training neural network number size"><td class="cell-term">Parameter <span class="term-badge badge-new">New</span></td><td>A single numerical value inside a model that is learned during training; models are often described by their parameter count (e.g., 7 billion).</td><td class="cell-analogy">Like individual adjustable screws inside a complex machine — each one affects how the machine behaves, and training tunes them all.</td><td class="cell-business">Parameter count signals model capability and resource requirements; more parameters generally means more power but higher cost.</td></tr>
+      <tr class="term-row" data-letter="P" data-search="pod kubernetes deployable unit containers scheduling scaling applications"><td class="cell-term">Pod</td><td>The basic deployable unit in Kubernetes that runs one or more tightly coupled containers.</td><td class="cell-analogy">Like a small work booth that can hold one specialist or a tiny team that must travel together.</td><td class="cell-business">Provides a practical unit for scheduling, scaling, and managing applications.</td></tr>
+      <tr class="term-row" data-letter="P" data-search="postgresql open source relational database system structured storage records"><td class="cell-term">PostgreSQL</td><td>An open-source relational database system.</td><td class="cell-analogy">Like a very organized digital filing cabinet with strong rules for storing and finding records.</td><td class="cell-business">Supports applications that need reliable structured data storage.</td></tr>
+      <tr class="term-row" data-letter="P" data-search="pretraining large model train broad data foundation weights initial"><td class="cell-term">Pretraining <span class="term-badge badge-new">New</span></td><td>The initial phase of training a foundation model on a massive, broad dataset to give it general knowledge and language understanding.</td><td class="cell-analogy">Like putting a new hire through a comprehensive multi-year university education before they start their specialized role.</td><td class="cell-business">Creates the general-purpose capability that makes models like LLMs useful across many tasks without task-specific data.</td></tr>
+      <tr class="term-row" data-letter="P" data-search="project nebius resource boundary organize control cloud billing"><td class="cell-term">Project</td><td>In Nebius, a resource boundary used to organize and control related cloud resources.</td><td class="cell-analogy">Like a labeled folder that keeps one department's budget, assets, and paperwork together.</td><td class="cell-business">Helps with organization, access control, and billing separation.</td></tr>
+      <tr class="term-row" data-letter="P" data-search="prometheus monitoring collect store metrics infrastructure alerting dashboards"><td class="cell-term">Prometheus</td><td>A monitoring system that collects and stores metrics from infrastructure and applications.</td><td class="cell-analogy">Like an automated clipboard that records performance readings at regular intervals.</td><td class="cell-business">Gives teams the data needed for dashboards, alerting, and capacity planning.</td></tr>
+      <tr class="term-row" data-letter="P" data-search="prompt instruction input text llm query user request context"><td class="cell-term">Prompt <span class="term-badge badge-new">New</span></td><td>The input text or instruction given to an AI model that tells it what task to perform or question to answer.</td><td class="cell-analogy">Like giving a briefing to a contractor — the clearer and more detailed your instructions, the better the outcome.</td><td class="cell-business">Prompt quality directly affects AI output quality; well-crafted prompts are a core enterprise skill for AI adoption.</td></tr>
+      <tr class="term-row" data-letter="P" data-search="provisioning create configure infrastructure resources ready setup automate"><td class="cell-term">Provisioning</td><td>Creating and configuring infrastructure resources so they are ready to use.</td><td class="cell-analogy">Like setting up desks, laptops, and badges before a new team arrives.</td><td class="cell-business">Speeds onboarding of systems and supports automation.</td></tr>
+      <tr class="term-row" data-letter="P" data-search="pytorch deep learning framework flexible research training neural network"><td class="cell-term">PyTorch <span class="term-badge badge-new">New</span></td><td>An open-source deep learning framework widely used for model research and production training, especially in AI labs.</td><td class="cell-analogy">Like a professional woodworking kit — flexible, precise, and favored by craftspeople who need full control.</td><td class="cell-business">The dominant framework for training state-of-the-art AI models; knowing its infrastructure requirements is key for cloud planning.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- Q -->
+<section class="letter-section" data-letter="Q" id="section-Q">
+  <div class="letter-heading"><div class="letter-badge">Q</div><span class="letter-count" id="count-Q"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="Q" data-search="quantization model compression reduce precision smaller faster inference"><td class="cell-term">Quantization <span class="term-badge badge-new">New</span></td><td>A technique that reduces the numerical precision of a model's weights to make it smaller and faster, with minimal accuracy loss.</td><td class="cell-analogy">Like compressing a high-resolution photo to a smaller file size — it looks almost the same but takes up far less space.</td><td class="cell-business">Allows large models to run on less expensive hardware or edge devices, dramatically reducing inference cost.</td></tr>
+      <tr class="term-row" data-letter="Q" data-search="queue depth requests tasks waiting processed signal scaling bottleneck"><td class="cell-term">Queue Depth</td><td>The number of requests or tasks waiting to be processed.</td><td class="cell-analogy">Like the number of people lined up at a coffee shop.</td><td class="cell-business">A useful signal for scaling systems and detecting bottlenecks.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- R -->
+<section class="letter-section" data-letter="R" id="section-R">
+  <div class="letter-heading"><div class="letter-badge">R</div><span class="letter-count" id="count-R"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="R" data-search="rag retrieval augmented generation knowledge grounding external documents llm"><td class="cell-term">RAG <span class="term-badge badge-new">New</span></td><td>Retrieval-Augmented Generation: a pattern where an AI model retrieves relevant external documents at query time and uses them to ground its response.</td><td class="cell-analogy">Like an open-book exam — instead of relying only on memory, the model is allowed to look things up before answering.</td><td class="cell-business">Reduces hallucination and keeps AI responses accurate and up-to-date without expensive retraining.</td></tr>
+      <tr class="term-row" data-letter="R" data-search="real-time inference live requests outputs immediately chatbot predictions"><td class="cell-term">Real-Time Inference</td><td>Producing model outputs immediately in response to live requests.</td><td class="cell-analogy">Like a translator speaking right as someone talks.</td><td class="cell-business">Important for chatbots, fraud checks, recommendations, and interactive apps.</td></tr>
+      <tr class="term-row" data-letter="R" data-search="region geographic cloud location resources latency compliance availability"><td class="cell-term">Region</td><td>A geographic cloud location where resources run.</td><td class="cell-analogy">Like choosing which city to open a branch office in.</td><td class="cell-business">Affects latency, compliance, disaster planning, and service availability.</td></tr>
+      <tr class="term-row" data-letter="R" data-search="rlhf reinforcement learning human feedback alignment training reward"><td class="cell-term">RLHF <span class="term-badge badge-new">New</span></td><td>Reinforcement Learning from Human Feedback: a technique for training AI models to produce outputs that align with human preferences using rated example responses.</td><td class="cell-analogy">Like coaching an employee by having managers rate their work and rewarding them when they get it right.</td><td class="cell-business">The key method used to make LLMs helpful, harmless, and honest — critical for safe enterprise AI deployment.</td></tr>
+      <tr class="term-row" data-letter="R" data-search="rollout deployment strategy canary blue green staged release"><td class="cell-term">Rollout Strategy <span class="term-badge badge-new">New</span></td><td>The plan for releasing a new model or service version to users — such as gradual canary releases or full blue/green switches.</td><td class="cell-analogy">Like a restaurant testing a new menu item with just 10% of tables before rolling it out everywhere.</td><td class="cell-business">Minimizes risk by catching problems with a small user group before they affect everyone.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- S -->
+<section class="letter-section" data-letter="S" id="section-S">
+  <div class="letter-heading"><div class="letter-badge">S</div><span class="letter-count" id="count-S"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="S" data-search="sbatch slurm command submit batch script execution dispatcher"><td class="cell-term">Sbatch</td><td>A Slurm command used to submit a batch script for execution.</td><td class="cell-analogy">Like handing a completed work order to the dispatcher.</td><td class="cell-business">Standardizes how jobs are submitted to the scheduler.</td></tr>
+      <tr class="term-row" data-letter="S" data-search="scheduling assigning jobs resources time meeting room efficient fair"><td class="cell-term">Scheduling</td><td>The process of assigning jobs to available resources over time.</td><td class="cell-analogy">Like deciding which meeting gets which room and when.</td><td class="cell-business">Keeps shared infrastructure efficient and fair.</td></tr>
+      <tr class="term-row" data-letter="S" data-search="serverless ai nebius model endpoint jobs no server manage overhead"><td class="cell-term">Serverless AI</td><td>Nebius's service model for running AI endpoints or jobs without managing the underlying servers directly.</td><td class="cell-analogy">Like catering a meal without renting and staffing the kitchen yourself.</td><td class="cell-business">Speeds delivery and reduces operational overhead for AI teams.</td></tr>
+      <tr class="term-row" data-letter="S" data-search="service account non-human identity application automation cloud access badge"><td class="cell-term">Service Account</td><td>A non-human identity used by applications or automation to access cloud resources.</td><td class="cell-analogy">Like a company badge issued to a robot worker instead of a person.</td><td class="cell-business">Improves security and automation by separating app permissions from user accounts.</td></tr>
+      <tr class="term-row" data-letter="S" data-search="shared filesystem storage multiple machines common file space drive nodes"><td class="cell-term">Shared Filesystem</td><td>A storage system that multiple machines can access as a common file space.</td><td class="cell-analogy">Like a shared drive everyone on a team can open.</td><td class="cell-business">Important for training data, checkpoints, and collaboration across nodes.</td></tr>
+      <tr class="term-row" data-letter="S" data-search="shared responsibility model cloud security provider customer layers landlord"><td class="cell-term">Shared Responsibility Model</td><td>A cloud security principle where the provider secures some layers and the customer secures others.</td><td class="cell-analogy">Like a landlord handling the building structure while the tenant locks their own office.</td><td class="cell-business">Clarifies who is responsible for security, compliance, and operations.</td></tr>
+      <tr class="term-row" data-letter="S" data-search="skypilot open source multi-cloud job launcher kubernetes resources optimize"><td class="cell-term">SkyPilot <span class="term-badge badge-new">New</span></td><td>An open-source framework referenced by Nebius that automates launching AI and ML jobs across cloud providers and Kubernetes clusters.</td><td class="cell-analogy">Like a universal flight booking agent that finds the cheapest and fastest available flight regardless of airline.</td><td class="cell-business">Helps organizations minimize compute cost and maximize GPU availability across cloud platforms.</td></tr>
+      <tr class="term-row" data-letter="S" data-search="slurm workload manager job scheduler hpc ai training batch open-source"><td class="cell-term">Slurm</td><td>An open-source workload manager and job scheduler widely used for high-performance computing and AI training.</td><td class="cell-analogy">Like a factory foreman assigning heavy jobs to the right crews and machines.</td><td class="cell-business">Helps organizations run large batch and training workloads efficiently.</td></tr>
+      <tr class="term-row" data-letter="S" data-search="soperator nebius kubernetes operator slurm pods combined infrastructure open-source"><td class="cell-term">Soperator</td><td>Nebius's open-source Kubernetes operator that runs Slurm nodes as Kubernetes Pods, combining Slurm and Kubernetes in one infrastructure.</td><td class="cell-analogy">Like mounting a factory foreman inside a modern operations control center so both work together.</td><td class="cell-business">Brings familiar Slurm job workflows to Kubernetes-based infrastructure.</td></tr>
+      <tr class="term-row" data-letter="S" data-search="srun slurm command launch tasks job steps allocated multi-step"><td class="cell-term">Srun</td><td>A Slurm command used to launch tasks or job steps inside an allocated job.</td><td class="cell-analogy">Like telling individual crew members to start their part of the work after the site is reserved.</td><td class="cell-business">Supports multi-step and multi-node execution inside scheduled jobs.</td></tr>
+      <tr class="term-row" data-letter="S" data-search="system prompt instruction context role configuration llm ai behavior guide"><td class="cell-term">System Prompt <span class="term-badge badge-new">New</span></td><td>A set of instructions given to an AI model at the start of a session that defines its role, behavior, and constraints throughout the conversation.</td><td class="cell-analogy">Like a job description and employee handbook given to a new hire on day one — it shapes how they respond to everything.</td><td class="cell-business">Lets businesses customize AI behavior for specific use cases like customer service, coding help, or legal review.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- T -->
+<section class="letter-section" data-letter="T" id="section-T">
+  <div class="letter-heading"><div class="letter-badge">T</div><span class="letter-count" id="count-T"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="T" data-search="temperature sampling creativity randomness llm output control diversity"><td class="cell-term">Temperature <span class="term-badge badge-new">New</span></td><td>A parameter that controls how random or creative an AI model's outputs are — low temperature means predictable, high temperature means more varied.</td><td class="cell-analogy">Like a dial on a blender — low speed gives controlled, consistent results; high speed mixes things up wildly.</td><td class="cell-business">Lets businesses tune AI behavior: low temperature for factual tasks, higher for brainstorming and creative work.</td></tr>
+      <tr class="term-row" data-letter="T" data-search="tensor multidimensional array data structure deep learning math"><td class="cell-term">Tensor <span class="term-badge badge-new">New</span></td><td>A multi-dimensional array used as the fundamental data structure in deep learning to represent everything from images to text embeddings.</td><td class="cell-analogy">Like a spreadsheet that can have many dimensions — not just rows and columns, but stacks of pages deep.</td><td class="cell-business">All data flowing through a neural network is a tensor; understanding tensors is foundational to AI infrastructure planning.</td></tr>
+      <tr class="term-row" data-letter="T" data-search="terraform infrastructure as code provision cloud configuration files automate"><td class="cell-term">Terraform</td><td>An infrastructure-as-code tool used to define and provision cloud resources from configuration files.</td><td class="cell-analogy">Like an architect's blueprint that can automatically assemble the building crew's work orders.</td><td class="cell-business">Improves repeatability, version control, and automation for infrastructure.</td></tr>
+      <tr class="term-row" data-letter="T" data-search="throughput capacity requests served per second volume performance rate"><td class="cell-term">Throughput <span class="term-badge badge-new">New</span></td><td>The number of requests, tasks, or tokens a system can process per unit of time.</td><td class="cell-analogy">Like how many cars per hour a toll booth can process — it defines the capacity of the system.</td><td class="cell-business">Higher throughput means more AI queries served at lower cost; critical for high-volume production deployments.</td></tr>
+      <tr class="term-row" data-letter="T" data-search="token text unit word subword piece llm input output count"><td class="cell-term">Token <span class="term-badge badge-new">New</span></td><td>The basic unit of text that an AI model reads and generates — typically a word or part of a word; models process and are priced by token count.</td><td class="cell-analogy">Like Scrabble tiles — text is broken into individual tiles before the model "plays" with them.</td><td class="cell-business">Token count drives inference cost and context window limits; understanding tokens helps budget AI API usage.</td></tr>
+      <tr class="term-row" data-letter="T" data-search="training teach model data adjust task learning examples coach"><td class="cell-term">Training</td><td>The process of teaching a model by adjusting it using data so it can perform a task.</td><td class="cell-analogy">Like coaching a new employee through many examples until they get good at the job.</td><td class="cell-business">Creates the model capability that later powers AI products.</td></tr>
+      <tr class="term-row" data-letter="T" data-search="transformer architecture neural network attention self-attention language model deep learning"><td class="cell-term">Transformer <span class="term-badge badge-new">New</span></td><td>The dominant neural network architecture behind modern LLMs and vision models, based on the attention mechanism to relate all parts of an input to each other.</td><td class="cell-analogy">Like a team of editors who each read the entire document and highlight how every sentence relates to every other sentence.</td><td class="cell-business">Understanding the transformer architecture is foundational to AI infrastructure decisions, as it drives GPU memory and compute requirements.</td></tr>
+      <tr class="term-row" data-letter="T" data-search="tpu tensor processing unit google custom ai accelerator hardware chip"><td class="cell-term">TPU <span class="term-badge badge-new">New</span></td><td>Tensor Processing Unit: Google's custom ASIC chip designed specifically to accelerate machine learning workloads, particularly matrix operations in neural networks.</td><td class="cell-analogy">Like a specialized espresso machine versus a general kitchen stove — purpose-built to do one thing exceptionally fast.</td><td class="cell-business">Offers an alternative to GPUs for large-scale AI training, with different cost/performance tradeoffs depending on workload.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- U -->
+<section class="letter-section" data-letter="U" id="section-U">
+  <div class="letter-heading"><div class="letter-badge">U</div><span class="letter-count" id="count-U"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="U" data-search="utilization resource usage efficiency gpu cpu compute allocation percent"><td class="cell-term">Utilization <span class="term-badge badge-new">New</span></td><td>The percentage of available compute resources (GPU, CPU, memory) actively being used at any moment.</td><td class="cell-analogy">Like how many seats in a restaurant are filled at dinner — low utilization means you're paying for empty tables.</td><td class="cell-business">High utilization means better return on expensive GPU infrastructure; monitoring utilization is key to cost optimization.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- V -->
+<section class="letter-section" data-letter="V" id="section-V">
+  <div class="letter-heading"><div class="letter-badge">V</div><span class="letter-count" id="count-V"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="V" data-search="vector database similarity search embeddings storage retrieval semantic"><td class="cell-term">Vector Database <span class="term-badge badge-new">New</span></td><td>A database designed to store and search vector embeddings efficiently, enabling fast similarity lookups across millions of items.</td><td class="cell-analogy">Like a music app that can find songs that "sound similar" to one you like — it's searching by feel, not by exact keyword.</td><td class="cell-business">Powers semantic search, RAG systems, and recommendation engines by enabling AI to find conceptually related content instantly.</td></tr>
+      <tr class="term-row" data-letter="V" data-search="virtual machine vm software defined computer os shared hardware isolated"><td class="cell-term">Virtual Machine (VM)</td><td>A software-defined computer that runs its own operating system on shared physical hardware.</td><td class="cell-analogy">Like renting an apartment in a larger building: it feels like your own place even though the structure is shared.</td><td class="cell-business">Provides flexible isolated compute for apps, data jobs, and AI workloads.</td></tr>
+      <tr class="term-row" data-letter="V" data-search="vllm inference engine fast llm serving throughput openai compatible"><td class="cell-term">vLLM <span class="term-badge badge-new">New</span></td><td>An open-source high-throughput LLM serving engine that uses paged attention to dramatically increase GPU utilization during inference.</td><td class="cell-analogy">Like a highly efficient hotel concierge who handles many guests simultaneously instead of helping one at a time.</td><td class="cell-business">Reduces inference cost per query significantly and is widely used in production LLM deployments on platforms like Nebius.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- W -->
+<section class="letter-section" data-letter="W" id="section-W">
+  <div class="letter-heading"><div class="letter-badge">W</div><span class="letter-count" id="count-W"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="W" data-search="worker node run application workloads slurm jobs compute production floor"><td class="cell-term">Worker Node</td><td>A node that actually runs application workloads or Slurm jobs.</td><td class="cell-analogy">Like the production floor where the real manufacturing happens.</td><td class="cell-business">Provides the compute capacity that does the work.</td></tr>
+      <tr class="term-row" data-letter="W" data-search="workflow ordered sequence steps complete task process recipe stages ai data"><td class="cell-term">Workflow</td><td>An ordered sequence of steps that together complete a task or process.</td><td class="cell-analogy">Like a recipe with stages from prep to cooking to plating.</td><td class="cell-business">Helps teams standardize complex AI and data operations.</td></tr>
+      <tr class="term-row" data-letter="W" data-search="workload manager software compute jobs resources slurm kubernetes dispatcher utilization"><td class="cell-term">Workload Manager</td><td>Software category that manages compute jobs and resource usage; Nebius discusses Slurm and Kubernetes in this role.</td><td class="cell-analogy">Like a dispatcher coordinating people, rooms, and equipment for many projects.</td><td class="cell-business">Improves utilization, scheduling, and operational control in shared environments.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- X -->
+<section class="letter-section" data-letter="X" id="section-X">
+  <div class="letter-heading"><div class="letter-badge">X</div><span class="letter-count" id="count-X"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="X" data-search="xgboost gradient boosting machine learning tabular ensemble tree models"><td class="cell-term">XGBoost <span class="term-badge badge-new">New</span></td><td>An optimized gradient-boosting framework for training fast, accurate models on tabular (spreadsheet-style) data.</td><td class="cell-analogy">Like having a committee of specialists vote on each decision — their combined judgment is more accurate than any single expert.</td><td class="cell-business">Widely used for structured data predictions like fraud detection, churn, and pricing — often outperforms deep learning for tabular data.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- Y -->
+<section class="letter-section" data-letter="Y" id="section-Y">
+  <div class="letter-heading"><div class="letter-badge">Y</div><span class="letter-count" id="count-Y"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="Y" data-search="yaml configuration file format kubernetes terraform infrastructure definition readable"><td class="cell-term">YAML <span class="term-badge badge-new">New</span></td><td>A human-readable configuration file format used extensively in Kubernetes, CI/CD pipelines, and infrastructure-as-code to define how systems should behave.</td><td class="cell-analogy">Like a plain-English instruction manual for machines — written in a way both humans and computers can understand.</td><td class="cell-business">The de facto format for configuring AI infrastructure in Kubernetes; every DevOps and MLOps team works with YAML daily.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<!-- Z -->
+<section class="letter-section" data-letter="Z" id="section-Z">
+  <div class="letter-heading"><div class="letter-badge">Z</div><span class="letter-count" id="count-Z"></span></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Term</th><th>Official Definition</th><th>Easy Analogy</th><th>Business Purpose</th></tr></thead>
+    <tbody>
+      <tr class="term-row" data-letter="Z" data-search="zero downtime deployment rolling update blue green canary no interruption"><td class="cell-term">Zero-Downtime Deployment <span class="term-badge badge-new">New</span></td><td>A deployment strategy that updates a running service to a new version without any interruption in service for users.</td><td class="cell-analogy">Like repaving a highway by shifting traffic to one lane — the road keeps functioning while the work gets done.</td><td class="cell-business">Critical for production AI services where downtime means lost revenue and degraded user trust.</td></tr>
+      <tr class="term-row" data-letter="Z" data-search="zero-shot learning task no examples llm prompt unseen inference generalize"><td class="cell-term">Zero-Shot Learning <span class="term-badge badge-new">New</span></td><td>The ability of an AI model to perform a task it was never explicitly trained on, using only a description or prompt at inference time.</td><td class="cell-analogy">Like asking a multilingual professor to grade a paper in a language they've never formally studied — they use their general knowledge to figure it out.</td><td class="cell-business">Enables rapid prototyping of AI capabilities without needing labeled training data for every new task.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<div id="noResults" class="no-results hidden">
+  <strong>No terms found</strong>
+  Try a different search term or click "All" to reset.
+</div>
+
+</div><!-- /content -->
+
+<div class="footer">
+  <div class="footer-inner">
+    <h3>Source Base</h3>
+    <div class="sources">
+      <a class="source-chip" href="https://docs.nebius.com/" target="_blank" rel="noopener">docs.nebius.com</a>
+      <a class="source-chip" href="https://docs.nebius.com/kubernetes" target="_blank" rel="noopener">docs.nebius.com/kubernetes</a>
+      <a class="source-chip" href="https://docs.nebius.com/compute/clusters/gpu" target="_blank" rel="noopener">docs.nebius.com/compute/clusters/gpu</a>
+      <a class="source-chip" href="https://docs.nebius.com/serverless/overview" target="_blank" rel="noopener">docs.nebius.com/serverless/overview</a>
+      <a class="source-chip" href="https://docs.nebius.com/slurm-soperator" target="_blank" rel="noopener">docs.nebius.com/slurm-soperator</a>
+      <a class="source-chip" href="https://docs.nebius.com/observability/logging" target="_blank" rel="noopener">docs.nebius.com/observability/logging</a>
+      <a class="source-chip" href="https://nebius.com/" target="_blank" rel="noopener">nebius.com</a>
+      <a class="source-chip" href="https://nebius.com/services/managed-kubernetes" target="_blank" rel="noopener">nebius.com/managed-kubernetes</a>
+      <a class="source-chip" href="https://nebius.com/solutions/inference" target="_blank" rel="noopener">nebius.com/solutions/inference</a>
+      <a class="source-chip" href="https://nebius.com/blog" target="_blank" rel="noopener">nebius.com/blog</a>
+    </div>
+  </div>
+</div>
+
+<div style="text-align:center;padding:16px 0 20px;position:relative;z-index:1;">
+  <a href="https://nebius.rus-teston.com" style="color:#0ea5e9;text-decoration:none;font-size:0.9rem;">← Back to Nebius Projects</a>
+</div>
+
+<script>
+const searchInput = document.getElementById('searchInput');
+const clearBtn = document.getElementById('clearBtn');
+const totalCount = document.getElementById('totalCount');
+const shownCount = document.getElementById('shownCount');
+const azButtons = Array.from(document.querySelectorAll('.az-btn'));
+const rows = Array.from(document.querySelectorAll('.term-row'));
+const sections = Array.from(document.querySelectorAll('.letter-section'));
+const noResults = document.getElementById('noResults');
+let activeLetter = 'ALL';
+
+// Count terms per letter and mark empty buttons
+const letterCounts = {};
+rows.forEach(r => {
+  const l = r.dataset.letter;
+  letterCounts[l] = (letterCounts[l] || 0) + 1;
+});
+azButtons.forEach(btn => {
+  const l = btn.dataset.letter;
+  if (l !== 'ALL' && !letterCounts[l]) btn.classList.add('empty');
+});
+
+// Update letter-count labels
+sections.forEach(section => {
+  const l = section.dataset.letter;
+  const el = document.getElementById('count-' + l);
+  if (el && letterCounts[l]) el.textContent = letterCounts[l] + ' term' + (letterCounts[l] === 1 ? '' : 's');
+});
+
+totalCount.textContent = rows.length;
+
+function highlightText(text, query) {
+  if (!query) return text;
+  const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return text.replace(new RegExp(escaped, 'gi'), m => '<mark>' + m + '</mark>');
+}
+
+function clearHighlights() {
+  rows.forEach(row => {
+    row.querySelectorAll('td').forEach(td => {
+      td.innerHTML = td.textContent;
+    });
+  });
+}
+
+function applyFilters() {
+  const q = searchInput.value.trim().toLowerCase();
+  let visibleCount = 0;
+
+  if (!q) clearHighlights();
+
+  rows.forEach(row => {
+    const matchesLetter = activeLetter === 'ALL' || row.dataset.letter === activeLetter;
+    const matchesSearch = !q || row.dataset.search.includes(q);
+    const visible = matchesLetter && matchesSearch;
+    row.classList.toggle('hidden', !visible);
+    if (visible) {
+      visibleCount++;
+      if (q) {
+        row.querySelectorAll('td').forEach(td => {
+          const text = td.textContent;
+          td.innerHTML = highlightText(text, q);
+        });
+      }
+    } else {
+      if (q) row.querySelectorAll('td').forEach(td => { td.innerHTML = td.textContent; });
+    }
+  });
+
+  sections.forEach(section => {
+    const anyVisible = section.querySelectorAll('tbody tr:not(.hidden)').length > 0;
+    section.classList.toggle('hidden', !anyVisible);
+  });
+
+  shownCount.textContent = visibleCount;
+  noResults.classList.toggle('hidden', visibleCount > 0);
+}
+
+azButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeLetter = btn.dataset.letter;
+    azButtons.forEach(b => b.classList.toggle('active', b === btn));
+    applyFilters();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+searchInput.addEventListener('input', applyFilters);
+clearBtn.addEventListener('click', () => {
+  searchInput.value = '';
+  activeLetter = 'ALL';
+  azButtons.forEach(b => b.classList.toggle('active', b.dataset.letter === 'ALL'));
+  clearHighlights();
+  applyFilters();
+  searchInput.focus();
+});
+
+applyFilters();
+</script>
+</body>
+</html>

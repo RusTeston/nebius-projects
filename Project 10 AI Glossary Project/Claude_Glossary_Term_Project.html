@@ -1012,6 +1012,43 @@ clearBtn.addEventListener('click', () => {
 });
 
 applyFilters();
+
+// Token Factory Integration
+const tfInput = document.getElementById('tfInput');
+const tfAskBtn = document.getElementById('tfAskBtn');
+const tfResponse = document.getElementById('tfResponse');
+const tfResponseText = document.getElementById('tfResponseText');
+
+function askTokenFactory() {
+  const question = tfInput.value.trim();
+  if (!question) return;
+
+  tfResponse.style.display = 'block';
+  tfResponseText.innerHTML = '<span style="color:#5A8AAE;">⚡ Asking DeepSeek V3.2 via Token Factory...</span>';
+
+  fetch('https://og7jfo5coewn245brfxmygjzaq0pebxk.lambda-url.us-east-1.on.aws/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ question: question })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.error) {
+      tfResponseText.textContent = 'Error: ' + data.error;
+    } else {
+      tfResponseText.textContent = data.answer;
+      document.querySelector('.tf-response-meta').textContent = 'Model: ' + data.model + ' \u00b7 Tokens used: ' + data.tokens;
+    }
+  })
+  .catch(err => {
+    tfResponseText.textContent = 'Error: ' + err.message;
+  });
+}
+
+tfAskBtn.addEventListener('click', askTokenFactory);
+tfInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') askTokenFactory();
+});
 </script>
 </body>
 </html>

@@ -2,9 +2,11 @@
 *.pdf
 *.code-workspace
 badge-mockup.html
+token-factory-mockup.html
 acm-validation.json
 cloudfront-config.json
 bucket-policy.json
 route53-alias.json
+.secrets/
 ~$*
 .DS_Store

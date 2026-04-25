@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebius AI Cloud — Technical Translation Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg-void:#0C1A3A;--bg-primary:#10224A;--bg-secondary:#162C52;--bg-card:#1C3660;--bg-card-hover:#224070;--bg-elevated:#2A4D70;--accent:#00C853;--accent-dim:rgba(0,200,83,0.12);--accent-border:rgba(0,200,83,0.28);--accent-glow:rgba(0,200,83,0.07);--blue-deep:#0F4C81;--text-primary:#F0F6FF;--text-secondary:#B0CFEA;--text-muted:#5A8AAE;--border:rgba(255,255,255,0.06);--border-accent:rgba(0,200,83,0.2);--green:#10D4A0;--gold:#F5A623;--red:#FF5F7E;--sidebar-w:272px;--topbar-h:62px;--radius:10px;--radius-sm:6px;--shadow:0 4px 24px rgba(0,0,0,0.4);--shadow-accent:0 0 28px rgba(0,194,243,0.1);--t:all 0.22s cubic-bezier(.4,0,.2,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Outfit',sans-serif;background:linear-gradient(180deg,#0C1A3A 0%,#0A3050 40%,#0E3558 100%);color:var(--text-primary);font-size:14px;line-height:1.6;overflow-x:hidden}
+a{color:var(--accent);text-decoration:none}
+button{cursor:pointer;border:none;background:none;color:inherit;font-family:inherit}
+input{font-family:inherit}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg-primary)}
+::-webkit-scrollbar-thumb{background:var(--border-accent);border-radius:4px}
+::selection{background:rgba(0,194,243,0.22)}
+
+/* LAYOUT */
+.app{display:flex;height:100vh;overflow:hidden}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar-w);min-width:var(--sidebar-w);background:var(--bg-primary);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width .3s cubic-bezier(.4,0,.2,1),min-width .3s;z-index:100;position:relative}
+.sidebar.collapsed{width:58px;min-width:58px}
+.sidebar-logo{padding:0 16px;height:var(--topbar-h);display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);flex-shrink:0}
+.logo-mark{width:30px;height:30px;background:linear-gradient(135deg,#E0FF4F,#00C853);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Inter',sans-serif;font-weight:800;font-size:15px;color:#fff;flex-shrink:0;box-shadow:0 0 14px rgba(0,194,243,0.3)}
+.logo-text{font-family:'Inter',sans-serif;font-weight:700;font-size:12.5px;color:var(--text-primary);letter-spacing:.02em;white-space:nowrap;overflow:hidden;opacity:1;transition:opacity .2s}
+.sidebar.collapsed .logo-text{opacity:0}
+.sidebar-toggle{margin-left:auto;width:22px;height:22px;display:flex;align-items:center;justify-content:center;border-radius:4px;color:var(--text-muted);transition:var(--t);flex-shrink:0}
+.sidebar-toggle:hover{color:var(--accent);background:var(--accent-dim)}
+.sidebar-scroll{flex:1;overflow-y:auto;overflow-x:hidden;padding:12px 0 80px}
+.sidebar-label{font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#E0FF4F;padding:10px 16px 5px;white-space:nowrap;overflow:hidden;transition:opacity .2s}
+.sidebar.collapsed .sidebar-label{opacity:0}
+.persona-chip{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 14px;margin:0 5px 2px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--t);border:1px solid transparent;white-space:nowrap;overflow:hidden}
+.persona-chip:hover{background:var(--accent-dim);border-color:var(--border-accent)}
+.persona-chip.active{background:var(--accent-dim);border-color:var(--accent);box-shadow:0 0 10px rgba(0,194,243,0.08)}
+.persona-chip-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.persona-chip-name{font-size:12px;font-weight:500;color:var(--text-secondary);transition:color .2s;overflow:hidden;text-overflow:ellipsis}
+.persona-chip.active .persona-chip-name,.persona-chip:hover .persona-chip-name{color:var(--text-primary)}
+.concept-nav-item{display:flex;align-items:center;gap:9px;padding:5px 12px 5px 14px;margin:0 5px 1px;border-radius:var(--radius-sm);cursor:pointer;transition:var(--t);border:1px solid transparent;white-space:nowrap;overflow:hidden}
+.concept-nav-item:hover{background:rgba(255,255,255,0.04)}
+.concept-nav-item.active{background:rgba(255,255,255,0.05);border-color:var(--border)}
+.concept-nav-num{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);opacity:.6;flex-shrink:0;width:18px}
+.concept-nav-name{font-size:11.5px;color:var(--text-secondary);overflow:hidden;text-overflow:ellipsis}
+.sidebar-bottom{position:absolute;bottom:0;left:0;width:100%;padding:10px;border-top:1px solid var(--border);background:var(--bg-primary)}
+.guide-btn{display:flex;align-items:center;gap:8px;width:100%;padding:8px 11px;border-radius:var(--radius-sm);background:rgba(0,194,243,0.07);border:1px solid var(--border-accent);color:var(--accent);font-size:12px;font-weight:500;transition:var(--t);white-space:nowrap;overflow:hidden}
+.guide-btn:hover{background:rgba(0,194,243,0.14);box-shadow:var(--shadow-accent)}
+.guide-btn-text{overflow:hidden;opacity:1;transition:opacity .2s}
+.sidebar.collapsed .guide-btn-text{opacity:0}
+
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:var(--topbar-h);display:flex;align-items:center;gap:10px;padding:0 20px;border-bottom:1px solid var(--border);background:var(--bg-primary);flex-shrink:0;z-index:50}
+.search-wrap{flex:1;max-width:460px;position:relative}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--text-muted);pointer-events:none;font-size:13px}
+.search-input{width:100%;background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:8px 34px 8px 34px;color:var(--text-primary);font-size:13px;transition:var(--t);outline:none}
+.search-input:focus{border-color:var(--accent-border);background:var(--bg-card);box-shadow:0 0 0 3px rgba(0,194,243,0.05)}
+.search-input::placeholder{color:var(--text-muted)}
+.search-clear{position:absolute;right:9px;top:50%;transform:translateY(-50%);color:var(--text-muted);font-size:16px;display:none;width:18px;height:18px;align-items:center;justify-content:center;border-radius:50%;transition:var(--t)}
+.search-clear.visible{display:flex}
+.search-clear:hover{color:var(--text-primary)}
+.search-shortcut{position:absolute;right:9px;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--text-muted);background:var(--bg-void);border:1px solid var(--border);padding:1px 5px;border-radius:3px}
+.topbar-stats{display:flex;align-items:center;gap:6px}
+.stat-pill{background:var(--bg-secondary);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:11.5px;color:var(--text-secondary);display:flex;align-items:center;gap:5px;transition:var(--t)}
+.stat-pill.filtered{border-color:var(--accent-border);color:var(--accent);background:var(--accent-dim)}
+.stat-dot{width:6px;height:6px;border-radius:50%}
+.topbar-actions{display:flex;align-items:center;gap:7px;margin-left:auto}
+.action-btn{height:32px;padding:0 12px;border-radius:var(--radius-sm);font-size:12px;font-weight:500;display:flex;align-items:center;gap:5px;transition:var(--t);border:1px solid var(--border);color:var(--text-secondary);background:var(--bg-secondary)}
+.action-btn:hover{border-color:var(--border-accent);color:var(--text-primary);background:var(--bg-card)}
+.action-btn.accent{background:var(--accent);color:var(--bg-void);border-color:var(--accent);font-weight:600}
+.action-btn.accent:hover{background:#00d4ff;box-shadow:0 0 14px rgba(0,194,243,0.28)}
+
+/* CONTENT */
+.content-area{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:18px}
+
+/* PERSONA BANNER */
+.persona-banner{display:none;align-items:center;gap:12px;padding:13px 18px;border-radius:var(--radius);border:1px solid var(--border);background:rgba(0,0,0,0.18);animation:slideDown .25s cubic-bezier(.4,0,.2,1)}
+.persona-banner.visible{display:flex}
+@keyframes slideDown{from{transform:translateY(-8px);opacity:0}to{transform:translateY(0);opacity:1}}
+.banner-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.banner-info{flex:1;min-width:0}
+.banner-name{font-family:'Inter',sans-serif;font-size:14px;font-weight:700}
+.banner-role{font-size:12px;color:var(--text-secondary);margin-top:1px}
+.banner-meta{text-align:right;min-width:150px}
+.banner-meta-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-muted)}
+.banner-priorities{font-size:11.5px;color:var(--text-secondary)}
+.banner-clear{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--radius-sm);border:1px solid currentColor;font-size:12px;font-weight:500;opacity:.65;transition:var(--t);flex-shrink:0}
+.banner-clear:hover{opacity:1}
+
+/* SECTION HEADER */
+.section-header{display:flex;align-items:center;gap:10px}
+.section-title{font-family:'Inter',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap}
+.section-line{flex:1;height:1px;background:var(--border)}
+
+/* PROOF STRIP */
+.proof-strip{display:flex;gap:8px;flex-wrap:wrap}
+.proof-pill{display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:20px;background:var(--bg-card);border:1px solid var(--border);font-size:11.5px;color:var(--text-secondary);transition:var(--t);cursor:default}
+.proof-pill:hover{border-color:var(--accent-border);color:var(--text-primary);background:var(--bg-card-hover)}
+
+/* CONCEPT CARDS */
+.concepts-grid{display:flex;flex-direction:column;gap:8px}
+.concept-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:var(--t);animation:fadeUp .28s cubic-bezier(.4,0,.2,1) both}
+@keyframes fadeUp{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}
+.concept-card:hover{border-color:var(--border-accent);box-shadow:var(--shadow-accent)}
+.concept-card.expanded{border-color:var(--accent-border)}
+.concept-card.hidden{display:none}
+.concept-header{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;transition:var(--t)}
+.concept-header:hover{background:rgba(255,255,255,0.018)}
+.concept-num{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--accent);opacity:.55;width:22px;flex-shrink:0}
+.concept-title-wrap{flex:1;min-width:0}
+.concept-name{font-family:'Inter',sans-serif;font-size:14.5px;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.concept-tagline{font-size:11.5px;color:var(--text-secondary);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.concept-badges{display:flex;gap:4px;align-items:center;flex-shrink:0}
+.concept-badge{font-size:9.5px;padding:2px 7px;border-radius:10px;border:1px solid var(--border);color:var(--text-muted);background:var(--bg-secondary)}
+.expand-icon{width:26px;height:26px;display:flex;align-items:center;justify-content:center;border-radius:50%;color:var(--text-muted);font-size:15px;transition:transform .25s,color .2s,background .2s;flex-shrink:0}
+.concept-card.expanded .expand-icon{transform:rotate(180deg);color:var(--accent)}
+.concept-header:hover .expand-icon{background:var(--accent-dim);color:var(--accent)}
+.concept-body{display:none;border-top:1px solid var(--border)}
+.concept-card.expanded .concept-body{display:block}
+.tech-explanation{padding:14px 18px;background:rgba(0,0,0,0.18);border-bottom:1px solid var(--border);display:flex;gap:12px;align-items:flex-start}
+.tech-label{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);opacity:.65;flex-shrink:0;padding-top:2px;width:80px}
+.tech-text{font-size:12.5px;line-height:1.65;color:var(--text-secondary)}
+.persona-tabs-wrap{padding:14px 18px}
+.persona-tabs{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:12px}
+.ptab{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:20px;border:1px solid var(--border);background:var(--bg-secondary);font-size:11.5px;color:var(--text-secondary);transition:var(--t)}
+.ptab:hover{border-color:var(--border-accent);color:var(--text-primary)}
+.ptab.active{background:var(--accent-dim);border-color:var(--accent);color:var(--text-primary);font-weight:500}
+.ptab-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.translation-panel{display:none}
+.translation-panel.active{display:block;animation:tabFade .18s ease}
+@keyframes tabFade{from{opacity:0;transform:translateX(5px)}to{opacity:1;transform:translateX(0)}}
+.translation-content{background:var(--bg-secondary);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;position:relative;transition:var(--t)}
+.translation-content:hover{border-color:var(--border-accent)}
+.translation-text{font-size:13px;line-height:1.72;color:var(--text-primary);padding-right:32px}
+.copy-btn{position:absolute;top:10px;right:10px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);background:var(--bg-card);border:1px solid var(--border);color:var(--text-muted);font-size:12px;transition:var(--t);opacity:0}
+.translation-content:hover .copy-btn{opacity:1}
+.copy-btn:hover{border-color:var(--accent-border);color:var(--accent);background:var(--accent-dim)}
+.copy-btn.copied{color:var(--green);border-color:var(--green);background:rgba(16,212,160,0.08)}
+.single-translation{padding:14px 18px}
+
+/* DRAWER */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.48);backdrop-filter:blur(3px);z-index:200}
+.drawer-overlay.open{display:block}
+.drawer{position:fixed;top:0;right:0;width:min(500px,90vw);height:100vh;background:var(--bg-secondary);border-left:1px solid var(--border-accent);z-index:201;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);box-shadow:-8px 0 36px rgba(0,0,0,0.48)}
+.drawer.open{transform:translateX(0)}
+.drawer-header{padding:18px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.drawer-title{font-family:'Inter',sans-serif;font-size:17px;font-weight:700}
+.drawer-close{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);color:var(--text-secondary);font-size:19px;transition:var(--t)}
+.drawer-close:hover{background:var(--border);color:var(--text-primary)}
+.drawer-body{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+.guide-step{padding:16px;border-radius:var(--radius);background:var(--bg-card);border:1px solid var(--border);transition:var(--t)}
+.guide-step:hover{border-color:var(--border-accent)}
+.guide-step-num{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--accent);opacity:.7;margin-bottom:5px;letter-spacing:.08em}
+.guide-step-title{font-family:'Inter',sans-serif;font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:7px}
+.guide-step-body{font-size:12.5px;line-height:1.65;color:var(--text-secondary)}
+
+/* CONVERSATION MODE */
+.conv-overlay{display:none;position:fixed;inset:0;background:var(--bg-void);z-index:300;flex-direction:column}
+.conv-overlay.open{display:flex}
+.conv-topbar{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-bottom:1px solid var(--border);flex-shrink:0}
+.conv-title-label{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)}
+.conv-progress{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text-secondary)}
+.conv-prog-bar{width:110px;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.conv-prog-fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s ease}
+.conv-body{flex:1;display:flex;align-items:center;justify-content:center;padding:32px;overflow:hidden}
+.conv-card{width:100%;max-width:820px;background:var(--bg-card);border:1px solid var(--border-accent);border-radius:14px;padding:36px 44px;box-shadow:0 20px 70px rgba(0,0,0,0.4),var(--shadow-accent);animation:convIn .28s cubic-bezier(.4,0,.2,1)}
+@keyframes convIn{from{transform:scale(.97) translateY(8px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.conv-c-num{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--accent);opacity:.6;margin-bottom:7px}
+.conv-c-name{font-family:'Inter',sans-serif;font-size:24px;font-weight:800;color:var(--text-primary);margin-bottom:5px}
+.conv-c-tagline{font-size:14px;color:var(--accent);font-style:italic;margin-bottom:22px;opacity:.88}
+.conv-tech{background:rgba(0,0,0,0.28);border-left:3px solid var(--accent);padding:12px 16px;border-radius:0 7px 7px 0;font-size:12.5px;color:var(--text-secondary);line-height:1.65;margin-bottom:24px}
+.conv-p-label{font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted);margin-bottom:9px}
+.conv-translation{font-size:14px;line-height:1.76;color:var(--text-primary);border:1px solid var(--border-accent);border-radius:var(--radius);padding:18px;background:rgba(0,194,243,0.025);position:relative}
+.conv-copy-btn{position:absolute;top:12px;right:12px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);background:var(--bg-card);border:1px solid var(--border);color:var(--text-muted);font-size:12px;transition:var(--t)}
+.conv-copy-btn:hover{border-color:var(--accent-border);color:var(--accent)}
+.conv-footer{height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-top:1px solid var(--border);flex-shrink:0}
+.conv-nav-btn{display:flex;align-items:center;gap:7px;padding:9px 18px;border-radius:var(--radius);border:1px solid var(--border);font-size:12.5px;color:var(--text-secondary);background:var(--bg-secondary);transition:var(--t);font-weight:500}
+.conv-nav-btn:hover{border-color:var(--border-accent);color:var(--text-primary);background:var(--bg-card)}
+.conv-nav-btn.primary-btn{background:var(--accent);color:var(--bg-void);border-color:var(--accent);font-weight:600}
+.conv-nav-btn.primary-btn:hover{background:#00d4ff;box-shadow:0 0 18px rgba(0,194,243,0.28)}
+.conv-nav-btn:disabled{opacity:.3;cursor:default}
+.conv-persona-tabs{display:flex;gap:5px}
+.conv-ptab{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:var(--radius-sm);border:1px solid var(--border);font-size:13px;transition:var(--t);cursor:pointer;background:var(--bg-secondary)}
+.conv-ptab:hover{border-color:var(--border-accent);background:var(--bg-card);transform:scale(1.08)}
+.conv-ptab.active{border-color:var(--accent);background:var(--accent-dim)}
+
+/* KEYBOARD MODAL */
+.kb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.58);backdrop-filter:blur(5px);z-index:400;align-items:center;justify-content:center}
+.kb-overlay.open{display:flex}
+.kb-modal{background:var(--bg-secondary);border:1px solid var(--border-accent);border-radius:13px;padding:26px 30px;width:min(420px,90vw);box-shadow:0 20px 56px rgba(0,0,0,0.48);animation:scaleIn .18s cubic-bezier(.4,0,.2,1)}
+@keyframes scaleIn{from{transform:scale(.95);opacity:0}to{transform:scale(1);opacity:1}}
+.kb-title{font-family:'Inter',sans-serif;font-size:15px;font-weight:700;margin-bottom:18px}
+.kb-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)}
+.kb-row:last-child{border-bottom:none}
+.kb-desc{font-size:12.5px;color:var(--text-secondary)}
+kbd{display:inline-flex;align-items:center;justify-content:center;padding:2px 7px;background:var(--bg-card);border:1px solid var(--border);border-radius:4px;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--text-primary);min-width:24px}
+
+/* EMPTY STATE */
+.empty-state{display:none;text-align:center;padding:50px 20px;color:var(--text-muted)}
+.empty-state.visible{display:block}
+.empty-icon{font-size:38px;margin-bottom:12px}
+.empty-title{font-family:'Inter',sans-serif;font-size:15px;font-weight:700;margin-bottom:5px;color:var(--text-secondary)}
+
+/* TOAST */
+.toast-container{position:fixed;bottom:22px;right:22px;z-index:500;display:flex;flex-direction:column;gap:7px}
+.toast{display:flex;align-items:center;gap:9px;padding:11px 15px;background:var(--bg-elevated);border:1px solid var(--border-accent);border-radius:var(--radius);font-size:12.5px;color:var(--text-primary);box-shadow:var(--shadow);animation:toastIn .22s cubic-bezier(.4,0,.2,1)}
+@keyframes toastIn{from{transform:translateY(8px) scale(.96);opacity:0}to{transform:translateY(0) scale(1);opacity:1}}
+
+/* RESPONSIVE */
+@media(max-width:900px){.sidebar{width:58px;min-width:58px}.sidebar .logo-text,.sidebar .sidebar-label,.sidebar .guide-btn-text{opacity:0}.topbar-stats{display:none}}
+@media(max-width:600px){.topbar{padding:0 12px}.content-area{padding:12px}.conv-card{padding:20px 22px}.conv-c-name{font-size:18px}.proof-strip{display:none}}
+@media print{.sidebar,.topbar,.drawer,.conv-overlay,.toast-container{display:none!important}.main{overflow:visible}.content-area{overflow:visible;padding:0}body{background:#fff;color:#000}.concept-card{break-inside:avoid;border:1px solid #ddd}.concept-card.hidden{display:block!important}.concept-card .concept-body{display:block!important}}
+</style>
+</head>
+<body>
+
+<!-- Keyboard Modal -->
+<div class="kb-overlay" id="kbOverlay" onclick="if(event.target===this)closeKb()">
+  <div class="kb-modal">
+    <div class="kb-title">⌨️ Keyboard Shortcuts</div>
+    <div class="kb-row"><span class="kb-desc">Focus search</span><kbd>/</kbd></div>
+    <div class="kb-row"><span class="kb-desc">Clear filters / close</span><kbd>Esc</kbd></div>
+    <div class="kb-row"><span class="kb-desc">Expand all cards</span><kbd>E</kbd></div>
+    <div class="kb-row"><span class="kb-desc">Collapse all cards</span><kbd>C</kbd></div>
+    <div class="kb-row"><span class="kb-desc">Conversation / Present mode</span><kbd>M</kbd></div>
+    <div class="kb-row"><span class="kb-desc">Open conversation guide</span><kbd>G</kbd></div>
+    <div class="kb-row"><span class="kb-desc">Navigate in present mode</span><kbd>← →</kbd></div>
+    <div class="kb-row"><span class="kb-desc">Show this help</span><kbd>?</kbd></div>
+  </div>
+</div>
+
+<!-- Usage Guide Drawer -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="usageDrawer">
+  <div class="drawer-header">
+    <div class="drawer-title">🎯 Conversation Guide</div>
+    <button class="drawer-close" onclick="closeDrawer()">×</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</div>
+
+<!-- Conversation Mode -->
+<div class="conv-overlay" id="convOverlay">
+  <div class="conv-topbar">
+    <div class="conv-title-label">🎙 Conversation Mode</div>
+    <div class="conv-progress">
+      <div class="conv-prog-bar"><div class="conv-prog-fill" id="convFill"></div></div>
+      <span id="convProgText">1 / 13</span>
+    </div>
+    <button class="action-btn" onclick="closeConvMode()" style="font-size:12px">✕ Exit</button>
+  </div>
+  <div class="conv-body" id="convBody"></div>
+  <div class="conv-footer">
+    <button class="conv-nav-btn" id="convPrev" onclick="convNav(-1)">← Prev</button>
+    <div class="conv-persona-tabs" id="convPTabs"></div>
+    <button class="conv-nav-btn primary-btn" id="convNext" onclick="convNav(1)">Next →</button>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- APP SHELL -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">N</div>
+      <div class="logo-text"><span style="color:#E0FF4F;">Nebius</span> AI Cloud</div>
+      <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle sidebar">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="currentColor"><rect y="1" width="13" height="2" rx="1"/><rect y="5.5" width="13" height="2" rx="1"/><rect y="10" width="13" height="2" rx="1"/></svg>
+      </button>
+    </div>
+    <div class="sidebar-scroll">
+      <div class="sidebar-label">Filter by Persona</div>
+      <div id="personaChips"></div>
+      <div class="sidebar-label" style="margin-top:6px">Concepts</div>
+      <nav id="conceptNav"></nav>
+    </div>
+    <div class="sidebar-bottom">
+      <a href="https://nebius.rus-teston.com" class="guide-btn" style="text-decoration:none;margin-bottom:6px;">
+        <span>←</span>
+        <span class="guide-btn-text">Back to Nebius Projects</span>
+      </a>
+      <button class="guide-btn" onclick="openDrawer()">
+        <span>📋</span>
+        <span class="guide-btn-text">Conversation Guide</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" id="searchInput" placeholder="Search concepts, features, terms…" autocomplete="off">
+        <button class="search-clear" id="searchClear" onclick="clearSearch()">×</button>
+        <div class="search-shortcut" id="searchShortcut">/</div>
+      </div>
+      <div class="topbar-stats">
+        <div class="stat-pill" id="statPill">
+          <div class="stat-dot" id="statDot" style="background:var(--accent)"></div>
+          <span id="statText">13 concepts</span>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button class="action-btn" onclick="expandAll()">⊕ Expand All</button>
+        <button class="action-btn" onclick="collapseAll()">⊖ Collapse</button>
+        <button class="action-btn accent" onclick="openConvMode()">🎙 Present</button>
+        <button class="action-btn" onclick="showKb()" title="Keyboard shortcuts">⌨️</button>
+      </div>
+    </div>
+
+    <div class="content-area" id="contentArea">
+
+      <!-- Persona Banner -->
+      <div class="persona-banner" id="personaBanner">
+        <div class="banner-dot" id="bannerDot"></div>
+        <div class="banner-info">
+          <div class="banner-name" id="bannerName"></div>
+          <div class="banner-role" id="bannerRole"></div>
+        </div>
+        <div class="banner-meta">
+          <div class="banner-meta-label">Key Priorities</div>
+          <div class="banner-priorities" id="bannerPriorities"></div>
+        </div>
+        <button class="banner-clear" id="bannerClear" onclick="clearPersonaFilter()">× All Personas</button>
+      </div>
+
+      <!-- Proof Points -->
+      <div>
+        <div class="section-header"><div class="section-title">Validated Proof Points</div><div class="section-line"></div></div>
+        <div class="proof-strip" id="proofStrip"></div>
+      </div>
+
+      <!-- Concepts -->
+      <div>
+        <div class="section-header"><div class="section-title">Technical Concept Translations</div><div class="section-line"></div></div>
+        <div class="concepts-grid" id="conceptsGrid"></div>
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">🔍</div>
+          <div class="empty-title">No concepts found</div>
+          <div style="font-size:12.5px;margin-top:4px;color:var(--text-muted)">Try a different search term or clear filters</div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</div>
+
+<script>
+/* ── DATA ──────────────────────────────────────────────────────────────────── */
+const PERSONAS=[
+  {id:'eng',   emoji:'🔬',name:'ML / AI Engineer',      color:'#00C2F3',role:'Hands-on builder of models & pipelines',                 priorities:'Performance, stability, fast iteration, reproducibility'},
+  {id:'cto',   emoji:'🏗️',name:'CTO / VP Engineering',   color:'#10D4A0',role:'Technology strategy & delivery velocity',               priorities:'Speed to market, architectural soundness, vendor reliability'},
+  {id:'cfo',   emoji:'📊',name:'CFO / FinOps Lead',       color:'#F5A623',role:'P&L, budget approvals & ROI accountability',             priorities:'TCO, pricing predictability, ROI proof, governance'},
+  {id:'mlops', emoji:'⚙️',name:'MLOps / Platform Eng.',   color:'#9B8BFF',role:'Builds & maintains AI infrastructure platform',         priorities:'Reliability, automation, observability, ease of management'},
+  {id:'ciso',  emoji:'🛡️',name:'CISO / Compliance',       color:'#FF5F7E',role:'Data protection, regulatory compliance & risk',        priorities:'Certifications, data sovereignty, access controls, audits'},
+  {id:'pm',    emoji:'🚀',name:'AI Product Manager',      color:'#F59E0B',role:'Defines AI-powered product features & roadmap',         priorities:'Time to market, feature velocity, inference quality, UX'},
+];
+
+const CONCEPTS=[
+  {id:'gpu',name:'NVIDIA GPU Clusters — Blackwell & Hopper',tagline:'The most powerful AI chips on the planet, available on demand',tags:['Compute','Hardware'],
+   tech:'Nebius offers the latest NVIDIA GPU generations — GB300 NVL72, HGX B300, B200, H200, and H100 — as cloud instances or dedicated clusters with up to thousands of GPUs. Nebius is Europe\'s first cloud to operate both GB300 NVL72 and B300 platforms in production, backed by three-stage acceptance testing before any cluster reaches a customer.',
+   t:{eng:'You get immediate, on-demand access to the newest NVIDIA Blackwell and Hopper GPUs — the same hardware competitors are waiting months to acquire. No procurement queues, no hardware babysitting. Spin up H100, H200, B200, or GB300 NVL72 clusters in minutes with pay-as-you-go billing.',
+      cto:'Nebius removes the 12–18 month hardware procurement cycle entirely. Your teams get generation-leading compute today, compressing your innovation timeline. As a Reference Platform NVIDIA Cloud Partner, Nebius runs on NVIDIA-certified architecture — not improvised configurations.',
+      cfo:'Pay-as-you-go GPU pricing with simple hourly billing eliminates multi-million-dollar CapEx commitments for hardware that depreciates and becomes obsolete. An independent SemiAnalysis study confirmed Nebius delivers the lowest Total Cost of Ownership (TCO) across three real-world AI workload scenarios.',
+      mlops:'Every GPU cluster undergoes three-stage acceptance testing — manufacturer QA, Nebius data center inspection, and full cluster burn-in — before reaching you. Clusters arrive with pre-installed GPU drivers, network drivers, and orchestration software. You spend time on AI work, not debugging hardware.',
+      pm:'The GPU capacity you need for a new AI-powered feature is available on demand — no IT procurement delays. Engineering teams can prototype, validate, and scale to production on the same platform, compressing the experiment-to-product cycle.'}},
+  {id:'infiniband',name:'InfiniBand Networking (Quantum-2 & Quantum-X800)',tagline:'Ultra-fast GPU-to-GPU communication that makes large model training possible',tags:['Networking','Performance'],
+   tech:'InfiniBand is a high-speed, ultra-low-latency networking fabric connecting GPUs within a cluster to act as a single unified compute system. Nebius offers NVIDIA Quantum-2 InfiniBand (up to 400 Gbps per GPU NIC) and is the first cloud globally to run production GB300 NVL72 clusters on 800 Gbps NVIDIA Quantum-X800 InfiniBand, doubling throughput for distributed workloads.',
+   t:{eng:'Training large models requires GPUs to exchange gradients constantly. Without fast interconnects, GPUs sit idle. With InfiniBand at 400–800 Gbps, communication overhead is slashed. Nebius NCCL benchmarks show 10–25% performance improvements from topology-aware scheduling alone — without changing a line of training code.',
+      cto:'InfiniBand is the difference between a GPU cluster and a supercomputer. Nebius achieved 1.97x speedup when doubling cluster size in MLPerf Training benchmarks — near-linear scaling — meaning your infrastructure investment compounds effectively as your models grow.',
+      cfo:'Faster GPU interconnects mean training jobs finish in less wall-clock time, so you pay for fewer GPU-hours per model trained. Nebius demonstrated near-linear scaling — you don\'t pay twice the cost to get twice the throughput. A 10–25% performance improvement directly translates to 10–25% cost savings per training run.',
+      mlops:'InfiniBand clusters include pre-configured non-blocking fabric, pre-installed NIC drivers, and NCCL libraries out of the box. Topology-aware scheduling automatically places distributed training jobs on physically close GPU nodes, minimizing latency without manual configuration.',
+      pm:'Large capable AI models require distributed training across many GPUs. InfiniBand is what makes training those models economically feasible. Nebius\'s interconnect means your team can train state-of-the-art models without hitting performance walls that force architectural compromises.'}},
+  {id:'kubernetes',name:'Managed Kubernetes (MK8s)',tagline:'Container orchestration for AI — no cluster management required',tags:['Orchestration','DevOps'],
+   tech:'Managed Kubernetes on Nebius is a fully managed container orchestration platform with native GPU and InfiniBand support, automated health checks, graceful node termination, out-of-the-box Grafana dashboards, and GPU resource requests. Teams deploy, scale, and manage containerized AI workloads without operating Kubernetes control planes. Included at no additional charge.',
+   t:{eng:'Package your training or inference code as a Docker container, declare your GPU needs, and Kubernetes handles the rest — scheduling, restarts on failure, scaling. No manual server login, no dependency conflicts. Reproducible, isolated environments for every experiment.',
+      cto:'Managed Kubernetes lets your engineering team follow modern cloud-native practices — GitOps, containerized workloads, declarative infrastructure — for AI at the same velocity as application services. It eliminates the ops burden of running Kubernetes control planes, freeing senior engineers for product work.',
+      cfo:'Managed Kubernetes is included at no additional charge on Nebius. No per-cluster premium on top of compute costs — you only pay for GPU and CPU resources your workloads actually consume. Efficient bin-packing means fewer idle resources and reduced waste.',
+      mlops:'Nebius Managed Kubernetes includes a graceful node termination handler that evicts and reschedules workloads automatically when nodes are unhealthy — training jobs survive hardware hiccups without manual intervention. Out-of-the-box Grafana dashboards give GPU utilization, pod health, and cluster metrics with no instrumentation work.',
+      ciso:'Managed Kubernetes runs within isolated virtual networks (VPCs) with IAM-enforced access controls. Workloads and data are isolated by namespace and project, reducing lateral movement risk. Kubernetes RBAC integrates with Nebius IAM for centralized, auditable permission management.'}},
+  {id:'soperator',name:'Soperator — Managed Slurm on Kubernetes',tagline:'Research-grade HPC job scheduling with enterprise-grade reliability',tags:['HPC','Orchestration'],
+   tech:'Soperator is Nebius\'s open-source Kubernetes operator running a full SLURM cluster on Kubernetes — combining SLURM\'s HPC job-queuing semantics (priority scheduling, fairshare allocation, gang scheduling) with Kubernetes\'s operational model. Available as a one-click self-service deployment. Nebius achieved MTBF of 168,000 GPU-hours/week on a 3,000-GPU cluster.',
+   t:{eng:'If your team comes from HPC or academia, you already know sbatch and squeue. Soperator gives you those same SLURM commands on a cloud cluster — no relearning tools, no rewriting pipelines. High-priority training runs preempt lower-priority experiments automatically.',
+      cto:'Soperator is the first open-source Kubernetes operator for SLURM, developed by Nebius. It gives your organization a vendor-agnostic, auditable scheduler. Research teams and software engineering teams can work on the same cluster with their preferred tools, reducing organizational friction.',
+      cfo:'Managed Soperator is free on Nebius — no license fee or cluster management premium. SLURM\'s fairshare scheduling ensures no team over-consumes GPU budget at others\' expense, acting as a built-in FinOps governance tool. GPU-hour allocation is trackable by user and project for internal chargeback.',
+      mlops:'Spin up a training-ready SLURM cluster in minutes with pre-installed GPU drivers, CUDA libraries, and MPI. Soperator\'s autohealing capabilities have achieved MTBF of 168,000 GPU-hours per week on a 3,000-GPU cluster. When a node fails, the orchestration layer reschedules affected jobs without manual intervention.',
+      pm:'Research teams and product ML teams often have different tooling preferences. Soperator lets both co-exist on the same infrastructure — researchers use familiar SLURM job scripts while production engineers use Kubernetes manifests — eliminating the platform schism that slows AI product development.'}},
+  {id:'topology',name:'Topology-Aware Job Scheduling',tagline:'Automatically place training jobs on GPUs that are physically closest together',tags:['Performance','Optimization'],
+   tech:'Topology-aware scheduling analyses the physical network topology of the GPU cluster and places distributed training jobs on nodes connected through the fewest network hops with the highest bandwidth paths, minimizing all-reduce communication latency. Available across Slurm, Kubernetes, Volcano, and Kueue. Nebius NCCL benchmarks show 10–25% average performance improvements.',
+   t:{eng:'When you launch a multi-node training job, the scheduler automatically selects GPU nodes in the same InfiniBand switch group — the arrangement that minimizes gradient communication latency. You get 10–25% faster training iterations without changing a single line of training code.',
+      cto:'Every 10% reduction in training time means research cycles are 10% faster and compute costs are 10% lower. Topology-aware scheduling delivers this automatically — an infrastructure-level advantage that multiplies across every training job your team runs, with zero engineering effort.',
+      cfo:'A 10–25% performance improvement translates directly to proportionally fewer GPU-hours billed per completed training run. If your monthly GPU spend is $100K, topology-aware scheduling could represent $10K–$25K in savings per month — with zero configuration changes.',
+      mlops:'Available across Slurm, Kubernetes, Volcano, and Kueue — you don\'t need to standardize on a single orchestrator to benefit. Nebius integrated NVIDIA Topograph to streamline topology ingestion automatically, so you don\'t manage topology maps manually.'}},
+  {id:'storage',name:'AI-Optimised Storage (Object + Shared Filesystem)',tagline:'Storage engineered to keep every GPU fed at full speed',tags:['Storage','Performance'],
+   tech:'Nebius provides two complementary storage tiers: AWS S3-compatible Object Storage delivering 2 GB/s per GPU for model checkpoints and dataset access, and a high-performance shared filesystem delivering up to 1 TB/s aggregate read throughput. Both are engineered for AI workloads requiring streaming large datasets and frequent checkpoint writes at extreme throughput.',
+   t:{eng:'Storage bottlenecks are a silent killer of GPU utilization — H100s can sit at 20% waiting for data from slow object storage. Nebius delivers 11–12 GB/s per 8-GPU node via VAST Data, far exceeding AWS EFS\'s 1.5 GB/s cap. Your GPUs stay busy and experiments finish faster.',
+      cto:'When compute is expensive, idle GPU time is wasted money. Nebius\'s storage layer eliminates the data bottleneck, ensuring GPU utilization stays high throughout training. The S3-compatible API means no rewriting of existing data pipeline code — existing tooling works immediately.',
+      cfo:'Egress traffic and public IP addresses on Nebius are free — a meaningful cost difference versus hyperscalers where egress can add 20–40% to bills. Combined with higher GPU utilization, the storage layer directly improves the cost-per-trained-model metric.',
+      mlops:'Object Storage is S3-API compatible, so existing ML pipelines, data loaders, and checkpoint logic work without modification. Shared filesystem supports concurrent access across all cluster nodes. Storage write-back caching (Nebius AI Cloud 3.1) further reduces checkpoint write latency.',
+      pm:'Slow storage means slower experiment cycles. When data scientists can run 3 experiments per day instead of 2, your AI feature roadmap moves 50% faster. Storage performance is a hidden multiplier on research velocity.'}},
+  {id:'mlflow',name:'Managed MLflow Clusters',tagline:'Experiment tracking and model registry — operational from day one',tags:['MLOps','Experiment Tracking'],
+   tech:'Nebius provides managed MLflow clusters handling infrastructure provisioning, scaling, and maintenance for the MLflow experiment tracking and model registry platform. AI teams get a centralized system to log parameters, metrics, artifacts, and model versions without running and patching MLflow servers themselves.',
+   t:{eng:'Every experiment is automatically logged — parameters, metrics, model artifacts, environment snapshots — in a centralized UI your whole team can access. Compare experiment runs, reproduce any past result, and promote the best model to the registry in one click. No more spreadsheets or ad-hoc logging scripts.',
+      cto:'MLflow gives your AI team the experiment governance infrastructure that\'s a prerequisite for serious production ML. Nebius hosts and manages it — meaning your team gets enterprise-grade experiment tracking without dedicating engineering time to maintaining the infrastructure for the infrastructure.',
+      cfo:'Untracked experiments are wasted compute — teams repeat work they\'ve already done and can\'t prove which model configuration generated the best results. MLflow provides the audit trail that makes AI R&D accountable and reproducible, improving the return on every GPU-dollar spent.',
+      mlops:'Managed MLflow means no version upgrades, no database maintenance, no backup configuration. Nebius has simplified pricing for Managed MLflow and optimized JupyterLab startup times in tandem. The managed service integrates directly with Nebius Kubernetes or Slurm clusters for automatic run tracking.'}},
+  {id:'serverless',name:'Serverless AI / Token Factory (Inference)',tagline:'Serve AI models to users without managing any GPU infrastructure',tags:['Inference','Serverless'],
+   tech:'Nebius Serverless AI and Token Factory provide managed, auto-scaling inference endpoints for open-source models (Llama, Mistral, DeepSeek, Qwen, and more). Token Factory offers guaranteed uptime, zero data-retention data flow, usage-based billing, and performance up to 4.5× faster than comparable providers at pricing up to 50% lower — with no GPU cluster management required.',
+   t:{eng:'Serve a fine-tuned or open-source model to production users via a REST API endpoint without managing Kubernetes deployments, GPU auto-scaling, or load balancers. Nebius handles the infrastructure. Use it for rapid prototyping or as a production inference layer while your team focuses on model quality.',
+      cto:'Token Factory gives you a production inference platform with SLA-backed uptime and auto-scaling, removing the need to build a custom model-serving layer. Time-to-production for new AI features compresses from weeks to hours. The zero data-retention architecture means sensitive customer queries never persist on Nebius systems.',
+      cfo:'Usage-based pricing means you pay for inference tokens consumed, not idle GPU-hours. Token Factory eliminates over-provisioning costs. Independent benchmarks show Nebius inference endpoints are up to 50% cheaper than comparable offerings — a significant operating cost lever for high-volume AI products.',
+      mlops:'No GPU management, no Kubernetes YAML, no autoscaler configuration. Token Factory handles traffic scaling automatically. NVIDIA DGX Cloud Serverless Inference via Nebius offers multi-cloud flexibility, ensuring inference capacity is available even during regional demand spikes.',
+      ciso:'Token Factory\'s zero data-retention architecture means inference request content is not logged or stored after the response is returned. This is critical for sensitive user data, healthcare queries, or financial information where data residency and retention must be minimal and auditable.',
+      pm:'You can launch an AI-powered product feature on a best-in-class inference endpoint — 4.5× faster performance, 50% cheaper than alternatives — without waiting for MLOps to provision infrastructure. The same endpoint scales from beta users to millions of production requests automatically.'}},
+  {id:'capacity',name:'Capacity Blocks & Real-Time Dashboard',tagline:'See exactly what GPU capacity you have — and lock in what you need',tags:['Planning','FinOps'],
+   tech:'Introduced in Nebius AI Cloud 3.1, Capacity Blocks allow customers to reserve specific GPU cluster capacity in advance across data center regions. A real-time Capacity Dashboard provides complete visibility into reserved GPU availability across all Nebius data centers. FOCUS-compliant billing exports enable FinOps integration and internal chargeback systems.',
+   t:{eng:'No more waking up to find your training cluster claimed by another team. With Capacity Blocks, your reserved GPU allocation is yours for the committed window. The real-time dashboard shows availability so you can plan training schedules around actual capacity, not guesswork.',
+      cto:'Capacity Blocks provide deterministic resource planning — you know exactly which teams have access to which capacity, and when. This is the foundation for a scalable internal GPU governance model without constant escalation to Cloud Ops. Multi-team environments become manageable.',
+      cfo:'Capacity Blocks give you the predictability needed for accurate GPU budget forecasting. You commit to capacity for defined time windows and see exactly how that capacity is consumed across teams in real time. FOCUS-compliant billing exports enable direct integration with FinOps tools and internal chargeback systems.',
+      mlops:'Transparent capacity management means fewer emergency escalations when a team\'s job can\'t schedule. The Capacity Dashboard surfaces availability across all regions so you can proactively shift workloads before there\'s a conflict. Multi-team environments with separate project quotas are now manageable through the console.',
+      pm:'Planning a major AI feature launch or model training sprint? Capacity Blocks let you reserve the GPU compute you need weeks in advance, ensuring your technical roadmap isn\'t at risk from capacity scarcity during peak periods.'}},
+  {id:'observability',name:'Observability Stack — Metrics, Logs & Traces',tagline:'Complete visibility into AI infrastructure and application performance',tags:['Monitoring','Operations'],
+   tech:'Nebius provides a fully integrated observability stack: real-time metrics with threshold-based alerting, centralized log aggregation with search and export, and distributed tracing for end-to-end application performance monitoring. Out-of-the-box Grafana dashboards are available via the Grafana marketplace. Custom telemetry can be written to the cloud.',
+   t:{eng:'When a training run fails at 3 AM, you need answers fast. Integrated logging lets you search across all nodes simultaneously, while metrics dashboards show GPU utilization, memory pressure, and network throughput over time — pinpointing failures in seconds, whether it\'s hardware, a pipeline timeout, or an OOM error.',
+      cto:'Pre-built Grafana dashboards give your team instant visibility without weeks of dashboard-building work that normally precedes running AI workloads in production. You establish a culture of data-driven operations from day one — not after the first production incident.',
+      cfo:'Observability data is also cost governance data. GPU utilization metrics surface idle capacity, underperforming jobs, and over-provisioned clusters — all of which translate directly to cost optimization opportunities. Custom telemetry lets FinOps teams build cost attribution dashboards on top of the same metrics stack.',
+      mlops:'Out-of-the-box Grafana dashboards mean you skip weeks of instrumentation work. Distributed tracing enables root-cause analysis across microservices in your inference stack. Custom telemetry ingestion lets you enrich platform metrics with application-level signals from your AI models.',
+      ciso:'Centralized log collection with searchable, exportable audit trails is foundational for SOC 2, HIPAA, and GDPR compliance. Nebius logs are automatically collected and retained in a queryable store, providing audit evidence required by regulators without custom log-shipping infrastructure.'}},
+  {id:'security',name:'Security & Compliance — SOC 2, HIPAA, GDPR',tagline:'Enterprise-grade security built into the platform, not bolted on',tags:['Security','Compliance'],
+   tech:'Nebius AI Cloud 3.0 "Aether" achieved SOC 2 Type II certification including HIPAA-eligible configurations, full GDPR and CCPA compliance, end-to-end encryption, per-object access controls in Object Storage, and Audit Logs capturing all significant user and service actions including Object Storage data-plane events. MysteryBox provides encrypted storage of sensitive keys and tokens.',
+   t:{eng:'Your proprietary model weights, training data, and research code are protected by end-to-end encryption in transit and at rest. Access is controlled by IAM policies you define — no teammate can accidentally access your production models or training datasets without explicit permission.',
+      cto:'SOC 2 Type II certification is a baseline requirement for enterprise sales cycles. With Nebius, your organization can accelerate security reviews for your own customers — you inherit a certified, auditable infrastructure rather than building compliance from scratch. This removes a common blocker to deploying AI products in regulated industries.',
+      cfo:'Compliance failures carry direct financial risk — GDPR fines can reach 4% of global annual revenue. Building compliance infrastructure in-house is expensive. Nebius transfers significant compliance burden to a SOC 2 Type II certified, HIPAA-eligible, GDPR/CCPA-compliant provider, reducing both risk exposure and compliance cost.',
+      mlops:'Audit Logs capture all significant actions including Object Storage data-plane events — critical for HIPAA-compliant configurations. Per-object access controls enforce least-privilege access at the dataset level. MysteryBox handles encryption key management, removing the need for a separate secrets management solution.',
+      ciso:'Nebius AI Cloud 3.0 Aether delivers the compliance trifecta: SOC 2 Type II (including HIPAA), GDPR/CCPA, and comprehensive Audit Logs. Object Storage data-plane event logging closes the audit gap that typically exists in cloud storage. The Trust Portal provides a centralized, current view of Nebius\'s security controls for vendor risk assessments.'}},
+  {id:'iac',name:'Infrastructure as Code — Terraform, CLI & API',tagline:'Manage AI infrastructure the same way you manage application code',tags:['DevOps','Automation'],
+   tech:'Nebius provides a Terraform provider for declarative infrastructure management, a native CLI for imperative resource control, and a gRPC API for programmatic integration. All Nebius resources — GPU clusters, Kubernetes clusters, storage, networking, IAM — can be provisioned and torn down through code, enabling GitOps workflows, automated CI/CD pipelines, and reproducible environments.',
+   t:{eng:'Launch a full training cluster with a single CLI command or a Terraform template version-controlled alongside your model code. SkyPilot integration lets you run any workload with sky launch --gpus H100:8 --cloud nebius. Your infrastructure setup is reproducible, shareable, and auditable.',
+      cto:'Infrastructure as Code means GPU clusters, Kubernetes environments, and storage configurations are version-controlled, reviewed, and deployed with the same engineering discipline as application code. You get infrastructure drift detection, rollback capability, and consistent environments across dev, staging, and production.',
+      cfo:'Automated provisioning and teardown via Terraform or CLI means resources are never left running when jobs complete. You can codify cost guardrails directly into infrastructure templates — ensuring clusters are sized correctly and shut down on schedule — eliminating human-error-driven cost overruns.',
+      mlops:'The Nebius Terraform provider supports all platform services — compute, storage, networking, IAM, Kubernetes, and Slurm — in a single declarative workflow. The gRPC API enables custom tooling and integration with internal developer portals. The Nebius MCP Server even enables managing cloud infrastructure via natural language.'}},
+  {id:'pricing',name:'Pay-As-You-Go Pricing with No Egress Fees',tagline:'Pay only for what you use — and nothing extra for moving your data',tags:['Pricing','FinOps'],
+   tech:'Nebius uses simple hourly pricing for all GPU and CPU instances, with several services bundled at no extra charge: Managed Kubernetes, Managed Slurm (Soperator), all egress and ingress network traffic, and public IP addresses. A pricing calculator is available in the console. Capacity Blocks enable reserved pricing for predictable workloads. FOCUS-compliant billing exports support FinOps integration.',
+   t:{eng:'Run a 500-GPU training job for 6 hours and pay for exactly 6 hours at the hourly rate — nothing more. No egress fees when you download model checkpoints. No hidden charges for Kubernetes or Slurm management. The pricing calculator lets you estimate costs before you commit.',
+      cto:'Nebius\'s transparent pricing eliminates "bill shock" that often derails AI programmes after month one. Hyperscalers charge premium rates for egress, managed services, and data transfer — costs that compound unexpectedly. Nebius bundles key services into the compute price, making total cost predictable.',
+      cfo:'Egress fees at hyperscalers run $0.08–$0.12/GB and can add 20–40% to cloud bills for AI workloads that move data frequently. Nebius eliminates this entirely. Combined with FOCUS-compliant billing exports for FinOps tools or internal chargeback systems, Nebius enables a transparent, governable AI infrastructure spend model.',
+      mlops:'Free egress means you can design your architecture around what\'s technically correct — not around minimizing data movement to control costs. Store datasets in Object Storage, stream to training clusters, checkpoint to shared filesystem, export results — without a cost penalty at each step.',
+      pm:'Inference workloads that serve users externally generate significant egress traffic. On Nebius, that traffic is free — meaning your AI product\'s unit economics improve directly as usage scales, rather than eroding as hyperscaler egress fees compound with growth.'}}
+];
+
+const PROOF_POINTS=[
+  {icon:'🏆',text:'Lowest TCO — SemiAnalysis Study'},
+  {icon:'🥇',text:'ClusterMAX™ Gold Medal'},
+  {icon:'📈',text:'MLPerf Training v5.1 Leader'},
+  {icon:'🔒',text:'SOC 2 Type II + HIPAA Eligible'},
+  {icon:'🤝',text:'NVIDIA Reference Platform Partner'},
+  {icon:'💰',text:'$17.4B Microsoft Agreement'},
+  {icon:'🌍',text:'First GB300 NVL72 on 800G IB (Europe)'},
+  {icon:'⚡',text:'Near-Linear Scaling (1.97×)'},
+  {icon:'🛡️',text:'GDPR / CCPA Compliant'},
+];
+
+const GUIDE_STEPS=[
+  {num:'01',title:'Identify Your Persona in the First 2 Minutes',body:'Listen for role signals in the opening conversation. Engineers reference specific tools (CUDA, PyTorch, sbatch). CTOs focus on team velocity and delivery risk. CFOs ask about pricing models and ROI. Security leaders ask about certifications first. Use the persona filter on the left sidebar to instantly focus all translations to your audience.'},
+  {num:'02',title:'Lead with Outcomes, Follow with Technology',body:'Never open with "We have InfiniBand at 800 Gbps." Open with the outcome: "Our customers cut training costs 10–25% with no code changes — want to understand how?" Once they lean in, explain the mechanism. Every translation in this tool is ordered outcome-first for exactly this reason.'},
+  {num:'03',title:'Pivot Across Personas in Multi-Stakeholder Meetings',body:'In buying committees, multiple personas are often present. When the CFO goes quiet while the CTO engages, redirect: "From a cost perspective, what this means is..." Use persona tabs within each concept card to instantly switch language and emphasis without losing the technical thread.'},
+  {num:'04',title:'Use Proof Points Early and Often',body:'Nebius has strong third-party validation: SemiAnalysis lowest TCO study, MLPerf Training v5.1 benchmarks, ClusterMAX Gold Medal, NVIDIA Reference Platform status, SOC 2 Type II / HIPAA certification, and the $17.4B Microsoft AI infrastructure agreement. Drop these at moments of scepticism — they are credibility shortcuts that stop the "why not AWS" objection cold.'},
+  {num:'05',title:'Match Concepts to Buying Stage',body:'Early discovery: GPU Clusters, InfiniBand, Pricing. Technical evaluation: Kubernetes, Soperator, Storage, Observability. Security review: Compliance, Audit Logs, MysteryBox. Commercial negotiation: Pricing, Capacity Blocks, FOCUS billing exports. Deployment planning: IaC / Terraform, CLI, SkyPilot integrations.'},
+  {num:'06',title:'Use the "Cost Anchor" Technique with CFOs',body:'Anchor on hyperscaler comparison costs. Establish what they currently pay for egress ($0.08–$0.12/GB), managed Kubernetes premiums, and SLURM licensing. Then show that Nebius bundles these services free within the compute price — the delta becomes immediate, concrete justification for an evaluation.'},
+  {num:'07',title:'Handle the "New Provider Risk" Objection',body:'"Nebius is purpose-built for AI workloads — not a general cloud that added GPU nodes. That focus is reflected in the MLPerf benchmarks, the NVIDIA Reference Platform status, the SemiAnalysis TCO results, and the $17.4B Microsoft infrastructure commitment. This is not a startup bet — it\'s a validated architecture backed by the largest players in AI."'},
+];
+
+/* ── STATE ─────────────────────────────────────────────────────────────────── */
+let activePersona=null,searchQuery='',convIdx=0,convPIdx=0,sidebarCollapsed=false;
+
+/* ── RENDER ────────────────────────────────────────────────────────────────── */
+function init(){
+  renderPersonaChips();
+  renderConceptNav();
+  renderProofPoints();
+  renderConcepts();
+  renderDrawer();
+  setupSearch();
+  setupKeyboard();
+}
+
+function renderPersonaChips(){
+  let h=`<div class="persona-chip ${!activePersona?'active':''}" onclick="setPersona(null)">
+    <div class="persona-chip-dot" style="background:#00C2F3"></div>
+    <span class="persona-chip-name">All Personas</span></div>`;
+  PERSONAS.forEach(p=>{
+    h+=`<div class="persona-chip ${activePersona===p.id?'active':''}" onclick="setPersona('${p.id}')">
+      <div class="persona-chip-dot" style="background:${p.color}"></div>
+      <span class="persona-chip-name">${p.emoji} ${p.name}</span></div>`;
+  });
+  document.getElementById('personaChips').innerHTML=h;
+}
+
+function renderConceptNav(){
+  document.getElementById('conceptNav').innerHTML=CONCEPTS.map((c,i)=>
+    `<div class="concept-nav-item" id="nav-${c.id}" onclick="scrollToCard('${c.id}')">
+      <span class="concept-nav-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="concept-nav-name">${c.name.split('—')[0].split('(')[0].trim()}</span></div>`
+  ).join('');
+}
+
+function renderProofPoints(){
+  document.getElementById('proofStrip').innerHTML=PROOF_POINTS.map(p=>
+    `<div class="proof-pill">${p.icon} ${p.text}</div>`).join('');
+}
+
+function renderConcepts(){
+  const grid=document.getElementById('conceptsGrid');
+  grid.innerHTML=CONCEPTS.map((c,i)=>{
+    const avail=PERSONAS.filter(p=>c.t[p.id]);
+    const def=activePersona&&c.t[activePersona]?activePersona:(avail[0]?avail[0].id:'');
+    return `<div class="concept-card" id="card-${c.id}" data-id="${c.id}">
+      <div class="concept-header" onclick="toggleCard('${c.id}')">
+        <span class="concept-num">${String(i+1).padStart(2,'0')}</span>
+        <div class="concept-title-wrap">
+          <div class="concept-name">${c.name}</div>
+          <div class="concept-tagline">${c.tagline}</div>
+        </div>
+        <div class="concept-badges">${c.tags.map(t=>`<span class="concept-badge">${t}</span>`).join('')}</div>
+        <div class="expand-icon">⌄</div>
+      </div>
+      <div class="concept-body">
+        <div class="tech-explanation">
+          <span class="tech-label">⚙ Technical</span>
+          <span class="tech-text">${c.tech}</span>
+        </div>
+        ${activePersona&&c.t[activePersona]
+          ?`<div class="single-translation"><div class="translation-content" style="border-left:3px solid ${PERSONAS.find(p=>p.id===activePersona).color}">
+              <p class="translation-text">${c.t[activePersona]}</p>
+              <button class="copy-btn" onclick="doCopy(event,'${esc(c.t[activePersona])}')" title="Copy">⎘</button>
+            </div></div>`
+          :`<div class="persona-tabs-wrap">
+              <div class="persona-tabs" id="tabs-${c.id}">
+                ${avail.map(p=>`<button class="ptab ${p.id===def?'active':''}" onclick="switchTab('${c.id}','${p.id}')">
+                  <div class="ptab-dot" style="background:${p.color}"></div>${p.emoji} ${p.name.split('/')[0].trim()}</button>`).join('')}
+              </div>
+              <div id="panels-${c.id}">
+                ${avail.map(p=>`<div class="translation-panel ${p.id===def?'active':''}" data-persona="${p.id}">
+                  <div class="translation-content" style="border-left:3px solid ${p.color}">
+                    <p class="translation-text">${c.t[p.id]}</p>
+                    <button class="copy-btn" onclick="doCopy(event,'${esc(c.t[p.id])}')" title="Copy">⎘</button>
+                  </div></div>`).join('')}
+              </div>
+            </div>`}
+      </div></div>`;
+  }).join('');
+}
+
+function renderDrawer(){
+  document.getElementById('drawerBody').innerHTML=GUIDE_STEPS.map(s=>
+    `<div class="guide-step">
+      <div class="guide-step-num">STEP ${s.num}</div>
+      <div class="guide-step-title">${s.title}</div>
+      <div class="guide-step-body">${s.body}</div>
+    </div>`).join('');
+}
+
+/* ── INTERACTIONS ──────────────────────────────────────────────────────────── */
+function setPersona(id){
+  activePersona=id;
+  renderPersonaChips();
+  renderConcepts();
+  updateBanner();
+  updateStat();
+  applySearch();
+}
+function clearPersonaFilter(){setPersona(null);}
+
+function updateBanner(){
+  const b=document.getElementById('personaBanner');
+  if(!activePersona){b.classList.remove('visible');return;}
+  const p=PERSONAS.find(x=>x.id===activePersona);
+  b.classList.add('visible');
+  b.style.borderColor=p.color+'44';
+  b.style.boxShadow=`0 0 18px ${p.color}0E`;
+  document.getElementById('bannerDot').style.background=p.color;
+  const bn=document.getElementById('bannerName');
+  bn.textContent=`${p.emoji} ${p.name}`;
+  bn.style.color=p.color;
+  document.getElementById('bannerRole').textContent=p.role;
+  document.getElementById('bannerPriorities').textContent=p.priorities;
+  document.getElementById('bannerClear').style.color=p.color;
+}
+
+function updateStat(){
+  const count=document.querySelectorAll('.concept-card:not(.hidden)').length;
+  const pill=document.getElementById('statPill');
+  if(activePersona){
+    const p=PERSONAS.find(x=>x.id===activePersona);
+    document.getElementById('statText').textContent=`${count} concepts · ${p.emoji} ${p.name.split('/')[0]}`;
+    pill.classList.add('filtered');
+    document.getElementById('statDot').style.background=p.color;
+  } else {
+    document.getElementById('statText').textContent=`${count} concept${count!==1?'s':''}`;
+    pill.classList.remove('filtered');
+    document.getElementById('statDot').style.background='var(--accent)';
+  }
+}
+
+function toggleCard(id){document.getElementById('card-'+id).classList.toggle('expanded');}
+function expandAll(){document.querySelectorAll('.concept-card:not(.hidden)').forEach(c=>c.classList.add('expanded'));}
+function collapseAll(){document.querySelectorAll('.concept-card').forEach(c=>c.classList.remove('expanded'));}
+
+function switchTab(cid,pid){
+  document.querySelectorAll(`#tabs-${cid} .ptab`).forEach(t=>{
+    t.classList.toggle('active',t.textContent.trim().startsWith(PERSONAS.find(p=>p.id===pid).emoji));
+  });
+  document.querySelectorAll(`#panels-${cid} .translation-panel`).forEach(p=>{
+    p.classList.toggle('active',p.dataset.persona===pid);
+  });
+}
+
+function scrollToCard(id){
+  const c=document.getElementById('card-'+id);
+  if(c){c.scrollIntoView({behavior:'smooth',block:'start'});c.classList.add('expanded');}
+  document.querySelectorAll('.concept-nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('nav-'+id)?.classList.add('active');
+}
+
+function doCopy(e,text){
+  e.stopPropagation();
+  const btn=e.currentTarget;
+  navigator.clipboard.writeText(text).then(()=>{
+    btn.classList.add('copied');btn.textContent='✓';
+    showToast('✓ Copied to clipboard!');
+    setTimeout(()=>{btn.classList.remove('copied');btn.textContent='⎘';},2000);
+  }).catch(()=>showToast('Copy failed — try manual copy'));
+}
+
+function esc(s){return s.replace(/'/g,"\\'").replace(/\n/g,' ');}
+
+/* ── SEARCH ──────────────────────────────────────────────────────────────── */
+function setupSearch(){
+  const inp=document.getElementById('searchInput');
+  const clr=document.getElementById('searchClear');
+  const scut=document.getElementById('searchShortcut');
+  inp.addEventListener('input',()=>{
+    searchQuery=inp.value.trim().toLowerCase();
+    clr.classList.toggle('visible',!!searchQuery);
+    scut.style.display=searchQuery?'none':'flex';
+    applySearch();
+  });
+  inp.addEventListener('focus',()=>{scut.style.display='none';});
+  inp.addEventListener('blur',()=>{if(!searchQuery)scut.style.display='flex';});
+}
+
+function applySearch(){
+  let vis=0;
+  CONCEPTS.forEach(c=>{
+    const card=document.getElementById('card-'+c.id);
+    if(!card)return;
+    const ms=!searchQuery||[c.name,c.tagline,c.tech,...Object.values(c.t),...c.tags].join(' ').toLowerCase().includes(searchQuery);
+    const mp=!activePersona||c.t[activePersona];
+    card.classList.toggle('hidden',!(ms&&mp));
+    if(ms&&mp)vis++;
+  });
+  document.getElementById('emptyState').classList.toggle('visible',vis===0);
+  updateStat();
+}
+
+function clearSearch(){
+  document.getElementById('searchInput').value='';
+  searchQuery='';
+  document.getElementById('searchClear').classList.remove('visible');
+  document.getElementById('searchShortcut').style.display='flex';
+  applySearch();
+}
+
+/* ── SIDEBAR ─────────────────────────────────────────────────────────────── */
+function toggleSidebar(){
+  sidebarCollapsed=!sidebarCollapsed;
+  document.getElementById('sidebar').classList.toggle('collapsed',sidebarCollapsed);
+}
+
+/* ── DRAWER ──────────────────────────────────────────────────────────────── */
+function openDrawer(){
+  document.getElementById('drawerOverlay').classList.add('open');
+  document.getElementById('usageDrawer').classList.add('open');
+}
+function closeDrawer(){
+  document.getElementById('drawerOverlay').classList.remove('open');
+  document.getElementById('usageDrawer').classList.remove('open');
+}
+
+/* ── CONVERSATION MODE ───────────────────────────────────────────────────── */
+function openConvMode(){
+  document.getElementById('convOverlay').classList.add('open');
+  convIdx=0;
+  convPIdx=activePersona?Math.max(0,PERSONAS.findIndex(p=>p.id===activePersona)):0;
+  renderConvCard();
+}
+function closeConvMode(){document.getElementById('convOverlay').classList.remove('open');}
+
+function convNav(dir){
+  const vis=CONCEPTS.filter(c=>!activePersona||c.t[activePersona]);
+  convIdx=Math.max(0,Math.min(vis.length-1,convIdx+dir));
+  renderConvCard();
+}
+
+function renderConvCard(){
+  const vis=CONCEPTS.filter(c=>!activePersona||c.t[activePersona]);
+  if(!vis.length)return;
+  const c=vis[convIdx];
+  const avail=PERSONAS.filter(p=>c.t[p.id]);
+  if(convPIdx>=avail.length)convPIdx=0;
+  const p=avail[convPIdx];
+
+  document.getElementById('convFill').style.width=`${((convIdx+1)/vis.length)*100}%`;
+  document.getElementById('convProgText').textContent=`${convIdx+1} / ${vis.length}`;
+
+  document.getElementById('convBody').innerHTML=`
+    <div class="conv-card">
+      <div class="conv-c-num">CONCEPT ${String(CONCEPTS.indexOf(c)+1).padStart(2,'0')} / ${CONCEPTS.length}</div>
+      <div class="conv-c-name">${c.name}</div>
+      <div class="conv-c-tagline">"${c.tagline}"</div>
+      <div class="conv-tech">${c.tech}</div>
+      <div class="conv-p-label">💬 Value translation for ${p.emoji} ${p.name}</div>
+      <div class="conv-translation">
+        <span id="convTransText">${c.t[p.id]}</span>
+        <button class="conv-copy-btn" onclick="copyConvText()" title="Copy">⎘</button>
+      </div>
+    </div>`;
+
+  document.getElementById('convPTabs').innerHTML=avail.map((ap,i)=>
+    `<div class="conv-ptab ${i===convPIdx?'active':''}" title="${ap.emoji} ${ap.name}" onclick="convSwitchP(${i})" style="${i===convPIdx?`border-color:${ap.color};background:${ap.color}20`:''}">${ap.emoji}</div>`
+  ).join('');
+
+  const prevBtn=document.getElementById('convPrev');
+  const nextBtn=document.getElementById('convNext');
+  prevBtn.disabled=convIdx===0;
+  prevBtn.style.opacity=convIdx===0?'0.3':'1';
+  if(convIdx===vis.length-1){
+    nextBtn.textContent='✓ Finish';
+    nextBtn.onclick=closeConvMode;
+  } else {
+    nextBtn.textContent='Next →';
+    nextBtn.onclick=()=>convNav(1);
+  }
+}
+
+function convSwitchP(i){convPIdx=i;renderConvCard();}
+function copyConvText(){
+  const t=document.getElementById('convTransText')?.textContent||'';
+  navigator.clipboard.writeText(t).then(()=>showToast('✓ Talking point copied!'));
+}
+
+/* ── TOAST ───────────────────────────────────────────────────────────────── */
+function showToast(msg,ms=2000){
+  const c=document.getElementById('toastContainer');
+  const t=document.createElement('div');
+  t.className='toast';
+  t.textContent=msg;
+  c.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(6px)';t.style.transition='all .28s';setTimeout(()=>t.remove(),300);},ms);
+}
+
+/* ── KEYBOARD ────────────────────────────────────────────────────────────── */
+function setupKeyboard(){
+  document.addEventListener('keydown',e=>{
+    const inInput=['INPUT','TEXTAREA'].includes(e.target.tagName);
+    if(e.key==='Escape'){
+      if(document.getElementById('kbOverlay').classList.contains('open')){closeKb();return;}
+      if(document.getElementById('convOverlay').classList.contains('open')){closeConvMode();return;}
+      if(document.getElementById('usageDrawer').classList.contains('open')){closeDrawer();return;}
+      if(searchQuery){clearSearch();return;}
+      if(activePersona){clearPersonaFilter();return;}
+      document.getElementById('searchInput').blur();return;
+    }
+    if(inInput)return;
+    if(e.key==='/')  {e.preventDefault();document.getElementById('searchInput').focus();}
+    if(e.key==='?')  showKb();
+    if(e.key==='g'||e.key==='G') openDrawer();
+    if(e.key==='m'||e.key==='M') openConvMode();
+    if(e.key==='e'||e.key==='E') expandAll();
+    if(e.key==='c'||e.key==='C') collapseAll();
+    if(e.key==='ArrowRight'&&document.getElementById('convOverlay').classList.contains('open')) convNav(1);
+    if(e.key==='ArrowLeft' &&document.getElementById('convOverlay').classList.contains('open')) convNav(-1);
+  });
+}
+function showKb(){document.getElementById('kbOverlay').classList.add('open');}
+function closeKb(){document.getElementById('kbOverlay').classList.remove('open');}
+document.getElementById('kbOverlay').addEventListener('click',e=>{if(e.target===e.currentTarget)closeKb();});
+
+/* ── BOOT ────────────────────────────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded',()=>{
+  init();
+  // Nav highlight on scroll
+  const ca=document.getElementById('contentArea');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(en.isIntersecting){
+        const id=en.target.dataset.id;
+        document.querySelectorAll('.concept-nav-item').forEach(n=>n.classList.remove('active'));
+        document.getElementById('nav-'+id)?.classList.add('active');
+      }
+    });
+  },{root:ca,threshold:0.25});
+  setTimeout(()=>{document.querySelectorAll('.concept-card').forEach(c=>obs.observe(c));},400);
+});
+</script>
+</body>
+</html>

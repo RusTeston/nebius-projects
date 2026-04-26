@@ -37,6 +37,23 @@
     min-height: 100vh;
   }
 
+  /* MEDDPICC MODAL */
+  .meddpicc-link { color: var(--accent); cursor: pointer; text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px; }
+  .meddpicc-link:hover { color: var(--accent2); }
+  .meddpicc-overlay { position: fixed; inset: 0; background: rgba(4,8,20,0.85); backdrop-filter: blur(8px); z-index: 500; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+  .meddpicc-overlay.active { opacity: 1; pointer-events: auto; }
+  .meddpicc-modal { background: var(--surface); border: 1px solid rgba(0,200,83,0.25); border-radius: 14px; padding: 32px 36px; max-width: 560px; width: 90%; max-height: 85vh; overflow-y: auto; position: relative; transform: scale(0.95) translateY(10px); transition: transform 0.3s ease; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .meddpicc-overlay.active .meddpicc-modal { transform: scale(1) translateY(0); }
+  .meddpicc-close { position: absolute; top: 14px; right: 16px; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; color: var(--text-dim); font-size: 1.1rem; width: 32px; height: 32px; display: grid; place-items: center; cursor: pointer; transition: all 0.2s; }
+  .meddpicc-close:hover { background: var(--border); color: var(--text); }
+  .meddpicc-title { font-family: 'Inter', sans-serif; font-size: 18px; font-weight: 700; color: var(--accent2); margin-bottom: 6px; }
+  .meddpicc-subtitle { font-size: 13px; color: var(--text-dim); margin-bottom: 20px; }
+  .meddpicc-item { display: flex; align-items: flex-start; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .meddpicc-item:last-child { border-bottom: none; }
+  .meddpicc-letter { width: 32px; height: 32px; border-radius: 8px; background: rgba(0,200,83,0.12); border: 1px solid rgba(0,200,83,0.25); color: var(--accent); font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .meddpicc-name { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .meddpicc-desc { font-size: 12.5px; color: var(--text-dim); line-height: 1.5; }
+
   /* ─── HEADER ─── */
   header {
     background: linear-gradient(135deg, #0C1A3A 0%, #0A3050 50%, #0E3558 100%);
@@ -969,7 +986,7 @@
       </div>
 
       <div class="card">
-        <div class="card-title">MEDDPICC Scorecard <span class="badge badge-blue">Score 0–3 per dimension · 18+ = High Priority</span></div>
+        <div class="card-title"><span class="meddpicc-link" onclick="document.getElementById('meddpiccModal').classList.add('active');document.body.style.overflow='hidden';">MEDDPICC</span> Scorecard <span class="badge badge-blue">Score 0–3 per dimension · 18+ = High Priority</span></div>
 
         <div class="score-row" style="background:var(--surface2);border-radius:10px 10px 0 0;padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);">
           <span>#</span><span>Dimension</span><span>Scoring Guidance</span><span style="text-align:right;">Score</span>
@@ -1663,6 +1680,32 @@
 <div style="text-align:center;padding:16px 0 20px;">
   <a href="https://nebius.rus-teston.com" style="color:#0ea5e9;text-decoration:none;font-size:0.9rem;">← Back to Nebius Projects</a>
 </div>
+
+<!-- MEDDPICC Modal -->
+<div class="meddpicc-overlay" id="meddpiccModal" onclick="if(event.target===this){this.classList.remove('active');document.body.style.overflow='';}">
+  <div class="meddpicc-modal">
+    <button class="meddpicc-close" onclick="document.getElementById('meddpiccModal').classList.remove('active');document.body.style.overflow='';">✕</button>
+    <div class="meddpicc-title">MEDDPICC Framework</div>
+    <div class="meddpicc-subtitle">Enterprise deal qualification methodology — score each dimension 0–3 to assess deal health.</div>
+    <div class="meddpicc-item"><div class="meddpicc-letter">M</div><div><div class="meddpicc-name">Metrics</div><div class="meddpicc-desc">Quantifiable evidence of the ROI or business value your solution provides. The prospect can articulate specific numbers they expect to achieve.</div></div></div>
+    <div class="meddpicc-item"><div class="meddpicc-letter">E</div><div><div class="meddpicc-name">Economic Buyer</div><div class="meddpicc-desc">Identifying and meeting the person with the ultimate budget and "yes" authority. The one who can sign without further approval.</div></div></div>
+    <div class="meddpicc-item"><div class="meddpicc-letter">D</div><div><div class="meddpicc-name">Decision Criteria</div><div class="meddpicc-desc">The formal requirements (technical and business) the prospect uses to judge vendors. What must be true for them to choose you.</div></div></div>
+    <div class="meddpicc-item"><div class="meddpicc-letter">D</div><div><div class="meddpicc-name">Decision Process</div><div class="meddpicc-desc">The internal roadmap and timeline the customer follows to reach a final choice. Who is involved, what steps, and when.</div></div></div>
+    <div class="meddpicc-item"><div class="meddpicc-letter">P</div><div><div class="meddpicc-name">Paper Process</div><div class="meddpicc-desc">The administrative, legal, and procurement steps required to get a contract signed. Security reviews, legal redlines, and approvals.</div></div></div>
+    <div class="meddpicc-item"><div class="meddpicc-letter">I</div><div><div class="meddpicc-name">Identify / Implicate Pain</div><div class="meddpicc-desc">Understanding the specific business problem and the cost of inaction. What happens if they do nothing?</div></div></div>
+    <div class="meddpicc-item"><div class="meddpicc-letter">C</div><div><div class="meddpicc-name">Champion</div><div class="meddpicc-desc">An internal advocate with influence who pushes the deal forward from the inside. They sell when you're not in the room.</div></div></div>
+    <div class="meddpicc-item"><div class="meddpicc-letter">C</div><div><div class="meddpicc-name">Competition</div><div class="meddpicc-desc">Identifying other vendors or the "status quo" and knowing your unique advantage. Who else are they talking to?</div></div></div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.getElementById('meddpiccModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+</script>
 
 </body>
 </html>

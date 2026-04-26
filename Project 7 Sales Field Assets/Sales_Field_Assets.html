@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nebius AI Cloud — Sales Field Assets 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+
+  :root {
+    --bg: #0C1A3A;
+    --surface: #10224A;
+    --surface2: #162C52;
+    --border: #1E3A5C;
+    --accent: #00C853;
+    --accent2: #E0FF4F;
+    --accent3: #00C853;
+    --warn: #ff6b6b;
+    --text: #F0F6FF;
+    --text-dim: #B0CFEA;
+    --text-muted: #5A8AAE;
+    --white: #ffffff;
+    --card-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    --glow: 0 0 40px rgba(0,212,255,0.07);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: linear-gradient(180deg, #0C1A3A 0%, #0A3050 40%, #0E3558 100%);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: linear-gradient(135deg, #0C1A3A 0%, #0A3050 50%, #0E3558 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 80% 20%, rgba(0,212,255,0.07) 0%, transparent 70%),
+                radial-gradient(ellipse 40% 60% at 10% 80%, rgba(123,109,255,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+  }
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,212,255,0.08);
+    border: 1px solid rgba(0,212,255,0.2);
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+  }
+  .header-badge::before { content: '◉'; font-size: 8px; }
+  h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(32px, 5vw, 54px);
+    font-weight: 800;
+    line-height: 1.1;
+    color: var(--white);
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  h1 span { color: var(--accent2); }
+  .header-sub {
+    color: var(--text-dim);
+    font-size: 15px;
+    font-weight: 400;
+    margin-bottom: 32px;
+    max-width: 520px;
+  }
+  .header-stats {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .stat-val {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .stat-val.green { color: var(--accent3); }
+  .stat-val.purple { color: var(--accent2); }
+  .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  /* ─── LAYOUT ─── */
+  .layout {
+    display: flex;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    width: 240px;
+    flex-shrink: 0;
+    padding: 32px 0 32px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .nav-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+    padding: 0 16px;
+    margin-bottom: 8px;
+    margin-top: 16px;
+  }
+  nav a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--text-dim);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 8px;
+    transition: all 0.18s;
+    border-left: 2px solid transparent;
+  }
+  nav a:hover {
+    color: var(--accent);
+    background: rgba(0,212,255,0.05);
+    border-left-color: var(--accent);
+  }
+  nav a .nav-icon { font-size: 14px; opacity: 0.7; }
+
+  /* ─── MAIN CONTENT ─── */
+  main {
+    flex: 1;
+    min-width: 0;
+    padding: 40px 0 40px 40px;
+    border-left: 1px solid var(--border);
+    margin-left: 0;
+  }
+
+  /* ─── SECTIONS ─── */
+  section {
+    margin-bottom: 64px;
+    padding-bottom: 64px;
+    border-bottom: 1px solid var(--border);
+  }
+  section:last-child { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .section-num {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--bg);
+    flex-shrink: 0;
+  }
+  h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.01em;
+  }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: var(--card-shadow);
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: rgba(0,212,255,0.15); }
+  .card-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-title .badge {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.06em;
+  }
+  .badge-blue { background: rgba(0,212,255,0.12); color: var(--accent); border: 1px solid rgba(0,212,255,0.2); }
+  .badge-purple { background: rgba(123,109,255,0.12); color: var(--accent2); border: 1px solid rgba(123,109,255,0.2); }
+  .badge-green { background: rgba(0,255,157,0.1); color: var(--accent3); border: 1px solid rgba(0,255,157,0.2); }
+  .badge-red { background: rgba(255,107,107,0.1); color: var(--warn); border: 1px solid rgba(255,107,107,0.2); }
+
+  h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    margin: 20px 0 10px;
+    letter-spacing: 0.02em;
+  }
+  h3:first-child { margin-top: 0; }
+
+  p { margin-bottom: 12px; color: var(--text); }
+  p:last-child { margin-bottom: 0; }
+
+  ul, ol {
+    padding-left: 18px;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  li { margin-bottom: 5px; }
+  li strong { color: var(--white); font-weight: 600; }
+
+  /* ─── TABLES ─── */
+  .table-wrap {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead th {
+    background: var(--surface2);
+    color: var(--text-dim);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  thead th:first-child { border-radius: 0; }
+  tbody tr { transition: background 0.15s; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+  tbody td {
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody td:first-child { color: var(--white); font-weight: 500; font-size: 12px; }
+  .td-nebius { color: var(--accent3) !important; font-weight: 600 !important; }
+  .td-comp { color: var(--warn) !important; }
+  .check { color: var(--accent3); font-size: 14px; }
+  .cross { color: var(--warn); font-size: 14px; }
+
+  /* ─── QUOTE BLOCKS ─── */
+  .quote {
+    background: linear-gradient(135deg, rgba(0,212,255,0.05), rgba(123,109,255,0.05));
+    border-left: 3px solid var(--accent);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-style: italic;
+    color: var(--text);
+  }
+  .quote strong { color: var(--accent); font-style: normal; }
+
+  /* ─── WIN/LOSE BOXES ─── */
+  .win-lose {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .win-box, .lose-box {
+    padding: 16px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+  .win-box {
+    background: rgba(0,255,157,0.05);
+    border: 1px solid rgba(0,255,157,0.15);
+  }
+  .win-box h4 {
+    color: var(--accent3);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+  .lose-box {
+    background: rgba(255,107,107,0.04);
+    border: 1px solid rgba(255,107,107,0.15);
+  }
+  .lose-box h4 {
+    color: var(--warn);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+
+  /* ─── SCORE TABLE ─── */
+  .score-row {
+    display: grid;
+    grid-template-columns: 28px 160px 1fr 80px;
+    gap: 12px;
+    align-items: start;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .score-row:last-child { border-bottom: none; }
+  .score-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--accent2);
+  }
+  .score-dim {
+    font-weight: 600;
+    color: var(--white);
+    font-size: 13px;
+  }
+  .score-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  .score-pts {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    text-align: right;
+  }
+
+  /* ─── DEMO STEPS ─── */
+  .demo-step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+    position: relative;
+  }
+  .demo-step::before {
+    content: '';
+    position: absolute;
+    left: 19px;
+    top: 40px;
+    bottom: -20px;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent2), transparent);
+  }
+  .demo-step:last-child::before { display: none; }
+  .step-bubble {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent2), var(--accent));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--bg);
+    flex-shrink: 0;
+    z-index: 1;
+  }
+  .step-content { flex: 1; padding-top: 8px; }
+  .step-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .step-time {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+
+  /* ─── PLAYBOOK CARDS ─── */
+  .playbook-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .playbook-header {
+    background: linear-gradient(135deg, var(--surface2), rgba(123,109,255,0.06));
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .playbook-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .playbook-meta {
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .playbook-body { padding: 20px 24px; }
+
+  /* ─── METRICS GRID ─── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+    margin: 16px 0;
+  }
+  .metric-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+  }
+  .metric-val {
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .metric-label { font-size: 12px; color: var(--text-dim); }
+
+  /* ─── OBJECTION CARDS ─── */
+  .objection {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .obj-question {
+    background: rgba(255,107,107,0.05);
+    border-bottom: 1px solid rgba(255,107,107,0.1);
+    padding: 14px 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .obj-q-icon { color: var(--warn); font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .obj-q-text { font-weight: 600; color: var(--white); font-size: 14px; font-style: italic; }
+  .obj-body { padding: 16px 20px; }
+  .obj-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+  .obj-tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    height: fit-content;
+  }
+  .tag-ack { background: rgba(123,109,255,0.15); color: var(--accent2); }
+  .tag-reframe { background: rgba(0,212,255,0.1); color: var(--accent); }
+  .tag-proof { background: rgba(0,255,157,0.1); color: var(--accent3); }
+  .tag-close { background: rgba(255,200,0,0.1); color: #ffd700; }
+
+  /* ─── PILLAR GRID ─── */
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+  }
+  .pillar {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .pillar:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .pillar-icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+    display: block;
+  }
+  .pillar-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+  .pillar-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+
+  /* ─── MANAGER TOOLS ─── */
+  .stage-gate {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .stage-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .stage-arrow {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .checklist li::before {
+    content: '□';
+    color: var(--text-muted);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
+  /* ─── TRAFFIC LIGHTS ─── */
+  .traffic-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin: 12px 0;
+  }
+  .traffic-cell {
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+  }
+  .tg-green { background: rgba(0,255,157,0.06); border: 1px solid rgba(0,255,157,0.15); }
+  .tg-yellow { background: rgba(255,200,0,0.06); border: 1px solid rgba(255,200,0,0.15); }
+  .tg-red { background: rgba(255,107,107,0.06); border: 1px solid rgba(255,107,107,0.15); }
+  .tg-header {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .tg-green .tg-header { color: var(--accent3); }
+  .tg-yellow .tg-header { color: #ffd700; }
+  .tg-red .tg-header { color: var(--warn); }
+
+  /* ─── COACHING TABLE ─── */
+  .coaching-table td:nth-child(2), .coaching-table td:nth-child(3), .coaching-table td:nth-child(4) {
+    font-size: 12px;
+  }
+
+  /* ─── POSITIONING STATEMENTS ─── */
+  .pos-statement {
+    background: linear-gradient(135deg, rgba(0,212,255,0.04), rgba(123,109,255,0.04));
+    border: 1px solid rgba(0,212,255,0.12);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .pos-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--accent2);
+    margin-bottom: 8px;
+  }
+
+  /* ─── DISCOVERY ─── */
+  .discovery-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .discovery-header {
+    background: var(--surface2);
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .discovery-letter {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    color: var(--bg);
+  }
+  .discovery-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--white);
+  }
+  .discovery-body { padding: 16px 20px; }
+  .discovery-body li { font-size: 13px; margin-bottom: 8px; color: var(--text-dim); }
+  .discovery-body li em { color: var(--text); font-style: italic; }
+
+  /* ─── PRINT ─── */
+  @media print {
+    body { background: white; color: #111; font-size: 11pt; }
+    header { background: #1a1a2e; -webkit-print-color-adjust: exact; }
+    nav { display: none; }
+    main { border-left: none; padding-left: 0; }
+    .card, .playbook-card, .objection { break-inside: avoid; }
+    .layout { display: block; }
+    a[href]::after { content: '' !important; }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .layout { flex-direction: column; padding: 0 16px; }
+    nav { width: 100%; height: auto; position: relative; padding: 20px 0; border-bottom: 1px solid var(--border); overflow-x: auto; display: flex; flex-wrap: wrap; gap: 4px; }
+    .nav-label { display: none; }
+    nav a { font-size: 12px; padding: 6px 12px; white-space: nowrap; }
+    main { padding: 24px 0; border-left: none; }
+    .win-lose { grid-template-columns: 1fr; }
+    .traffic-grid { grid-template-columns: 1fr; }
+    header { padding: 40px 20px 36px; }
+    .header-stats { gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="header-badge">Confidential · Internal Sales Enablement · April 2026</div>
+    <h1>Nebius <span>AI Cloud</span><br>Sales Field Assets</h1>
+    <p class="header-sub">Comprehensive enterprise sales toolkit for the Nebius sales team — battle-tested assets to accelerate deal velocity and win competitive engagements.</p>
+    <div class="header-stats">
+      <div class="stat">
+        <span class="stat-val">$50B</span>
+        <span class="stat-label">Contracted Backlog</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val green">$2.10/hr</span>
+        <span class="stat-label">H100 Starting Price</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val purple">8</span>
+        <span class="stat-label">Sales Assets</span>
+      </div>
+      <div class="stat">
+        <span class="stat-val">11M+</span>
+        <span class="stat-label">Daily AI Queries (Brave)</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav>
+    <div class="nav-label">Navigation</div>
+    <a href="#battle-cards"><span class="nav-icon">⚔️</span> Battle Cards</a>
+    <a href="#discovery"><span class="nav-icon">🔍</span> Discovery Guides</a>
+    <a href="#qualification"><span class="nav-icon">✅</span> Qualification</a>
+    <a href="#demo"><span class="nav-icon">🎬</span> Demo Narratives</a>
+    <a href="#playbooks"><span class="nav-icon">📖</span> Use-Case Playbooks</a>
+    <a href="#objections"><span class="nav-icon">🛡️</span> Objection Handling</a>
+    <a href="#positioning"><span class="nav-icon">🎯</span> Positioning</a>
+    <a href="#coaching"><span class="nav-icon">🏆</span> Manager Coaching</a>
+  </nav>
+
+  <main>
+
+    <!-- ════════════════════════════════════ BATTLE CARDS ════════════════════════════════════ -->
+    <section id="battle-cards">
+      <div class="section-header">
+        <div class="section-num">1</div>
+        <h2>Battle Cards</h2>
+      </div>
+
+      <!-- vs CoreWeave -->
+      <div class="card">
+        <div class="card-title">Nebius vs. CoreWeave <span class="badge badge-red">Primary Competitor</span></div>
+        <p style="color:var(--text-dim);font-size:13px;margin-bottom:20px;">CoreWeave is training-at-all-costs for frontier labs. Nebius is the full-stack, developer-friendly AI cloud with better economics, broader compliance, and a richer software layer — backed by the same NVIDIA relationship.</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Dimension</th><th class="td-nebius">Nebius</th><th class="td-comp">CoreWeave</th></tr></thead>
+            <tbody>
+              <tr><td>H100 Hourly Rate</td><td class="td-nebius">$2.10–$2.95/hr</td><td class="td-comp">~$4.76/hr</td></tr>
+              <tr><td>Onboarding</td><td class="td-nebius">Self-serve + free credits</td><td class="td-comp">Enterprise intake form required</td></tr>
+              <tr><td>Software Stack</td><td class="td-nebius">Full-stack: K8s, Slurm, PostgreSQL, MLOps, AI Studio</td><td class="td-comp">Raw compute-first; limited managed services</td></tr>
+              <tr><td>Compliance</td><td class="td-nebius">HIPAA, SOC 2, GDPR, ISO 27001</td><td class="td-comp">SOC 2; limited GDPR</td></tr>
+              <tr><td>EU Data Residency</td><td class="td-nebius"><span class="check">✔</span> Finland (operational)</td><td class="td-comp"><span class="cross">✘</span> Primarily US-based</td></tr>
+              <tr><td>Spot Market Flexibility</td><td class="td-nebius">High — on-demand + short contracts</td><td class="td-comp">&gt;98% locked long-term</td></tr>
+              <tr><td>Balance Sheet</td><td class="td-nebius">Cash-rich, low debt</td><td class="td-comp">Highly leveraged</td></tr>
+              <tr><td>Inference Tooling</td><td class="td-nebius">Nebius AI Studio (managed API)</td><td class="td-comp">Limited; customer-managed</td></tr>
+              <tr><td>Customer Concentration</td><td class="td-nebius">Diversified across thousands</td><td class="td-comp">Microsoft = 62% of 2024 revenue</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="win-lose">
+          <div class="win-box">
+            <h4>🏆 When Nebius Wins</h4>
+            <ul style="font-size:13px;padding-left:16px;">
+              <li>Managed services needed beyond raw GPU</li>
+              <li>EU data residency / GDPR required</li>
+              <li>Mid-market or startup wanting self-serve</li>
+              <li>Regulated industry (HIPAA needed)</li>
+              <li>Inference workloads / AI Studio fit</li>
+              <li>Flexible contract terms preferred</li>
+            </ul>
+          </div>
+          <div class="lose-box">
+            <h4>⚠️ Watch Out For</h4>
+            <ul style="font-size:13px;padding-left:16px;">
+              <li>Frontier AI lab needing 10,000+ GPUs instantly</li>
+              <li>Customer already locked in long-term CoreWeave contract</li>
+              <li>Pure bare-metal, no-software-layer requirement</li>
+            </ul>
+          </div>
+        </div>
+        <h3>Winning Statements</h3>
+        <div class="quote">"CoreWeave locks you into multi-year contracts at nearly <strong>2x our H100 price</strong>. With Nebius, you get the same NVIDIA hardware, at the lowest independently validated TCO, with the flexibility to scale up or down."</div>
+        <div class="quote">"We're the only AI cloud with <strong>full GDPR and HIPAA coverage AND a live EU data center</strong>. If your data can't leave Europe, CoreWeave isn't an option."</div>
+      </div>
+
+      <!-- vs Hyperscalers -->
+      <div class="card">
+        <div class="card-title">Nebius vs. AWS / Azure / GCP <span class="badge badge-blue">Status Quo</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Dimension</th><th class="td-nebius">Nebius</th><th class="td-comp">Hyperscalers</th></tr></thead>
+            <tbody>
+              <tr><td>GPU Pricing</td><td class="td-nebius">H100 from $2.10/hr</td><td class="td-comp">$12–$20+/hr equivalent</td></tr>
+              <tr><td>Provisioning Time</td><td class="td-nebius">Hours</td><td class="td-comp">Days to weeks (quota approvals)</td></tr>
+              <tr><td>AI Specialization</td><td class="td-nebius">Purpose-built for AI</td><td class="td-comp">General cloud; AI added on</td></tr>
+              <tr><td>Storage for AI</td><td class="td-nebius">1 TB/s read, 2 GB/s per GPU</td><td class="td-comp">Standard cloud storage</td></tr>
+              <tr><td>Model FLOPS Utilization</td><td class="td-nebius">Maximized (min. overhead)</td><td class="td-comp">Shared infra; reduced MFU</td></tr>
+              <tr><td>Inference API</td><td class="td-nebius">Open-source LLMs + image models</td><td class="td-comp">Proprietary APIs / closed models</td></tr>
+              <tr><td>Vendor Lock-in</td><td class="td-nebius">Open-source stack</td><td class="td-comp">Strong proprietary lock-in</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="quote">"AWS GPU instances cost <strong>5–8x more per hour</strong> than Nebius. For the same $1M budget, you get dramatically more compute time — which means faster model iteration and a shorter time-to-market for your AI products."</div>
+      </div>
+
+      <!-- vs Lambda -->
+      <div class="card">
+        <div class="card-title">Nebius vs. Lambda Labs <span class="badge badge-purple">Adjacent</span></div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Dimension</th><th class="td-nebius">Nebius</th><th class="td-comp">Lambda Labs</th></tr></thead>
+            <tbody>
+              <tr><td>Managed Services</td><td class="td-nebius">Full: K8s, Slurm, PostgreSQL, MLOps</td><td class="td-comp">Minimal; primarily raw compute</td></tr>
+              <tr><td>Inference Layer</td><td class="td-nebius">Nebius AI Studio (managed API)</td><td class="td-comp">No managed inference product</td></tr>
+              <tr><td>EU Data Centers</td><td class="td-nebius"><span class="check">✔</span> Finland (live)</td><td class="td-comp"><span class="cross">✘</span> Primarily US</td></tr>
+              <tr><td>Compliance</td><td class="td-nebius">HIPAA, SOC 2, GDPR, ISO 27001</td><td class="td-comp">Limited</td></tr>
+              <tr><td>Hardware</td><td class="td-nebius">Blackwell, Hopper, Vera Rubin</td><td class="td-comp">Hopper-focused</td></tr>
+              <tr><td>Enterprise SLAs</td><td class="td-nebius">Full enterprise SLAs</td><td class="td-comp">Limited</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="quote">"Lambda is great for <strong>prototyping</strong>. Nebius is built for <strong>production</strong>. When you're ready for enterprise SLAs, GDPR compliance, managed Kubernetes, and an inference API — that's when you move to Nebius."</div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════ DISCOVERY ════════════════════════════════════ -->
+    <section id="discovery">
+      <div class="section-header">
+        <div class="section-num">2</div>
+        <h2>Discovery Guides</h2>
+      </div>
+
+      <div class="card">
+        <div class="card-title">The TRAIN Discovery Framework</div>
+        <p style="color:var(--text-dim);font-size:13px;margin-bottom:20px;">Use this structured framework on every first discovery call. Each letter covers a critical dimension of the prospect's AI infrastructure situation.</p>
+
+        <div class="discovery-section">
+          <div class="discovery-header">
+            <div class="discovery-letter">T</div>
+            <div class="discovery-name">Training &amp; Inference Workloads</div>
+          </div>
+          <div class="discovery-body">
+            <ul>
+              <li><em>"Walk me through your current AI infrastructure. Are you pre-training, fine-tuning, or serving models in production?"</em></li>
+              <li><em>"How large are your largest training runs? Are you hitting GPU count or compute budget ceilings?"</em></li>
+              <li><em>"What's your current average GPU utilization? Are you seeing Model FLOPS Utilization below expectations?"</em></li>
+              <li><em>"Do you serve models in production today? What does your inference stack look like?"</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="discovery-section">
+          <div class="discovery-header">
+            <div class="discovery-letter">R</div>
+            <div class="discovery-name">Resources &amp; Costs</div>
+          </div>
+          <div class="discovery-body">
+            <ul>
+              <li><em>"What's your current monthly cloud infrastructure spend?"</em></li>
+              <li><em>"How are you provisioning GPUs — on-demand, reserved, or spot?"</em></li>
+              <li><em>"How much engineering time does your team spend on infrastructure vs. model development?"</em></li>
+              <li><em>"Have you done any TCO analysis comparing providers? What did you find?"</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="discovery-section">
+          <div class="discovery-header">
+            <div class="discovery-letter">A</div>
+            <div class="discovery-name">Access &amp; Agility</div>
+          </div>
+          <div class="discovery-body">
+            <ul>
+              <li><em>"How long does it take to provision a new GPU cluster today?"</em></li>
+              <li><em>"Have you ever had training jobs fail due to infrastructure issues? How did that impact your timeline?"</em></li>
+              <li><em>"Do you need the ability to scale up on short notice — for a large batch training run?"</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="discovery-section">
+          <div class="discovery-header">
+            <div class="discovery-letter">I</div>
+            <div class="discovery-name">Infrastructure Constraints &amp; Compliance</div>
+          </div>
+          <div class="discovery-body">
+            <ul>
+              <li><em>"Do you have data residency requirements — European, US, or specific country?"</em></li>
+              <li><em>"Are you subject to compliance frameworks — HIPAA, SOC 2, GDPR, ISO 27001?"</em></li>
+              <li><em>"Is there a vendor approval process or security review for new cloud providers?"</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="discovery-section">
+          <div class="discovery-header">
+            <div class="discovery-letter">N</div>
+            <div class="discovery-name">Needs, Timeline &amp; Next Steps</div>
+          </div>
+          <div class="discovery-body">
+            <ul>
+              <li><em>"What's driving this evaluation now — specific project, product launch, budget cycle?"</em></li>
+              <li><em>"If you could change one thing about your current infrastructure, what would it be?"</em></li>
+              <li><em>"Who else is involved in this decision — procurement, security, engineering leadership?"</em></li>
+              <li><em>"What would a successful outcome look like at the end of a 90-day trial?"</em></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Pain Discovery Probes by Current Provider</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--warn);margin-bottom:10px;">If on AWS / Azure / GCP</div>
+            <ul style="font-size:13px;color:var(--text-dim);padding-left:16px;">
+              <li>How long did your last GPU quota approval take?</li>
+              <li>Have you had a critical training run delayed by capacity unavailability?</li>
+              <li>Have you modeled the cost delta vs. specialized AI clouds?</li>
+            </ul>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent2);margin-bottom:10px;">If on CoreWeave</div>
+            <ul style="font-size:13px;color:var(--text-dim);padding-left:16px;">
+              <li>Are you locked into long-term take-or-pay contracts?</li>
+              <li>Do you have GDPR or EU data residency requirements?</li>
+              <li>What managed services do you need beyond raw compute?</li>
+            </ul>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin-bottom:10px;">If on Lambda / RunPod</div>
+            <ul style="font-size:13px;color:var(--text-dim);padding-left:16px;">
+              <li>As you move to production, what gaps are you hitting?</li>
+              <li>Do you have enterprise SLA requirements your provider can't meet?</li>
+              <li>How much time does your team spend on Kubernetes management?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════ QUALIFICATION ════════════════════════════════════ -->
+    <section id="qualification">
+      <div class="section-header">
+        <div class="section-num">3</div>
+        <h2>Qualification Frameworks</h2>
+      </div>
+
+      <div class="card">
+        <div class="card-title">MEDDPICC Scorecard <span class="badge badge-blue">Score 0–3 per dimension · 18+ = High Priority</span></div>
+
+        <div class="score-row" style="background:var(--surface2);border-radius:10px 10px 0 0;padding:10px 14px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);">
+          <span>#</span><span>Dimension</span><span>Scoring Guidance</span><span style="text-align:right;">Score</span>
+        </div>
+
+        <div class="score-row">
+          <span class="score-num">M</span>
+          <span class="score-dim">Metrics</span>
+          <div class="score-desc">3: Quantified TCO target, MFU improvement, or inference goal<br>2: General cost/performance goal<br>1: Vague "better infra"<br>0: No metrics<br><small style="color:var(--accent3);">Proof: Brave Search 11M queries/day · SemiAnalysis lowest TCO</small></div>
+          <span class="score-pts">__ / 3</span>
+        </div>
+        <div class="score-row">
+          <span class="score-num">E</span>
+          <span class="score-dim">Economic Buyer</span>
+          <div class="score-desc">3: VP Eng / CTO / Head of AI identified and engaged<br>2: Budget holder identified; not yet accessed<br>1: ICs only<br>0: Unknown</div>
+          <span class="score-pts">__ / 3</span>
+        </div>
+        <div class="score-row">
+          <span class="score-num">D</span>
+          <span class="score-dim">Decision Criteria</span>
+          <div class="score-desc">3: Criteria documented; Nebius meets all must-haves<br>2: Criteria known; Nebius competitive<br>1: Criteria unclear<br>0: None defined<br><small style="color:var(--accent3);">Watch for: HIPAA/GDPR, Kubernetes managed services, AI Studio</small></div>
+          <span class="score-pts">__ / 3</span>
+        </div>
+        <div class="score-row">
+          <span class="score-num">D</span>
+          <span class="score-dim">Decision Process</span>
+          <div class="score-desc">3: Clear process with timeline; Nebius in formal evaluation<br>2: Process partly known<br>1: Informal "we'll figure it out"<br>0: Unknown</div>
+          <span class="score-pts">__ / 3</span>
+        </div>
+        <div class="score-row">
+          <span class="score-num">P</span>
+          <span class="score-dim">Paper Process</span>
+          <div class="score-desc">3: Security review timeline known; SOC 2/ISO 27001 pre-accepted<br>2: Process known; some steps unclear<br>1: Procurement involved; timeline unknown<br>0: Not started</div>
+          <span class="score-pts">__ / 3</span>
+        </div>
+        <div class="score-row">
+          <span class="score-num">I</span>
+          <span class="score-dim">Identify Pain</span>
+          <div class="score-desc">3: Quantified pain — GPU cost, failed runs, compliance gaps, DevOps burden<br>2: General dissatisfaction<br>1: Passive interest<br>0: No pain — re-qualify</div>
+          <span class="score-pts">__ / 3</span>
+        </div>
+        <div class="score-row">
+          <span class="score-num">C</span>
+          <span class="score-dim">Champion</span>
+          <div class="score-desc">3: ML Eng Lead / Head of AI; access to economic buyer; actively advocating<br>2: Champion identified; not tested<br>1: Potential; unconfirmed<br>0: No champion</div>
+          <span class="score-pts">__ / 3</span>
+        </div>
+        <div class="score-row" style="border-bottom:none;">
+          <span class="score-num">C</span>
+          <span class="score-dim">Competition</span>
+          <div class="score-desc">3: Competitive situation known; Nebius differentiation accepted<br>2: Competition known; positioning not established<br>1: Suspected; unconfirmed<br>0: Unknown — critical risk</div>
+          <span class="score-pts">__ / 3</span>
+        </div>
+
+        <div style="background:linear-gradient(135deg,rgba(0,212,255,0.06),rgba(123,109,255,0.06));border:1px solid rgba(0,212,255,0.15);border-radius:10px;padding:14px 16px;margin-top:20px;display:flex;gap:24px;flex-wrap:wrap;">
+          <div><span style="font-family:'Syne',sans-serif;font-weight:800;color:var(--accent3);font-size:18px;">18–24</span><br><span style="font-size:12px;color:var(--text-dim);">High Priority — Full Resources</span></div>
+          <div><span style="font-family:'Syne',sans-serif;font-weight:800;color:#ffd700;font-size:18px;">10–17</span><br><span style="font-size:12px;color:var(--text-dim);">Developing — Active Coaching</span></div>
+          <div><span style="font-family:'Syne',sans-serif;font-weight:800;color:var(--warn);font-size:18px;">&lt;10</span><br><span style="font-size:12px;color:var(--text-dim);">Re-Qualify or Nurture</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Ideal Customer Profile Quick-Check</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;">
+          <div style="background:rgba(0,255,157,0.04);border:1px solid rgba(0,255,157,0.15);border-radius:12px;padding:16px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent3);margin-bottom:10px;">Tier 1 — Immediate Priority</div>
+            <ul style="font-size:13px;padding-left:16px;color:var(--text);">
+              <li>Training models &gt;1B parameters</li>
+              <li>GPU cloud spend &gt;$50K/month</li>
+              <li>EU HQ or GDPR data residency</li>
+              <li>Regulated industry (HIPAA/SOC 2)</li>
+              <li>5+ ML engineers on team</li>
+            </ul>
+          </div>
+          <div style="background:rgba(255,200,0,0.04);border:1px solid rgba(255,200,0,0.15);border-radius:12px;padding:16px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#ffd700;margin-bottom:10px;">Tier 2 — Strong Fit</div>
+            <ul style="font-size:13px;padding-left:16px;color:var(--text);">
+              <li>AI-first product company, inference in production</li>
+              <li>Frustrated with hyperscaler GPU cost/availability</li>
+              <li>Series B+ AI startup</li>
+              <li>Open-source LLM inference needs (AI Studio)</li>
+            </ul>
+          </div>
+          <div style="background:rgba(255,107,107,0.04);border:1px solid rgba(255,107,107,0.12);border-radius:12px;padding:16px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--warn);margin-bottom:10px;">Tier 3 — Nurture</div>
+            <ul style="font-size:13px;padding-left:16px;color:var(--text);">
+              <li>Experimenting with AI, no production workloads</li>
+              <li>Single GPU use cases only</li>
+              <li>IT-led without ML engineering involvement</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════ DEMO NARRATIVE ════════════════════════════════════ -->
+    <section id="demo">
+      <div class="section-header">
+        <div class="section-num">4</div>
+        <h2>Demo Narratives</h2>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Standard Demo: "From Zero to Training in Minutes" <span class="badge badge-blue">30–45 min</span></div>
+        <p style="color:var(--text-dim);font-size:13px;margin-bottom:24px;"><strong style="color:var(--white);">Audience:</strong> ML Engineers, Head of AI, CTO — Use the opening hook to contrast their current provisioning time with Nebius.</p>
+
+        <div class="demo-step">
+          <div class="step-bubble">0</div>
+          <div class="step-content">
+            <div class="step-label">Opening Hook</div>
+            <div class="step-time">2 min</div>
+            <div class="quote" style="margin-top:0;">"Today I want to show you what it looks like to go from signing up on Nebius to running your first distributed training job — without a single DevOps ticket. But first — <strong>how long does it take you to provision a GPU cluster today?</strong>"</div>
+            <p style="font-size:13px;color:var(--text-dim);">Let them answer. Use their number as the contrast anchor for the entire demo.</p>
+          </div>
+        </div>
+
+        <div class="demo-step">
+          <div class="step-bubble">1</div>
+          <div class="step-content">
+            <div class="step-label">Act 1: Infrastructure in Minutes</div>
+            <div class="step-time">8 min</div>
+            <p style="font-size:13px;"><em>Story: "Your ML engineers should spend their time on models, not infrastructure."</em></p>
+            <ul style="font-size:13px;margin-top:8px;">
+              <li>Show: Nebius AI Cloud console → spin up H100 cluster</li>
+              <li>Show: Pre-configured NVIDIA drivers, CUDA, InfiniBand — zero manual setup</li>
+              <li>Show: Topology-aware scheduling — GPU cluster geometry understood automatically</li>
+              <li>Transition: <em>"Notice we're already ready to train. On AWS, you'd still be waiting for quota approval."</em></li>
+            </ul>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+              <span class="badge badge-blue">NVIDIA Blackwell B200</span>
+              <span class="badge badge-purple">1,000-GPU clusters</span>
+              <span class="badge badge-green">Node auto-repair</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="demo-step">
+          <div class="step-bubble">2</div>
+          <div class="step-content">
+            <div class="step-label">Act 2: Maximum Performance</div>
+            <div class="step-time">8 min</div>
+            <p style="font-size:13px;"><em>Story: "Not all GPU clouds are equal — the difference shows up in model quality and training speed."</em></p>
+            <ul style="font-size:13px;margin-top:8px;">
+              <li>Show: MFU benchmarks — Nebius minimizes virtualization overhead</li>
+              <li>Show: Storage — 1 TB/s read throughput; 2 GB/s per GPU</li>
+              <li>Show: Non-blocking InfiniBand fabric — AllReduce at wire speed</li>
+              <li>Transition: <em>"SemiAnalysis ran LLM pre-training, multimodal RL, and inference — Nebius delivered lowest TCO in every scenario."</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="demo-step">
+          <div class="step-bubble">3</div>
+          <div class="step-content">
+            <div class="step-label">Act 3: Full Stack — Not Just Compute</div>
+            <div class="step-time">8 min</div>
+            <p style="font-size:13px;"><em>Story: "Nebius is the only AI cloud where compute, orchestration, storage, and inference live in one place."</em></p>
+            <ul style="font-size:13px;margin-top:8px;">
+              <li>Show: Managed Kubernetes — zero config, production-ready</li>
+              <li>Show: Managed Slurm — for HPC and research workflows</li>
+              <li>Show: Integrated observability — GPU utilization, job health, alerting</li>
+              <li>Transition: <em>"This is why Brave Search runs 11M AI queries daily on Nebius — it's a production platform."</em></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="demo-step">
+          <div class="step-bubble">4</div>
+          <div class="step-content">
+            <div class="step-label">Act 4: Nebius AI Studio — Inference Made Simple</div>
+            <div class="step-time">8 min</div>
+            <p style="font-size:13px;"><em>Story: "When you're ready to serve your model — or access best-in-class open-source models — AI Studio is your inference layer."</em></p>
+            <ul style="font-size:13px;margin-top:8px;">
+              <li>Show: AI Studio playground — compare models side by side</li>
+              <li>Show: Single API for LLMs + image generation (Flux Schnell, Flux Dev, SDXL)</li>
+              <li>Show: 100M+ tokens/minute capacity; auto-scaling</li>
+              <li>Show: Per-token / per-image pricing — no idle cost</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="demo-step">
+          <div class="step-bubble">5</div>
+          <div class="step-content">
+            <div class="step-label">Act 5: Security &amp; Compliance</div>
+            <div class="step-time">5 min</div>
+            <ul style="font-size:13px;margin-top:8px;">
+              <li>HIPAA BAA, SOC 2 Type II, GDPR, ISO 27001, EU AI Act</li>
+              <li>Tenant-level isolation — workloads never shared</li>
+              <li>EU data center (Finland) — data stays in Europe</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="demo-step" style="margin-bottom:0;">
+          <div class="step-bubble">✓</div>
+          <div class="step-content">
+            <div class="step-label">Closing &amp; Call to Action</div>
+            <div class="step-time">5 min</div>
+            <div class="quote" style="margin-top:0;">"What would it mean for your team to ship your next model <strong>30% faster, at half the infrastructure cost?</strong>"</div>
+            <p style="font-size:13px;color:var(--text-dim);">Next Step Offer: Free trial credits + dedicated onboarding engineer for first 30 days.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════ PLAYBOOKS ════════════════════════════════════ -->
+    <section id="playbooks">
+      <div class="section-header">
+        <div class="section-num">5</div>
+        <h2>Use-Case Playbooks</h2>
+      </div>
+
+      <!-- Playbook 1 -->
+      <div class="playbook-card">
+        <div class="playbook-header">
+          <div>
+            <div class="playbook-title">Foundation Model Pre-Training</div>
+            <div class="playbook-meta">Champion: ML Infrastructure Lead · Economic Buyer: CTO / VP Eng</div>
+          </div>
+          <span class="badge badge-blue">AI Labs · Research · Funded Startups</span>
+        </div>
+        <div class="playbook-body">
+          <h3>The Situation</h3>
+          <p>Company is training a large language model (7B–70B+ parameters) and faces: massive compute costs on hyperscalers, slow cluster provisioning, or training instability due to hardware failures.</p>
+          <h3>Nebius Solution</h3>
+          <ul>
+            <li>NVIDIA HGX H100 / H200 / Blackwell B200 clusters — 1,000+ GPUs available</li>
+            <li>Non-blocking InfiniBand fabric (NVIDIA Quantum-2) for minimum AllReduce overhead</li>
+            <li>Managed Slurm or Kubernetes for job orchestration</li>
+            <li>Fault-tolerant infrastructure with node health monitoring + auto-repair</li>
+            <li>1 TB/s shared filesystem throughput for dataset streaming</li>
+          </ul>
+          <h3>ROI Metrics</h3>
+          <div class="metrics-grid">
+            <div class="metric-box"><div class="metric-val">5–8x</div><div class="metric-label">GPU cost reduction vs AWS</div></div>
+            <div class="metric-box"><div class="metric-val">Hours</div><div class="metric-label">Provisioning vs. weeks at hyperscalers</div></div>
+            <div class="metric-box"><div class="metric-val">40 hrs</div><div class="metric-label">Engineering time saved per cluster setup</div></div>
+            <div class="metric-box"><div class="metric-val">0</div><div class="metric-label">Failed training runs from hardware issues</div></div>
+          </div>
+          <div class="quote"><strong>Reference:</strong> Recraft trained their first generative AI model for designers from scratch on Nebius using PyTorch + Kubeflow — without provisioning delays or infrastructure failures.</div>
+        </div>
+      </div>
+
+      <!-- Playbook 2 -->
+      <div class="playbook-card">
+        <div class="playbook-header">
+          <div>
+            <div class="playbook-title">Production AI Inference at Scale</div>
+            <div class="playbook-meta">Champion: Head of AI Product · Economic Buyer: VP Product / CTO</div>
+          </div>
+          <span class="badge badge-green">SaaS Platforms · AI Products</span>
+        </div>
+        <div class="playbook-body">
+          <h3>The Situation</h3>
+          <p>Company has a trained model and needs to serve it to end users reliably at low latency, high throughput, and acceptable cost — without managing complex inference infrastructure.</p>
+          <h3>Nebius Solution</h3>
+          <ul>
+            <li><strong>Nebius AI Studio:</strong> Managed inference API for open-source LLMs + image models</li>
+            <li>Single API endpoint — 100M+ tokens/minute standard capacity</li>
+            <li>Auto-scaling — no idle GPU cost</li>
+            <li>Per-token / per-image pricing for predictable unit economics</li>
+            <li>NVIDIA NIM™ microservices for enterprise-grade inference</li>
+          </ul>
+          <h3>ROI Metrics</h3>
+          <div class="metrics-grid">
+            <div class="metric-box"><div class="metric-val">40–70%</div><div class="metric-label">Inference cost reduction vs OpenAI API</div></div>
+            <div class="metric-box"><div class="metric-val">~100%</div><div class="metric-label">GPU utilization (Brave Search)</div></div>
+            <div class="metric-box"><div class="metric-val">11M+</div><div class="metric-label">Daily AI answers proven at scale</div></div>
+          </div>
+          <div class="quote"><strong>Reference:</strong> Brave Search delivers AI-powered search summaries for 11 million daily queries at nearly 100% GPU utilization — with low latency and strict privacy standards.</div>
+        </div>
+      </div>
+
+      <!-- Playbook 3 -->
+      <div class="playbook-card">
+        <div class="playbook-header">
+          <div>
+            <div class="playbook-title">Enterprise MLOps &amp; AI Platform</div>
+            <div class="playbook-meta">Champion: ML Platform Engineer · Economic Buyer: VP Eng / CAIO</div>
+          </div>
+          <span class="badge badge-purple">Enterprise · Multi-Team AI</span>
+        </div>
+        <div class="playbook-body">
+          <h3>The Situation</h3>
+          <p>Enterprise is building an internal AI platform to enable multiple data science teams. Needs managed orchestration, storage, experiment tracking, and compute in one place with enterprise security.</p>
+          <h3>Nebius Solution</h3>
+          <ul>
+            <li>Managed Kubernetes — production-ready, zero config</li>
+            <li>Managed PostgreSQL for experiment metadata and model registry</li>
+            <li>Container registry — internal model artifact management</li>
+            <li>Integrated observability — GPU utilization, job health, alerting</li>
+            <li>SOC 2 Type II + HIPAA + ISO 27001; tenant-level isolation + IAM</li>
+          </ul>
+          <h3>ROI Metrics</h3>
+          <div class="metrics-grid">
+            <div class="metric-box"><div class="metric-val">0.5 FTE</div><div class="metric-label">DevOps allocation vs. 2–3 FTE on competitors</div></div>
+            <div class="metric-box"><div class="metric-val">30–50%</div><div class="metric-label">Faster model experimentation cycles</div></div>
+            <div class="metric-box"><div class="metric-val">$400K</div><div class="metric-label">Saved per year avoiding 2 DevOps hires</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playbook 4 -->
+      <div class="playbook-card">
+        <div class="playbook-header">
+          <div>
+            <div class="playbook-title">Healthcare / Regulated Industry AI</div>
+            <div class="playbook-meta">Champion: Head of Data Science · Economic Buyer: CTO / CIO / Compliance Officer</div>
+          </div>
+          <span class="badge badge-red">Healthcare · Pharma · Fintech</span>
+        </div>
+        <div class="playbook-body">
+          <h3>The Situation</h3>
+          <p>Organization wants to build AI models on sensitive data (patient records, clinical trials, financial data) and must ensure data never leaves compliant infrastructure.</p>
+          <h3>Nebius Solution</h3>
+          <ul>
+            <li>HIPAA Business Associate Agreement available</li>
+            <li>SOC 2 Type II + ISO 27001 certification</li>
+            <li>GDPR compliance — EU data residency in Finland</li>
+            <li>Tenant-level isolation — no shared compute for sensitive data</li>
+            <li>EU AI Act compliant for European healthcare customers</li>
+          </ul>
+          <h3>ROI Metrics</h3>
+          <div class="metrics-grid">
+            <div class="metric-box"><div class="metric-val">$1.9M</div><div class="metric-label">Max HIPAA penalty per violation avoided</div></div>
+            <div class="metric-box"><div class="metric-val">Months</div><div class="metric-label">Faster time-to-AI vs. private cloud build</div></div>
+            <div class="metric-box"><div class="metric-val">100%</div><div class="metric-label">EU data residency compliance guaranteed</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Playbook 5 -->
+      <div class="playbook-card">
+        <div class="playbook-header">
+          <div>
+            <div class="playbook-title">AI Startup: Prototype to Production</div>
+            <div class="playbook-meta">Champion: CTO / Co-Founder · Economic Buyer: CTO / CEO</div>
+          </div>
+          <span class="badge badge-green">Series A–C AI Startups</span>
+        </div>
+        <div class="playbook-body">
+          <h3>The Situation</h3>
+          <p>Startup has proven their AI concept, is ready to scale, needs enterprise-grade infrastructure without procurement delays — and is burn-rate conscious with investor scrutiny.</p>
+          <h3>Nebius Solution</h3>
+          <ul>
+            <li>Self-serve sign-up with free trial credits — zero procurement friction</li>
+            <li>Pay-as-you-go (1-second billing) — no long-term commitment required</li>
+            <li>Full-stack platform — no dedicated DevOps team needed</li>
+            <li>Scale from 1 GPU to 1,000+ as needed</li>
+            <li>Nebius AI Studio for inference without dedicated inference infrastructure</li>
+          </ul>
+          <h3>ROI Metrics</h3>
+          <div class="metrics-grid">
+            <div class="metric-box"><div class="metric-val">50–70%</div><div class="metric-label">Cost savings vs AWS/GCP → extended runway</div></div>
+            <div class="metric-box"><div class="metric-val">$400K</div><div class="metric-label">/yr saved vs. 2 DevOps engineer hires</div></div>
+            <div class="metric-box"><div class="metric-val">Days</div><div class="metric-label">Time to launch production AI vs. weeks</div></div>
+          </div>
+          <div class="quote"><strong>Reference:</strong> Wubble (AI music platform) leveraged Nebius + Kubernetes to build scalable AI for high-capacity inference, QLoRA adaptation, and faster audio pipelines — reducing time-to-first-token.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════ OBJECTIONS ════════════════════════════════════ -->
+    <section id="objections">
+      <div class="section-header">
+        <div class="section-num">6</div>
+        <h2>Objection-Handling Guides</h2>
+      </div>
+
+      <div class="objection">
+        <div class="obj-question"><span class="obj-q-icon">❓</span><span class="obj-q-text">"We're already on AWS/Azure/GCP and it's too hard to switch."</span></div>
+        <div class="obj-body">
+          <div class="obj-section"><span class="obj-tag tag-ack">Acknowledge</span><span>Switching cloud providers is a real concern — migration risk, retraining teams, and re-architecting can be significant.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-reframe">Reframe</span><span>For a team spending $500K/month on AWS GPU, the Nebius cost difference is $3–4M per year in avoidable costs. And we're not asking you to migrate everything at once. Start with new AI projects.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-proof">Proof</span><span>Our infrastructure uses standard Kubernetes and Slurm — your engineers don't need to learn new tools. Zero retraining required.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-close">Close</span><span>"Would it make sense to run a parallel pilot on one upcoming training run and compare cost and performance yourself?"</span></div>
+        </div>
+      </div>
+
+      <div class="objection">
+        <div class="obj-question"><span class="obj-q-icon">❓</span><span class="obj-q-text">"We've never heard of Nebius — how do I know you'll be around in 3 years?"</span></div>
+        <div class="obj-body">
+          <div class="obj-section"><span class="obj-tag tag-ack">Acknowledge</span><span>Brand trust is absolutely a fair consideration when choosing infrastructure that your AI products will depend on.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-proof">Proof</span><span>NVIDIA invested $2 billion directly in Nebius. Meta signed a $27B contract. Microsoft signed $19B+. We have nearly $50B in contracted backlog and a $41B market cap with 27 analyst buy ratings. The largest GPU maker on Earth bet $2B on us.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-reframe">Context</span><span>Our founding team built Yandex — one of Europe's largest internet companies — and brought hundreds of experienced infrastructure engineers with them. This is not a scrappy startup.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-close">Close</span><span>"Would a technical and financial due diligence session with our team give you the confidence to move to a pilot?"</span></div>
+        </div>
+      </div>
+
+      <div class="objection">
+        <div class="obj-question"><span class="obj-q-icon">❓</span><span class="obj-q-text">"CoreWeave is the established leader — why should I go with you?"</span></div>
+        <div class="obj-body">
+          <div class="obj-section"><span class="obj-tag tag-ack">Acknowledge</span><span>CoreWeave is a strong provider, especially for frontier AI labs doing massive training at scale.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-reframe">Differentiate</span><span>But CoreWeave is optimized for one thing: raw training scale. If you need managed Kubernetes, an inference API, EU data residency, HIPAA compliance, or self-serve access without a lengthy enterprise form — Nebius has all of that. And our H100 is $2.10/hr vs. CoreWeave's $4.76/hr.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-proof">Proof</span><span>CoreWeave's revenue is 62% one customer. Ours is diversified across thousands — from Brave Search to JetBrains to regulated healthcare companies.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-close">Close</span><span>"What's most important: maximum raw GPU scale for frontier training, or a full-stack platform with better economics and compliance? That'll tell us who's the right fit."</span></div>
+        </div>
+      </div>
+
+      <div class="objection">
+        <div class="obj-question"><span class="obj-q-icon">❓</span><span class="obj-q-text">"Your pricing seems too cheap — what's the catch?"</span></div>
+        <div class="obj-body">
+          <div class="obj-section"><span class="obj-tag tag-reframe">Explain</span><span>Nebius achieves lower pricing through vertical integration — we design our own servers, racks, and data centers, eliminating the general-purpose overhead tax. SemiAnalysis independently modeled real workloads and confirmed Nebius has the lowest TCO.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-proof">Proof</span><span>Brave Search runs 11 million AI-powered queries daily on us at nearly 100% GPU utilization. That's not the behavior of a customer worried about reliability.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-close">Close</span><span>"The best way to prove it is a pilot. Run one of your real workloads with trial credits and compare performance and cost yourself."</span></div>
+        </div>
+      </div>
+
+      <div class="objection">
+        <div class="obj-question"><span class="obj-q-icon">❓</span><span class="obj-q-text">"We need to stay in the US — we can't use European infrastructure."</span></div>
+        <div class="obj-body">
+          <div class="obj-section"><span class="obj-tag tag-reframe">Correct</span><span>We have US infrastructure — us-central1 is live today. We're building 300MW in Birmingham, Alabama and a 1,200MW campus in Independence, Missouri. The US is a core infrastructure priority.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-proof">Flip It</span><span>For customers with EU users or GDPR requirements, our Finland data center is a unique differentiator — something CoreWeave and most US-only providers can't offer.</span></div>
+        </div>
+      </div>
+
+      <div class="objection">
+        <div class="obj-question"><span class="obj-q-icon">❓</span><span class="obj-q-text">"We're under a long-term contract with our current provider."</span></div>
+        <div class="obj-body">
+          <div class="obj-section"><span class="obj-tag tag-ack">Acknowledge</span><span>That's a real constraint — we're not going to ask you to break contracts.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-reframe">Bridge</span><span>Contracts end and budgets get reviewed. The best time to evaluate alternatives is before the renewal pressure hits. Starting a smaller pilot on Nebius today gives you the data and leverage you need for your next negotiation.</span></div>
+          <div class="obj-section"><span class="obj-tag tag-close">Close</span><span>"When does your current contract come up for renewal?"</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════ POSITIONING ════════════════════════════════════ -->
+    <section id="positioning">
+      <div class="section-header">
+        <div class="section-num">7</div>
+        <h2>Competitive Positioning</h2>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Core Positioning Statement</div>
+        <div style="background:linear-gradient(135deg,rgba(0,212,255,0.07),rgba(123,109,255,0.07));border:1px solid rgba(0,212,255,0.2);border-radius:14px;padding:24px;margin-bottom:20px;">
+          <p style="font-size:18px;font-weight:500;color:var(--white);line-height:1.6;font-style:italic;">"Nebius is the <strong>full-stack AI cloud</strong> built for teams who are serious about production — combining the <strong>lowest independently validated TCO</strong>, NVIDIA's latest hardware, and a complete software layer that eliminates DevOps overhead. Backed by NVIDIA's $2B investment and trusted by Meta, Microsoft, and Brave Search."</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Differentiation Pillars</div>
+        <div class="pillar-grid">
+          <div class="pillar">
+            <span class="pillar-icon">💰</span>
+            <div class="pillar-title">Lowest TCO</div>
+            <div class="pillar-desc">SemiAnalysis independently validated: lowest TCO across LLM pre-training, multimodal RL, and production inference. H100 from $2.10/hr. 1-second billing.</div>
+          </div>
+          <div class="pillar">
+            <span class="pillar-icon">🧩</span>
+            <div class="pillar-title">Full-Stack Platform</div>
+            <div class="pillar-desc">Managed Kubernetes + Slurm, PostgreSQL, container registry, MLOps tools, observability, and Nebius AI Studio inference API — not just GPU boxes.</div>
+          </div>
+          <div class="pillar">
+            <span class="pillar-icon">⚡</span>
+            <div class="pillar-title">NVIDIA-First Architecture</div>
+            <div class="pillar-desc">Reference Platform Cloud Partner. $2B NVIDIA equity investment. First Vera Rubin NVL72 deployments. Maximum MFU via minimal virtualization overhead.</div>
+          </div>
+          <div class="pillar">
+            <span class="pillar-icon">🔒</span>
+            <div class="pillar-title">Enterprise Compliance</div>
+            <div class="pillar-desc">HIPAA BAA, SOC 2 Type II, GDPR, ISO 27001, EU AI Act compliant. EU data centers (Finland). Tenant-level isolation as standard.</div>
+          </div>
+          <div class="pillar">
+            <span class="pillar-icon">🚀</span>
+            <div class="pillar-title">Developer-First</div>
+            <div class="pillar-desc">Self-serve signup, free trial credits, ready in hours. Standard open-source tooling (PyTorch, Kubeflow, W&B, NCCL). No proprietary lock-in.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Proof Points Matrix</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Claim</th><th>Proof Point</th></tr></thead>
+            <tbody>
+              <tr><td>Lowest TCO</td><td>SemiAnalysis independent study — lowest across 3 workload types</td></tr>
+              <tr><td>Production reliability</td><td>Brave Search: 11M+ daily AI answers at ~100% GPU utilization</td></tr>
+              <tr><td>Scale for enterprise</td><td>Meta ($27B), Microsoft ($19B+) contracted infrastructure</td></tr>
+              <tr><td>Developer trust</td><td>JetBrains, Recraft, CentML, Wubble, Prisma Labs</td></tr>
+              <tr><td>NVIDIA endorsement</td><td>$2B direct equity + Reference Platform Cloud Partner status</td></tr>
+              <tr><td>Compliance</td><td>HIPAA BAA, SOC 2 Type II, ISO 27001, GDPR, EU AI Act</td></tr>
+              <tr><td>Speed to deploy</td><td>Hours from signup to running workloads</td></tr>
+              <tr><td>Hardware recency</td><td>First Vera Rubin NVL72 deployments H2 2026</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">One-Line Competitive Positioning Statements</div>
+        <div class="pos-statement"><div class="pos-label">vs. AWS / Azure / GCP</div>"Hyperscalers are built for everything — which means they're optimized for nothing. Nebius is built exclusively for AI. That's why we're 5–8x cheaper per GPU and provision in hours, not weeks."</div>
+        <div class="pos-statement"><div class="pos-label">vs. CoreWeave</div>"CoreWeave is the training-at-all-costs provider for frontier labs. Nebius is the full-stack AI cloud for companies building AI products — with better economics, EU compliance, developer-friendly access, and a managed software layer."</div>
+        <div class="pos-statement"><div class="pos-label">vs. Lambda Labs</div>"Lambda is a great starting point. Nebius is where you come when you're ready for production — enterprise SLAs, managed orchestration, compliance coverage, and an inference API."</div>
+        <div class="pos-statement"><div class="pos-label">vs. On-Premise GPUs</div>"Owning GPUs made sense before cloud GPU pricing came down. Today, Nebius delivers bare-metal performance in a managed cloud — without the capital cost, maintenance burden, or obsolescence risk."</div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════ COACHING ════════════════════════════════════ -->
+    <section id="coaching">
+      <div class="section-header">
+        <div class="section-num">8</div>
+        <h2>Manager Coaching Tools</h2>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Weekly Deal Review: 5 Health Questions</div>
+        <p style="font-size:13px;color:var(--text-dim);margin-bottom:20px;">Use these five questions on every active deal in 1:1s. Map each answer to the traffic light below.</p>
+
+        <div style="margin-bottom:20px;">
+          <h3>Q1: Who is the economic buyer, and when did the AE last speak with them directly?</h3>
+          <div class="traffic-grid">
+            <div class="traffic-cell tg-green"><div class="tg-header">🟢 Green</div>Spoken to within 2 weeks; relationship active</div>
+            <div class="traffic-cell tg-yellow"><div class="tg-header">🟡 Yellow</div>Identified but not yet directly engaged</div>
+            <div class="traffic-cell tg-red"><div class="tg-header">🔴 Red</div>Unknown or only champion-level access</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <h3>Q2: What is the prospect's #1 pain, and has it been quantified?</h3>
+          <div class="traffic-grid">
+            <div class="traffic-cell tg-green"><div class="tg-header">🟢 Green</div>"$400K/month on AWS GPUs, want to cut 50%" — specific and quantified</div>
+            <div class="traffic-cell tg-yellow"><div class="tg-header">🟡 Yellow</div>General pain stated; not yet quantified</div>
+            <div class="traffic-cell tg-red"><div class="tg-header">🔴 Red</div>No clear pain; deal is interest-only</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <h3>Q3: Competitive landscape — where does Nebius stand?</h3>
+          <div class="traffic-grid">
+            <div class="traffic-cell tg-green"><div class="tg-header">🟢 Green</div>Competition mapped; Nebius differentiation accepted by champion</div>
+            <div class="traffic-cell tg-yellow"><div class="tg-header">🟡 Yellow</div>Competition known; positioning work in progress</div>
+            <div class="traffic-cell tg-red"><div class="tg-header">🔴 Red</div>Competitor not identified — or prospect leaning away without counter</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:20px;">
+          <h3>Q4: What is the next mutually agreed-upon step, and when is it scheduled?</h3>
+          <div class="traffic-grid">
+            <div class="traffic-cell tg-green"><div class="tg-header">🟢 Green</div>Specific next step, confirmed date, both sides committed</div>
+            <div class="traffic-cell tg-yellow"><div class="tg-header">🟡 Yellow</div>Next step proposed but not confirmed</div>
+            <div class="traffic-cell tg-red"><div class="tg-header">🔴 Red</div>"They'll get back to us" — no commitment</div>
+          </div>
+        </div>
+
+        <div>
+          <h3>Q5: What compliance requirements has the prospect shared, and are we cleared?</h3>
+          <div class="traffic-grid">
+            <div class="traffic-cell tg-green"><div class="tg-header">🟢 Green</div>Requirements known; SOC 2, HIPAA, GDPR confirmed met</div>
+            <div class="traffic-cell tg-yellow"><div class="tg-header">🟡 Yellow</div>Requirements known; legal review in progress</div>
+            <div class="traffic-cell tg-red"><div class="tg-header">🔴 Red</div>Unknown — major risk if compliance is a gate</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Stage Gate Criteria</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;">
+          <div class="stage-gate">
+            <div class="stage-title">Stage 1 <span class="stage-arrow">→</span> Stage 2 <span style="font-size:12px;color:var(--text-muted);font-weight:400;">Discovery → Qualification</span></div>
+            <ul class="checklist">
+              <li>ICP confirmed (GPU spend &gt;$50K/month or production AI)</li>
+              <li>Primary pain identified (cost, availability, compliance, DevOps)</li>
+              <li>Champion identified with economic buyer access</li>
+              <li>Evaluation timeline established</li>
+            </ul>
+          </div>
+          <div class="stage-gate">
+            <div class="stage-title">Stage 2 <span class="stage-arrow">→</span> Stage 3 <span style="font-size:12px;color:var(--text-muted);font-weight:400;">→ Tech Validation</span></div>
+            <ul class="checklist">
+              <li>Economic buyer identified and engaged at least once</li>
+              <li>Decision criteria documented; Nebius meets all must-haves</li>
+              <li>Competitive landscape mapped</li>
+              <li>Demo/deep dive scheduled</li>
+              <li>MEDDPICC score ≥ 15</li>
+            </ul>
+          </div>
+          <div class="stage-gate">
+            <div class="stage-title">Stage 3 <span class="stage-arrow">→</span> Stage 4 <span style="font-size:12px;color:var(--text-muted);font-weight:400;">→ Proposal</span></div>
+            <ul class="checklist">
+              <li>Technical validation complete (POC or trial)</li>
+              <li>Champion has presented Nebius internally</li>
+              <li>Commercial scope aligned (GPU count, services, term)</li>
+              <li>Procurement / legal process understood</li>
+              <li>No unresolved compliance objections</li>
+            </ul>
+          </div>
+          <div class="stage-gate">
+            <div class="stage-title">Stage 4 <span class="stage-arrow">→</span> Closed Won</div>
+            <ul class="checklist">
+              <li>Proposal sent; verbal commitment received</li>
+              <li>Economic buyer approved</li>
+              <li>Legal / security review complete</li>
+              <li>MSA and Order Form in final negotiation</li>
+              <li>Signed contract received</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Coaching Questions by Scenario</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;">
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent2);margin-bottom:10px;">Scenario A: Deal Stuck in Discovery &gt;30 Days</div>
+            <ul style="font-size:13px;padding-left:16px;color:var(--text-dim);">
+              <li>Has the prospect confirmed this is a priority project?</li>
+              <li>Who was the last executive-level touchpoint — and was there urgency?</li>
+              <li>Is there a real budget, or is this exploratory?</li>
+            </ul>
+            <div style="margin-top:10px;font-size:12px;color:var(--accent);font-weight:600;">Action: Multi-thread; have AE request intro to VP/CTO.</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--warn);margin-bottom:10px;">Scenario B: Stalling Before Technical Validation</div>
+            <ul style="font-size:13px;padding-left:16px;color:var(--text-dim);">
+              <li>What is the stated reason for not scheduling the deep dive or POC?</li>
+              <li>Are they evaluating another provider in parallel?</li>
+              <li>Have we offered trial credits to lower the barrier?</li>
+            </ul>
+            <div style="margin-top:10px;font-size:12px;color:var(--accent);font-weight:600;">Action: Send free credit activation + onboarding engineer intro.</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent3);margin-bottom:10px;">Scenario C: Losing to CoreWeave</div>
+            <ul style="font-size:13px;padding-left:16px;color:var(--text-dim);">
+              <li>Has AE positioned EU compliance + full-stack vs. compute-only?</li>
+              <li>Has TCO been modeled ($2.10/hr vs $4.76/hr with SemiAnalysis)?</li>
+              <li>Has the champion been armed with the battle card?</li>
+            </ul>
+            <div style="margin-top:10px;font-size:12px;color:var(--accent);font-weight:600;">Action: Set up competitive technical session with SE team.</div>
+          </div>
+          <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;">
+            <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#ffd700;margin-bottom:10px;">Scenario D: Losing to Status Quo (Hyperscaler)</div>
+            <ul style="font-size:13px;padding-left:16px;color:var(--text-dim);">
+              <li>Has the prospect quantified what they're overpaying vs. Nebius?</li>
+              <li>Have we offered to run a cost modeling exercise on their workloads?</li>
+              <li>Is there an upcoming renewal creating a natural change moment?</li>
+            </ul>
+            <div style="margin-top:10px;font-size:12px;color:var(--accent);font-weight:600;">Action: Commission joint TCO analysis with SE; show the math.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">AE Skill Coaching Checklist</div>
+        <div class="table-wrap">
+          <table class="coaching-table">
+            <thead><tr><th>Competency</th><th>1 — Needs Work</th><th>3 — Developing</th><th>5 — Expert</th></tr></thead>
+            <tbody>
+              <tr><td>AI Infrastructure Knowledge</td><td>Can't explain MFU or InfiniBand</td><td>Explains training vs. inference</td><td>Discusses NVIDIA hardware architecture; Blackwell vs. Hopper differences</td></tr>
+              <tr><td>TCO Discovery</td><td>Doesn't ask about GPU spend</td><td>Asks spend; can't model savings</td><td>Proactively models TCO using prospect's actual workload data</td></tr>
+              <tr><td>Compliance Navigation</td><td>Unaware of HIPAA/GDPR requirements</td><td>Knows which certs Nebius has</td><td>Raises compliance proactively; guides procurement</td></tr>
+              <tr><td>Competitive Selling</td><td>Generic responses to CoreWeave</td><td>2–3 differentiators stated</td><td>Handles any CoreWeave/AWS objection with data; arms champion</td></tr>
+              <tr><td>Champion Development</td><td>Single-threaded at engineer level</td><td>Champion identified; not tested</td><td>Champion actively advocates internally; AE coached their narrative</td></tr>
+              <tr><td>Multi-Threading</td><td>One contact in account</td><td>2–3 contacts across functions</td><td>Economic buyer + champion + technical contact all engaged</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Monthly Pipeline Health Dashboard</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Metric</th><th>Target</th><th>Status</th></tr></thead>
+            <tbody>
+              <tr><td>Average MEDDPICC score (active deals)</td><td class="td-nebius">≥ 16</td><td>___</td></tr>
+              <tr><td>% deals with confirmed economic buyer</td><td class="td-nebius">≥ 70%</td><td>___</td></tr>
+              <tr><td>% Stage 3+ with POC / trial credits active</td><td class="td-nebius">≥ 50%</td><td>___</td></tr>
+              <tr><td>Win rate vs. CoreWeave</td><td class="td-nebius">≥ 40%</td><td>___</td></tr>
+              <tr><td>Win rate vs. hyperscalers</td><td class="td-nebius">≥ 55%</td><td>___</td></tr>
+              <tr><td>Avg deal cycle (&lt;$100K ACV)</td><td class="td-nebius">&lt; 60 days</td><td>___</td></tr>
+              <tr><td>Deals stalled &gt;45 days with no next step</td><td class="td-nebius">0</td><td>___</td></tr>
+              <tr><td>% ICP-qualified pipeline</td><td class="td-nebius">≥ 80%</td><td>___</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+</div>
+
+<footer style="border-top:1px solid var(--border);padding:24px 40px;display:flex;justify-content:space-between;align-items:center;color:var(--text-muted);font-size:12px;flex-wrap:wrap;gap:12px;">
+  <span>© Nebius Group N.V. · Sales Enablement · Confidential — Internal Use Only</span>
+  <span>Last Updated: April 2026 · NASDAQ: NBIS</span>
+</footer>
+
+<div style="text-align:center;padding:16px 0 20px;">
+  <a href="https://nebius.rus-teston.com" style="color:#0ea5e9;text-decoration:none;font-size:0.9rem;">← Back to Nebius Projects</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SA Enablement Program — Implementation Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0C1A3A;
+    --surface: #10224A;
+    --surface2: #162C52;
+    --border: #1E3A5C;
+    --gold: #E0FF4F;
+    --gold-light: #E8FF7A;
+    --gold-dim: rgba(224,255,79,0.12);
+    --text: #F0F6FF;
+    --text-muted: #B0CFEA;
+    --text-dim: #5A8AAE;
+    --accent: #00C853;
+    --accent-soft: rgba(0,200,83,0.12);
+    --green: #00C853;
+    --sidebar-w: 280px;
+    --header-h: 64px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: linear-gradient(180deg, #0C1A3A 0%, #0A3050 40%, #0E3558 100%);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ─────────────────────────────── */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--header-h);
+    background: linear-gradient(180deg,#0C1A3A 0%,#0A3050 40%,#0E3558 100%);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    z-index: 100;
+    gap: 16px;
+  }
+
+  .header-logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .header-divider {
+    width: 1px; height: 24px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  .header-subtitle {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+
+  .header-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 1px solid;
+  }
+  .badge-gold { color: var(--gold); border-color: rgba(201,168,76,0.35); background: var(--gold-dim); }
+  .badge-green { color: var(--green); border-color: rgba(63,185,80,0.35); background: rgba(63,185,80,0.08); }
+
+  .progress-ring-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* ── LAYOUT ─────────────────────────────── */
+  .layout {
+    display: flex;
+    padding-top: var(--header-h);
+    min-height: 100vh;
+  }
+
+  /* ── SIDEBAR ─────────────────────────────── */
+  aside {
+    width: var(--sidebar-w);
+    flex-shrink: 0;
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    bottom: 0;
+    overflow-y: auto;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 28px 0 40px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  aside::-webkit-scrollbar { width: 4px; }
+  aside::-webkit-scrollbar-track { background: transparent; }
+  aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .sidebar-section-label {
+    padding: 0 20px 10px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-dim);
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+    color: var(--text-muted);
+  }
+  .nav-item:hover { background: var(--surface2); color: var(--text); }
+  .nav-item.active {
+    background: var(--gold-dim);
+    border-left-color: var(--gold);
+    color: var(--gold-light);
+  }
+
+  .nav-step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    transition: all 0.2s;
+  }
+  .nav-item.active .nav-step-num {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #0d1117;
+  }
+  .nav-item.completed .nav-step-num {
+    background: var(--green);
+    border-color: var(--green);
+    color: #0d1117;
+  }
+  .nav-item.completed { color: var(--text-dim); }
+
+  .nav-label {
+    font-size: 12.5px;
+    font-weight: 500;
+    line-height: 1.3;
+  }
+
+  .sidebar-divider {
+    margin: 18px 20px;
+    border: none;
+    border-top: 1px solid var(--border);
+  }
+
+  .sidebar-quick-nav {
+    padding: 0 20px;
+  }
+
+  .sidebar-quick-nav a {
+    display: block;
+    font-size: 12px;
+    color: var(--text-dim);
+    text-decoration: none;
+    padding: 5px 0;
+    transition: color 0.15s;
+  }
+  .sidebar-quick-nav a:hover { color: var(--gold); }
+
+  /* ── MAIN CONTENT ─────────────────────────── */
+  main {
+    margin-left: var(--sidebar-w);
+    flex: 1;
+    min-width: 0;
+    padding: 48px 56px 120px;
+    max-width: calc(100% - var(--sidebar-w));
+  }
+
+  /* ── HERO ─────────────────────────────── */
+  .hero {
+    margin-bottom: 56px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero h1 {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 20px;
+    max-width: 720px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-desc {
+    max-width: 680px;
+    color: var(--text-muted);
+    font-size: 15px;
+    line-height: 1.75;
+    margin-bottom: 32px;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 680px;
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .stat-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  /* ── OVERVIEW BLOCK ─────────────────────────── */
+  .overview-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 56px;
+  }
+
+  .info-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .info-card.accent-gold { border-left: 3px solid var(--gold); }
+  .info-card.accent-blue { border-left: 3px solid var(--accent); }
+  .info-card.full-width { grid-column: 1 / -1; }
+
+  .card-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  .card-body {
+    color: var(--text-muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .order-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 24px;
+  }
+
+  .order-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 4px 0;
+  }
+
+  .order-list li .ol-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--gold);
+    flex-shrink: 0;
+    width: 20px;
+  }
+
+  /* ── STEP SECTIONS ─────────────────────────── */
+  .steps-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .steps-header h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .steps-header-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .step-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+
+  .step-card:hover {
+    border-color: rgba(201,168,76,0.3);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.25);
+  }
+
+  .step-card.expanded { border-color: rgba(201,168,76,0.4); }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 28px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .step-header:hover { background: var(--surface2); }
+
+  .step-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.25);
+    font-family: 'Inter', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .step-meta { flex: 1; min-width: 0; }
+
+  .step-num-label {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--text-dim);
+    margin-bottom: 3px;
+  }
+
+  .step-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+
+  .step-summary {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .step-toggle {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.25s, background 0.2s;
+    color: var(--text-dim);
+    font-size: 14px;
+  }
+
+  .step-card.expanded .step-toggle {
+    transform: rotate(180deg);
+    background: var(--gold-dim);
+    color: var(--gold);
+    border-color: rgba(201,168,76,0.3);
+  }
+
+  .step-body {
+    display: none;
+    padding: 0 28px 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .step-card.expanded .step-body { display: block; }
+
+  .step-body-inner {
+    padding-top: 24px;
+  }
+
+  .accomplishes-block {
+    background: rgba(59,130,246,0.06);
+    border: 1px solid rgba(59,130,246,0.18);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+  }
+
+  .accomplishes-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .accomplishes-label::before {
+    content: '▸';
+    font-size: 10px;
+  }
+
+  .accomplishes-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .content-section { margin-top: 22px; }
+
+  .content-section h4 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .content-para {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+
+  .bullet-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .bullet-list li {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .bullet-list li::before {
+    content: '';
+    display: inline-block;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    margin-top: 7px;
+  }
+
+  .numbered-path {
+    counter-reset: path;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .numbered-path li {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .numbered-path li::before {
+    counter-increment: path;
+    content: counter(path);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px; height: 22px;
+    border-radius: 6px;
+    background: var(--gold-dim);
+    border: 1px solid rgba(201,168,76,0.25);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+  }
+
+  .tag.gold {
+    background: var(--gold-dim);
+    border-color: rgba(201,168,76,0.25);
+    color: var(--gold);
+  }
+
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 12px;
+  }
+
+  .metrics-col h5 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  /* ── ARTIFACTS SECTION ─────────────────────────── */
+  .artifacts-section {
+    margin-top: 64px;
+    padding-top: 48px;
+    border-top: 1px solid var(--border);
+  }
+
+  .artifacts-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 28px;
+  }
+
+  .artifact-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .artifact-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .artifact-card:hover {
+    border-color: rgba(201,168,76,0.35);
+    transform: translateY(-2px);
+  }
+
+  .artifact-num {
+    font-family: 'Inter', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .artifact-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+
+  .artifact-desc {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+
+  /* ── QUOTE CALLOUT ─────────────────────────── */
+  .callout {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 10px 10px 0;
+    padding: 20px 24px;
+    margin: 24px 0;
+    font-size: 14px;
+    color: var(--text-muted);
+    font-style: italic;
+    line-height: 1.75;
+  }
+
+  /* ── PHASE BLOCKS ─────────────────────────── */
+  .phase-blocks {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-top: 14px;
+  }
+
+  .phase-block {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+
+  .phase-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+
+  .phase-items {
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  /* INFO MODALS */
+  .info-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(4,8,20,0.85);
+    backdrop-filter: blur(8px);
+    z-index: 500;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .info-modal-overlay.active { opacity: 1; pointer-events: auto; }
+  .info-modal {
+    background: var(--surface);
+    border: 1px solid rgba(224,255,79,0.25);
+    border-radius: 14px;
+    padding: 32px 36px;
+    max-width: 520px; width: 90%;
+    max-height: 85vh; overflow-y: auto;
+    position: relative;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  }
+  .info-modal-overlay.active .info-modal { transform: scale(1) translateY(0); }
+  .info-modal-close {
+    position: absolute; top: 14px; right: 16px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text-muted);
+    font-size: 1.1rem; width: 32px; height: 32px;
+    display: grid; place-items: center;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .info-modal-close:hover { background: var(--border); color: var(--text); }
+  .info-modal-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px; font-weight: 700;
+    color: var(--gold); margin-bottom: 6px;
+  }
+  .info-modal-subtitle {
+    font-size: 13px; color: var(--text-muted);
+    margin-bottom: 20px;
+  }
+  .info-modal-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .info-modal-item:last-child { border-bottom: none; }
+  .info-modal-num {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--gold-dim);
+    border: 1px solid rgba(224,255,79,0.25);
+    color: var(--gold);
+    font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .info-modal-text { flex: 1; }
+  .info-modal-name {
+    font-size: 14px; font-weight: 600;
+    color: var(--text); margin-bottom: 2px;
+  }
+  .info-modal-desc {
+    font-size: 12.5px; color: var(--text-muted); line-height: 1.5;
+  }
+  .info-modal-link {
+    display: inline-block; margin-top: 16px;
+    font-size: 12px; color: var(--accent);
+    cursor: pointer; text-decoration: none;
+  }
+  .info-modal-link:hover { text-decoration: underline; }
+  .stat-card.clickable { cursor: pointer; transition: border-color 0.2s, transform 0.2s; }
+  .stat-card.clickable:hover { border-color: rgba(224,255,79,0.35); transform: translateY(-2px); }
+
+  /* ── SCROLL ANIMATION ─────────────────────────── */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ── BACK TO TOP ─────────────────────────── */
+  .back-to-top {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    width: 44px; height: 44px;
+    background: var(--gold);
+    color: #0d1117;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+    opacity: 0;
+    transition: opacity 0.25s, transform 0.2s;
+    transform: translateY(8px);
+    z-index: 50;
+  }
+  .back-to-top.visible { opacity: 1; transform: none; }
+  .back-to-top:hover { transform: translateY(-2px); }
+
+  /* ── SEARCH BAR ─────────────────────────── */
+  .search-wrap {
+    padding: 0 20px 20px;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 12px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .search-input:focus { border-color: var(--gold); }
+  .search-input::placeholder { color: var(--text-dim); }
+
+  @media (max-width: 900px) {
+    aside { display: none; }
+    main { margin-left: 0; max-width: 100%; padding: 32px 24px 80px; }
+    .hero-stats { grid-template-columns: repeat(2, 1fr); }
+    .overview-grid { grid-template-columns: 1fr; }
+    .artifacts-grid { grid-template-columns: 1fr; }
+    .metrics-grid { grid-template-columns: 1fr; }
+    .phase-blocks { grid-template-columns: 1fr; }
+    .order-list { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <span class="header-logo">SA Enablement</span>
+  <div class="header-divider"></div>
+  <span class="header-subtitle">Implementation Guide</span>
+  <div class="header-right">
+    <span class="badge badge-gold">12 Steps</span>
+    <span class="badge badge-green">Enterprise Framework</span>
+  </div>
+</header>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="search-wrap">
+      <input class="search-input" type="text" placeholder="Search steps…" id="searchInput" />
+    </div>
+
+    <div class="sidebar-section-label">Implementation Steps</div>
+
+    <nav id="stepNav">
+      <a class="nav-item" href="#step-1" data-step="1">
+        <span class="nav-step-num">1</span>
+        <span class="nav-label">Define Charter &amp; Outcomes</span>
+      </a>
+      <a class="nav-item" href="#step-2" data-step="2">
+        <span class="nav-step-num">2</span>
+        <span class="nav-label">Clarify SA Role &amp; Scope</span>
+      </a>
+      <a class="nav-item" href="#step-3" data-step="3">
+        <span class="nav-step-num">3</span>
+        <span class="nav-label">Build Competency Framework</span>
+      </a>
+      <a class="nav-item" href="#step-4" data-step="4">
+        <span class="nav-step-num">4</span>
+        <span class="nav-label">Map Critical Path</span>
+      </a>
+      <a class="nav-item" href="#step-5" data-step="5">
+        <span class="nav-step-num">5</span>
+        <span class="nav-label">Current-State Gap Analysis</span>
+      </a>
+      <a class="nav-item" href="#step-6" data-step="6">
+        <span class="nav-step-num">6</span>
+        <span class="nav-label">Design Program Architecture</span>
+      </a>
+      <a class="nav-item" href="#step-7" data-step="7">
+        <span class="nav-step-num">7</span>
+        <span class="nav-label">Milestone-Based Onboarding</span>
+      </a>
+      <a class="nav-item" href="#step-8" data-step="8">
+        <span class="nav-step-num">8</span>
+        <span class="nav-label">Assessment &amp; Certification</span>
+      </a>
+      <a class="nav-item" href="#step-9" data-step="9">
+        <span class="nav-step-num">9</span>
+        <span class="nav-label">Enable Manager Coaching</span>
+      </a>
+      <a class="nav-item" href="#step-10" data-step="10">
+        <span class="nav-step-num">10</span>
+        <span class="nav-label">Reinforce in Flow of Work</span>
+      </a>
+      <a class="nav-item" href="#step-11" data-step="11">
+        <span class="nav-step-num">11</span>
+        <span class="nav-label">Instrument with Metrics</span>
+      </a>
+      <a class="nav-item" href="#step-12" data-step="12">
+        <span class="nav-step-num">12</span>
+        <span class="nav-label">Quarterly Operating Rhythm</span>
+      </a>
+    </nav>
+
+    <hr class="sidebar-divider" />
+
+    <div class="sidebar-section-label">Quick Navigation</div>
+    <div class="sidebar-quick-nav">
+      <a href="#overview">Program Overview</a>
+      <a href="#steps">Implementation Steps</a>
+      <a href="#artifacts">Four Launch Artifacts</a>
+      <a href="#critical-path-note">Critical Path Placement</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- HERO -->
+    <section class="hero fade-in">
+      <div class="hero-eyebrow">Solutions Architect Enablement Program</div>
+      <h1>Build an enablement program that creates<br/><em>field-ready SAs,</em> not training calendars.</h1>
+      <p class="hero-desc">
+        SA enablement is not simply product training. It must blend technical credibility, discovery skills,
+        architecture judgment, communication excellence, and field execution — in a deliberate, sequenced order.
+        Strong programs measure <strong style="color:var(--text)">time to competency</strong>, not just time to first meeting.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-card clickable" onclick="openInfoModal('steps')">
+          <div class="stat-num">12</div>
+          <div class="stat-label">Ordered Steps ▸</div>
+        </div>
+        <div class="stat-card clickable" onclick="openInfoModal('artifacts')">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Launch Artifacts ▸</div>
+        </div>
+        <div class="stat-card clickable" onclick="openInfoModal('competency')">
+          <div class="stat-num">8</div>
+          <div class="stat-label">Competency Domains ▸</div>
+        </div>
+        <div class="stat-card clickable" onclick="openInfoModal('phases')">
+          <div class="stat-num">4</div>
+          <div class="stat-label">Onboarding Phases ▸</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OVERVIEW -->
+    <section id="overview" class="fade-in">
+      <div class="overview-grid">
+
+        <div class="info-card accent-gold">
+          <div class="card-title">Why Sequence Matters</div>
+          <div class="card-body">
+            Sequence is critical because building a critical path before defining the role and competency model
+            produces a training calendar — not an enablement program. Think of it like drawing a treasure map
+            before deciding which island you're on.
+          </div>
+        </div>
+
+        <div class="info-card accent-blue">
+          <div class="card-title">Core Principle</div>
+          <div class="card-body">
+            Begin with four artifacts, not modules:
+            a Program Charter, an SA Competency Matrix, a Field-Readiness Critical Path, and a Ramp Scorecard
+            with Certification Gates. Everything else becomes easier — and less political — once these exist.
+          </div>
+        </div>
+
+        <div class="info-card full-width">
+          <div class="card-title">Order Summary</div>
+          <ul class="order-list">
+            <li><span class="ol-num">1</span> Charter the program</li>
+            <li><span class="ol-num">2</span> Define the SA role and success profile</li>
+            <li><span class="ol-num">3</span> Build the competency framework</li>
+            <li><span class="ol-num">4</span> Map the critical path to readiness</li>
+            <li><span class="ol-num">5</span> Assess current-state gaps</li>
+            <li><span class="ol-num">6</span> Design the enablement operating model</li>
+            <li><span class="ol-num">7</span> Build milestone-based onboarding</li>
+            <li><span class="ol-num">8</span> Create certification gates</li>
+            <li><span class="ol-num">9</span> Enable managers to coach</li>
+            <li><span class="ol-num">10</span> Reinforce in the flow of work</li>
+            <li><span class="ol-num">11</span> Measure time to competency &amp; outcomes</li>
+            <li><span class="ol-num">12</span> Review and iterate quarterly</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- STEPS -->
+    <section id="steps">
+      <div class="steps-header fade-in">
+        <h2>Implementation Steps</h2>
+        <div class="steps-header-line"></div>
+        <span class="badge badge-gold">Recommended Order</span>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="step-card fade-in" id="step-1">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">1</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 1 · Foundation</div>
+            <div class="step-title">Define the Charter and Business Outcomes</div>
+            <div class="step-summary">The real starting point — not the curriculum.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                You create executive sponsorship, a measurable charter, and permission to say "no" to random training
+                requests that do not support outcomes.
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Defined at This Stage</h4>
+              <ul class="bullet-list">
+                <li>Why the program exists</li>
+                <li>Which business problems it is supposed to solve</li>
+                <li>Which SA population it covers</li>
+                <li>Which metrics matter most</li>
+              </ul>
+            </div>
+            <div class="content-section">
+              <h4>Typical Goals</h4>
+              <div class="tag-list">
+                <span class="tag gold">Reduce SA ramp time</span>
+                <span class="tag gold">Improve technical win rates</span>
+                <span class="tag">Increase demo quality</span>
+                <span class="tag">Improve discovery depth</span>
+                <span class="tag">Reduce hero dependence</span>
+                <span class="tag">Increase field consistency</span>
+              </div>
+            </div>
+            <div class="callout">
+              Enablement must begin with alignment to top-level business objectives, not with training content.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-card fade-in" id="step-2">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">2</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 2 · Role Definition</div>
+            <div class="step-title">Clarify the SA Role, Scope, and Moments That Matter</div>
+            <div class="step-summary">Move from vague expectations to observable performance standards.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                You move from vague expectations like "be technical and helpful" to observable performance expectations.
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Key Interactions to Define</h4>
+              <ul class="bullet-list">
+                <li>SA mission by segment or motion</li>
+                <li>Core responsibilities across the customer lifecycle</li>
+                <li>Discovery, technical qualification, architecture design</li>
+                <li>Demo, POC guidance, objection handling, handoff</li>
+                <li>Partner collaboration and cross-functional engagement</li>
+              </ul>
+            </div>
+            <div class="content-section">
+              <h4>Role Boundaries</h4>
+              <div class="tag-list">
+                <span class="tag">AEs</span>
+                <span class="tag">CSMs</span>
+                <span class="tag">Product</span>
+                <span class="tag">Support</span>
+                <span class="tag">PS</span>
+                <span class="tag">Partners</span>
+              </div>
+            </div>
+            <div class="callout">
+              Role-specific enablement and competency-based approaches depend on making target behaviors explicit first.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-card fade-in" id="step-3">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">3</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 3 · Competency</div>
+            <div class="step-title">Build the Competency Framework</div>
+            <div class="step-summary">The backbone for onboarding, assessment, career paths, and certification.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                You create the backbone for onboarding, assessment, career paths, coaching rubrics, and certification standards.
+                This is where the program becomes real.
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Competency Domains (5–8)</h4>
+              <ul class="bullet-list">
+                <li>Business acumen</li>
+                <li>Discovery and consultative questioning</li>
+                <li>Architecture and design skills</li>
+                <li>Product and platform knowledge</li>
+                <li>Demo and POC execution</li>
+                <li>Competitive positioning</li>
+                <li>Executive communication and storytelling</li>
+                <li>Deal strategy and internal collaboration</li>
+              </ul>
+            </div>
+            <div class="content-section">
+              <h4>Proficiency Levels</h4>
+              <div class="tag-list">
+                <span class="tag">Aware</span>
+                <span class="tag">Working</span>
+                <span class="tag gold">Proficient</span>
+                <span class="tag gold">Advanced</span>
+              </div>
+            </div>
+            <div class="callout">
+              The competency-first model gives you the target state for onboarding, coaching, certification, and promotion.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step-card fade-in" id="step-4">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">4</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 4 · Critical Path</div>
+            <div class="step-title">Map the Critical Path to Field Readiness</div>
+            <div class="step-summary">Sequence learning and define what's prerequisite versus nice-to-have.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                You create the ordered learning journey and decide what is prerequisite versus nice-to-have.
+                Without steps 1–3 first, you end up sequencing tasks without knowing what "ready" means.
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Common Critical Path</h4>
+              <ol class="numbered-path">
+                <li>Company and GTM context</li>
+                <li>Customer and use-case understanding</li>
+                <li>Platform and product fundamentals</li>
+                <li>Core architecture patterns</li>
+                <li>Sales process and deal stages</li>
+                <li>Discovery methodology</li>
+                <li>Demo narrative and execution</li>
+                <li>Common objections and competition</li>
+                <li>Hands-on design and POC practice</li>
+                <li>Certification to engage independently</li>
+              </ol>
+            </div>
+            <div class="callout">
+              The critical path belongs early — but after the charter and competency framework, not before.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step-card fade-in" id="step-5">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">5</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 5 · Diagnosis</div>
+            <div class="step-title">Conduct a Current-State Gap Analysis</div>
+            <div class="step-summary">Know what to build first, what to leave alone, and where revenue risk lives.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                You know what to build first, what to leave alone, and where the revenue risk actually is.
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Sources to Use</h4>
+              <ul class="bullet-list">
+                <li>Manager and top-performer interviews</li>
+                <li>Win/loss themes</li>
+                <li>Call and demo reviews</li>
+                <li>Self-assessments and shadowing findings</li>
+                <li>Existing onboarding content audit</li>
+              </ul>
+            </div>
+            <div class="content-section">
+              <h4>Common Gaps Identified</h4>
+              <ul class="bullet-list">
+                <li>Great technical depth, weak discovery</li>
+                <li>Strong product knowledge, weak business framing</li>
+                <li>Inconsistent demo quality</li>
+                <li>Poor partner alignment</li>
+                <li>No standard architecture review process</li>
+              </ul>
+            </div>
+            <div class="callout">
+              Listening tours and diagnosis should always precede solutioning.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step-card fade-in" id="step-6">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">6</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 6 · Operating Model</div>
+            <div class="step-title">Design the Target Program Architecture</div>
+            <div class="step-summary">Build a system, not a collection of disconnected training assets.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                You decide the major components and how they fit together, creating the operating model for SA capability development.
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Program Structure</h4>
+              <ul class="bullet-list">
+                <li>New-hire onboarding</li>
+                <li>Role transition onboarding</li>
+                <li>Ongoing enablement</li>
+                <li>Manager coaching motions</li>
+                <li>Certification and recertification</li>
+                <li>Content system and knowledge base</li>
+                <li>Field reinforcement loop</li>
+              </ul>
+            </div>
+            <div class="callout">
+              High-performing enablement programs are operating systems, not events.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 7 -->
+      <div class="step-card fade-in" id="step-7">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">7</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 7 · Onboarding</div>
+            <div class="step-title">Design Milestone-Based Onboarding</div>
+            <div class="step-summary">A ramp that is faster, safer, and more measurable than shadowing by osmosis.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                You give new SAs a structured ramp that is faster, safer, and more measurable than "ride along with Chris and absorb the vibe."
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Four Onboarding Phases</h4>
+              <div class="phase-blocks">
+                <div class="phase-block">
+                  <div class="phase-label">Phase 1 · Foundation</div>
+                  <div class="phase-items">Company, market, ICP, products, tools, process</div>
+                </div>
+                <div class="phase-block">
+                  <div class="phase-label">Phase 2 · Guided Application</div>
+                  <div class="phase-items">Shadowing, sandbox work, architecture exercises</div>
+                </div>
+                <div class="phase-block">
+                  <div class="phase-label">Phase 3 · Supervised Execution</div>
+                  <div class="phase-items">Run discovery/demo portions with oversight</div>
+                </div>
+                <div class="phase-block">
+                  <div class="phase-label">Phase 4 · Independent Readiness</div>
+                  <div class="phase-items">Certified for core SA motions</div>
+                </div>
+              </div>
+            </div>
+            <div class="callout">
+              Measure time to competency — whether the person can reliably perform — not merely whether they attended training.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 8 -->
+      <div class="step-card fade-in" id="step-8">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">8</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 8 · Certification</div>
+            <div class="step-title">Build Assessment and Certification Gates</div>
+            <div class="step-summary">Define what "field ready" means and prevent premature graduation.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                You define what "field ready" means and prevent premature graduation. This is one of the biggest
+                differences between average and strong SA enablement programs.
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Certification Gates</h4>
+              <ul class="bullet-list">
+                <li>Knowledge checks</li>
+                <li>Demo certification</li>
+                <li>Discovery role play</li>
+                <li>Architecture and design review</li>
+                <li>Objection handling simulation</li>
+                <li>Tool and process proficiency</li>
+                <li>Manager signoff</li>
+                <li>Field observation</li>
+              </ul>
+            </div>
+            <div class="callout">
+              Certification must verify the person can do the job — not just remember facts.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 9 -->
+      <div class="step-card fade-in" id="step-9">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">9</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 9 · Coaching</div>
+            <div class="step-title">Equip Managers and Field Leaders to Coach</div>
+            <div class="step-summary">The step most often skipped — and where good onboarding goes to die.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                The field becomes part of the enablement system rather than a randomizer.
+                Training alone does not sustain behavior change.
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Manager Enablement Toolkit</h4>
+              <ul class="bullet-list">
+                <li>Coaching rubric tied to competencies</li>
+                <li>Observation checklist for demos and discovery</li>
+                <li>Weekly ramp checkpoint template</li>
+                <li>Guidance on when to intervene vs. let reps struggle productively</li>
+                <li>Escalation path for missed milestones</li>
+              </ul>
+            </div>
+            <div class="callout">
+              Reinforcement, manager involvement, and coaching are the mechanisms that make new behaviors stick.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 10 -->
+      <div class="step-card fade-in" id="step-10">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">10</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 10 · Reinforcement</div>
+            <div class="step-title">Launch Reinforcement in the Flow of Work</div>
+            <div class="step-summary">Make knowledge usable under real field pressure.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                Knowledge becomes usable under field pressure. The program shifts from event-based to always-on.
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Reinforcement Assets</h4>
+              <ul class="bullet-list">
+                <li>Battlecards and talk tracks</li>
+                <li>Demo snippets and exemplar recordings</li>
+                <li>Architecture pattern libraries</li>
+                <li>Competitive refreshers</li>
+                <li>Just-in-time play guidance</li>
+                <li>Spaced repetition and reinforcement tasks</li>
+                <li>Deal reviews tied to competencies</li>
+              </ul>
+            </div>
+            <div class="callout">
+              Enablement works when it drives behavior change in real work, not when it stays as a one-time classroom event.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 11 -->
+      <div class="step-card fade-in" id="step-11">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">11</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 11 · Measurement</div>
+            <div class="step-title">Instrument the Program with Leading and Lagging Metrics</div>
+            <div class="step-summary">Prove impact and identify bottlenecks before revenue misses appear.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                You can prove impact and identify bottlenecks before revenue misses show up.
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Metric Framework</h4>
+              <div class="metrics-grid">
+                <div class="metrics-col">
+                  <h5>Leading Indicators</h5>
+                  <ul class="bullet-list">
+                    <li>Onboarding completion rate</li>
+                    <li>Certification pass rate</li>
+                    <li>Time to competency</li>
+                    <li>Content usage</li>
+                    <li>Manager coaching frequency</li>
+                    <li>Demo assessment scores</li>
+                  </ul>
+                </div>
+                <div class="metrics-col">
+                  <h5>Lagging Indicators</h5>
+                  <ul class="bullet-list">
+                    <li>Technical win rate</li>
+                    <li>POC success</li>
+                    <li>Sales cycle influence</li>
+                    <li>Pipeline progression</li>
+                    <li>Quota contribution</li>
+                    <li>Average deal size</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="callout">
+              Measuring readiness and competency gives a better leading signal than only measuring downstream quota outcomes.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 12 -->
+      <div class="step-card fade-in" id="step-12">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-icon">12</div>
+          <div class="step-meta">
+            <div class="step-num-label">Step 12 · Governance</div>
+            <div class="step-title">Iterate with a Quarterly Operating Rhythm</div>
+            <div class="step-summary">The final step is not "done" — it is ongoing governance.</div>
+          </div>
+          <div class="step-toggle">▾</div>
+        </div>
+        <div class="step-body">
+          <div class="step-body-inner">
+            <div class="accomplishes-block">
+              <div class="accomplishes-label">What Gets Accomplished</div>
+              <div class="accomplishes-text">
+                The program stays alive, relevant, and tied to business change.
+              </div>
+            </div>
+            <div class="content-section">
+              <h4>Quarterly Review Agenda</h4>
+              <ul class="bullet-list">
+                <li>What new sellers struggle with most</li>
+                <li>Which certifications correlate with better outcomes</li>
+                <li>Which modules are outdated</li>
+                <li>What managers are not reinforcing</li>
+                <li>Which field assets are actually used</li>
+                <li>Which product changes require refresh</li>
+              </ul>
+            </div>
+            <div class="callout">
+              Treat enablement as an operating system for GTM execution — not a one-time project.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CRITICAL PATH NOTE -->
+    <section id="critical-path-note" class="artifacts-section fade-in">
+      <div class="steps-header">
+        <h2>Where "Critical Path Overview" Fits</h2>
+        <div class="steps-header-line"></div>
+      </div>
+      <div class="info-card accent-gold">
+        <div class="card-title">The Correct Order</div>
+        <div class="card-body">
+          <p style="margin-bottom:12px;">The Critical Path belongs early — but not as step one. The correct sequence is:</p>
+          <ol class="numbered-path">
+            <li>What business result are we trying to create?</li>
+            <li>What does a great SA actually do here?</li>
+            <li>What competencies prove they can do it?</li>
+            <li>What is the critical path to build those competencies?</li>
+          </ol>
+          <p style="margin-top:16px;">
+            Starting with a critical path before defining the role and competency model produces a training
+            calendar — not an enablement program. That is like drawing a treasure map before deciding which island you're on.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOUR ARTIFACTS -->
+    <section id="artifacts" class="artifacts-section fade-in">
+      <div class="steps-header">
+        <h2>Four Launch Artifacts</h2>
+        <div class="steps-header-line"></div>
+        <span class="badge badge-gold">Start Here</span>
+      </div>
+      <p style="color:var(--text-muted); font-size:14px; margin-bottom:4px;">
+        For an enterprise SA enablement launch, do not begin by writing modules. Begin with these four artifacts.
+        Once they exist, everything else becomes easier — and far less political.
+      </p>
+      <div class="artifacts-grid">
+        <div class="artifact-card">
+          <div class="artifact-num">01</div>
+          <div class="artifact-title">Program Charter</div>
+          <div class="artifact-desc">
+            Documents why the program exists, which business problems it solves, which SA population it covers,
+            which metrics matter, and who sponsors it at the executive level.
+          </div>
+        </div>
+        <div class="artifact-card">
+          <div class="artifact-num">02</div>
+          <div class="artifact-title">SA Competency Matrix</div>
+          <div class="artifact-desc">
+            Defines all competency domains with proficiency levels (Aware → Working → Proficient → Advanced)
+            mapped to observable behaviors per role and segment.
+          </div>
+        </div>
+        <div class="artifact-card">
+          <div class="artifact-num">03</div>
+          <div class="artifact-title">Field-Readiness Critical Path</div>
+          <div class="artifact-desc">
+            The ordered learning journey from Day 1 through independent field certification,
+            with gated milestones and clear prerequisites at each stage.
+          </div>
+        </div>
+        <div class="artifact-card">
+          <div class="artifact-num">04</div>
+          <div class="artifact-title">Ramp Scorecard with Certification Gates</div>
+          <div class="artifact-desc">
+            Tracks progress through onboarding phases with defined criteria for advancement,
+            manager signoff requirements, and assessment formats per competency domain.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Info Modals -->
+<div class="info-modal-overlay" id="stepsModal" onclick="if(event.target===this)closeInfoModal('steps')">
+  <div class="info-modal">
+    <button class="info-modal-close" onclick="closeInfoModal('steps')">✕</button>
+    <div class="info-modal-title">12 Implementation Steps</div>
+    <div class="info-modal-subtitle">The recommended sequence for building an SA enablement program that creates field-ready SAs.</div>
+    <div class="info-modal-item"><div class="info-modal-num">1</div><div class="info-modal-text"><div class="info-modal-name">Define Charter & Business Outcomes</div><div class="info-modal-desc">Create executive sponsorship, a measurable charter, and permission to say "no" to random training requests.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">2</div><div class="info-modal-text"><div class="info-modal-name">Clarify SA Role, Scope & Moments That Matter</div><div class="info-modal-desc">Move from vague expectations to observable performance standards across the customer lifecycle.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">3</div><div class="info-modal-text"><div class="info-modal-name">Build the Competency Framework</div><div class="info-modal-desc">Define 5–8 competency domains with proficiency levels — the backbone for all assessment and certification.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">4</div><div class="info-modal-text"><div class="info-modal-name">Map the Critical Path to Field Readiness</div><div class="info-modal-desc">Create the ordered learning journey from Day 1 through independent field certification.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">5</div><div class="info-modal-text"><div class="info-modal-name">Current-State Gap Analysis</div><div class="info-modal-desc">Compare current capability to desired future state to know what to build first.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">6</div><div class="info-modal-text"><div class="info-modal-name">Design Target Program Architecture</div><div class="info-modal-desc">Decide the major components and how they fit together as an operating model.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">7</div><div class="info-modal-text"><div class="info-modal-name">Design Milestone-Based Onboarding</div><div class="info-modal-desc">Build a structured 4-phase ramp that is faster, safer, and more measurable than shadowing.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">8</div><div class="info-modal-text"><div class="info-modal-name">Build Assessment & Certification Gates</div><div class="info-modal-desc">Define what "field ready" means and prevent premature graduation with live demonstrations.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">9</div><div class="info-modal-text"><div class="info-modal-name">Equip Managers to Coach</div><div class="info-modal-desc">Give managers coaching rubrics, observation checklists, and escalation paths for missed milestones.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">10</div><div class="info-modal-text"><div class="info-modal-name">Launch Reinforcement in Flow of Work</div><div class="info-modal-desc">Battlecards, demo snippets, architecture libraries, competitive refreshers, and deal reviews.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">11</div><div class="info-modal-text"><div class="info-modal-name">Instrument with Leading & Lagging Metrics</div><div class="info-modal-desc">Track time to competency, certification rates, win rates, deal size, and pipeline progression.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">12</div><div class="info-modal-text"><div class="info-modal-name">Quarterly Operating Rhythm</div><div class="info-modal-desc">Review what's working, what's outdated, and what needs refresh on a regular cadence.</div></div></div>
+    <a class="info-modal-link" onclick="closeInfoModal('steps');document.getElementById('steps').scrollIntoView({behavior:'smooth'});">Jump to Implementation Steps →</a>
+  </div>
+</div>
+
+<div class="info-modal-overlay" id="artifactsModal" onclick="if(event.target===this)closeInfoModal('artifacts')">
+  <div class="info-modal">
+    <button class="info-modal-close" onclick="closeInfoModal('artifacts')">✕</button>
+    <div class="info-modal-title">4 Launch Artifacts</div>
+    <div class="info-modal-subtitle">For an enterprise SA enablement launch, begin with these four artifacts — not modules. Everything else becomes easier once they exist.</div>
+    <div class="info-modal-item"><div class="info-modal-num">1</div><div class="info-modal-text"><div class="info-modal-name">Program Charter</div><div class="info-modal-desc">Documents why the program exists, which business problems it solves, which SA population it covers, which metrics matter, and who sponsors it at the executive level.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">2</div><div class="info-modal-text"><div class="info-modal-name">SA Competency Matrix</div><div class="info-modal-desc">Defines all competency domains with proficiency levels (Aware → Working → Proficient → Advanced) mapped to observable behaviors per role and segment.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">3</div><div class="info-modal-text"><div class="info-modal-name">Field-Readiness Critical Path</div><div class="info-modal-desc">The ordered learning journey from Day 1 through independent field certification, with gated milestones and clear prerequisites at each stage.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">4</div><div class="info-modal-text"><div class="info-modal-name">Ramp Scorecard with Certification Gates</div><div class="info-modal-desc">Tracks progress through onboarding phases with defined criteria for advancement, manager signoff requirements, and assessment formats per competency domain.</div></div></div>
+    <a class="info-modal-link" onclick="closeInfoModal('artifacts');document.getElementById('artifacts').scrollIntoView({behavior:'smooth'});">Jump to Launch Artifacts section →</a>
+  </div>
+</div>
+
+<div class="info-modal-overlay" id="competencyModal" onclick="if(event.target===this)closeInfoModal('competency')">
+  <div class="info-modal">
+    <button class="info-modal-close" onclick="closeInfoModal('competency')">✕</button>
+    <div class="info-modal-title">8 Competency Domains</div>
+    <div class="info-modal-subtitle">Defined in Step 3 — the backbone for onboarding, assessment, career paths, and certification.</div>
+    <div class="info-modal-item"><div class="info-modal-num">1</div><div class="info-modal-text"><div class="info-modal-name">Business Acumen</div><div class="info-modal-desc">Understanding the customer's business context, industry dynamics, and how technology decisions connect to business outcomes.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">2</div><div class="info-modal-text"><div class="info-modal-name">Discovery & Consultative Questioning</div><div class="info-modal-desc">Leading structured discovery conversations that uncover real requirements, pain points, and decision criteria.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">3</div><div class="info-modal-text"><div class="info-modal-name">Architecture & Design Skills</div><div class="info-modal-desc">Designing solutions that meet technical requirements while aligning to customer constraints and best practices.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">4</div><div class="info-modal-text"><div class="info-modal-name">Product & Platform Knowledge</div><div class="info-modal-desc">Deep understanding of the platform's capabilities, limitations, and how features map to customer use cases.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">5</div><div class="info-modal-text"><div class="info-modal-name">Demo & POC Execution</div><div class="info-modal-desc">Delivering compelling, tailored demonstrations and managing proof-of-concept engagements that build customer confidence.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">6</div><div class="info-modal-text"><div class="info-modal-name">Competitive Positioning</div><div class="info-modal-desc">Articulating differentiation against competitors and handling competitive objections with credibility and evidence.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">7</div><div class="info-modal-text"><div class="info-modal-name">Executive Communication & Storytelling</div><div class="info-modal-desc">Translating technical value into business narratives that resonate with C-level and VP-level decision makers.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">8</div><div class="info-modal-text"><div class="info-modal-name">Deal Strategy & Internal Collaboration</div><div class="info-modal-desc">Working effectively with AEs, CSMs, Product, and Partners to advance deals and deliver customer outcomes.</div></div></div>
+    <a class="info-modal-link" onclick="closeInfoModal('competency');document.getElementById('step-3').scrollIntoView({behavior:'smooth'});document.querySelector('#step-3 .step-header').click();">View full details in Step 3 →</a>
+  </div>
+</div>
+
+<div class="info-modal-overlay" id="phasesModal" onclick="if(event.target===this)closeInfoModal('phases')">
+  <div class="info-modal">
+    <button class="info-modal-close" onclick="closeInfoModal('phases')">✕</button>
+    <div class="info-modal-title">4 Onboarding Phases</div>
+    <div class="info-modal-subtitle">Defined in Step 7 — a structured ramp from foundation through independent field readiness.</div>
+    <div class="info-modal-item"><div class="info-modal-num">1</div><div class="info-modal-text"><div class="info-modal-name">Foundation</div><div class="info-modal-desc">Company, market, Ideal Customer Profile, products, tools, and process. Build the knowledge base every SA needs before engaging customers.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">2</div><div class="info-modal-text"><div class="info-modal-name">Guided Application</div><div class="info-modal-desc">Shadowing experienced SAs, sandbox work, and architecture exercises. Apply knowledge in safe, supervised environments.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">3</div><div class="info-modal-text"><div class="info-modal-name">Supervised Execution</div><div class="info-modal-desc">Run portions of discovery and demo with oversight. The SA leads real customer interactions with a safety net.</div></div></div>
+    <div class="info-modal-item"><div class="info-modal-num">4</div><div class="info-modal-text"><div class="info-modal-name">Independent Field Readiness</div><div class="info-modal-desc">Certified for core SA motions. The SA operates independently with full customer-facing responsibility.</div></div></div>
+    <a class="info-modal-link" onclick="closeInfoModal('phases');document.getElementById('step-7').scrollIntoView({behavior:'smooth'});document.querySelector('#step-7 .step-header').click();">View full details in Step 7 →</a>
+  </div>
+</div>
+
+<!-- BACK TO TOP -->
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<div style="text-align:center;padding:16px 0 20px;">
+  <a href="https://nebius.rus-teston.com" style="color:#0ea5e9;text-decoration:none;font-size:0.9rem;">← Back to Nebius Projects</a>
+</div>
+
+<script>
+  // Toggle step cards
+  function toggleStep(header) {
+    const card = header.closest('.step-card');
+    card.classList.toggle('expanded');
+  }
+
+  // Sidebar active state on scroll
+  const stepEls = document.querySelectorAll('.step-card[id]');
+  const navItems = document.querySelectorAll('.nav-item[data-step]');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.getAttribute('id');
+        const stepNum = id.replace('step-', '');
+        navItems.forEach(item => {
+          item.classList.remove('active');
+          if (item.getAttribute('data-step') === stepNum) {
+            item.classList.add('active');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px' });
+
+  stepEls.forEach(el => observer.observe(el));
+
+  // Fade-in on scroll
+  const fadeEls = document.querySelectorAll('.fade-in');
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        fadeObserver.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -60px 0px' });
+
+  fadeEls.forEach(el => fadeObserver.observe(el));
+
+  // Back to top button
+  const btn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    btn.classList.toggle('visible', window.scrollY > 400);
+  });
+
+  // Sidebar search
+  const searchInput = document.getElementById('searchInput');
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.toLowerCase();
+    navItems.forEach(item => {
+      const label = item.querySelector('.nav-label').textContent.toLowerCase();
+      item.style.display = label.includes(q) ? '' : 'none';
+    });
+  });
+
+  // Auto-expand first step on load
+  document.querySelector('#step-1 .step-header').click();
+
+  // Info modals
+  function openInfoModal(type) {
+    var ids = {steps:'stepsModal', artifacts:'artifactsModal', competency:'competencyModal', phases:'phasesModal'};
+    document.getElementById(ids[type]).classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeInfoModal(type) {
+    var ids = {steps:'stepsModal', artifacts:'artifactsModal', competency:'competencyModal', phases:'phasesModal'};
+    document.getElementById(ids[type]).classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      closeInfoModal('steps');
+      closeInfoModal('artifacts');
+      closeInfoModal('competency');
+      closeInfoModal('phases');
+    }
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Four Launch Artifacts | Solutions Architect Enablement Program</title>
+  <style>
+    :root {
+      --navy: #0f172a;
+      --slate: #334155;
+      --muted: #64748b;
+      --line: #dbe3ef;
+      --soft: #f8fafc;
+      --blue: #2563eb;
+      --cyan: #0891b2;
+      --green: #059669;
+      --amber: #d97706;
+      --purple: #7c3aed;
+      --card: #ffffff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--navy);
+      background: linear-gradient(135deg, #eef5ff 0%, #f8fafc 42%, #ecfeff 100%);
+      line-height: 1.55;
+    }
+
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 42px 24px 64px;
+    }
+
+    .hero {
+      background: radial-gradient(circle at top left, rgba(37, 99, 235, .26), transparent 32%),
+                  linear-gradient(135deg, #0f172a 0%, #1e3a8a 52%, #0e7490 100%);
+      color: white;
+      border-radius: 28px;
+      padding: 48px;
+      box-shadow: 0 24px 60px rgba(15, 23, 42, .22);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero:after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      top: -90px;
+      width: 270px;
+      height: 270px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, .12);
+    }
+
+    .eyebrow {
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 700;
+      font-size: 13px;
+      opacity: .86;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-size: 44px;
+      line-height: 1.08;
+      margin: 0 0 18px;
+      max-width: 850px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      max-width: 880px;
+      margin: 0;
+      color: #e2e8f0;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .pill {
+      background: rgba(255,255,255,.13);
+      border: 1px solid rgba(255,255,255,.22);
+      color: #fff;
+      padding: 9px 13px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 650;
+    }
+
+    .section {
+      margin-top: 34px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(219, 227, 239, .94);
+      border-radius: 24px;
+      box-shadow: 0 14px 38px rgba(15, 23, 42, .07);
+      overflow: hidden;
+    }
+
+    .section-header {
+      padding: 28px 32px 20px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #fff, #f8fafc);
+    }
+
+    .section-header h2 {
+      margin: 0 0 8px;
+      font-size: 27px;
+    }
+
+    .section-header p {
+      margin: 0;
+      color: var(--slate);
+      font-size: 16px;
+    }
+
+    .content { padding: 28px 32px 32px; }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .045);
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .card p { margin: 0; color: var(--slate); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      color: #fff;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .b1 { background: var(--blue); }
+    .b2 { background: var(--purple); }
+    .b3 { background: var(--green); }
+    .b4 { background: var(--amber); }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: white;
+      margin: 16px 0 22px;
+    }
+
+    th {
+      background: #0f172a;
+      color: white;
+      text-align: left;
+      padding: 13px 14px;
+      font-size: 13px;
+      letter-spacing: .02em;
+    }
+
+    td {
+      padding: 14px;
+      border-top: 1px solid var(--line);
+      vertical-align: top;
+      color: var(--slate);
+      font-size: 14px;
+    }
+
+    td strong { color: var(--navy); }
+
+    .callout {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-left: 6px solid var(--blue);
+      border-radius: 16px;
+      padding: 18px 20px;
+      margin: 22px 0;
+      color: #1e3a8a;
+    }
+
+    .callout strong { color: #172554; }
+
+    .artifact-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .artifact-title span {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .artifact-title h3 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .subhead {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 24px 0 8px;
+      color: var(--navy);
+    }
+
+    ul { margin: 8px 0 0 22px; padding: 0; }
+    li { margin-bottom: 7px; color: var(--slate); }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 16px;
+      align-items: start;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .num {
+      width: 46px;
+      height: 46px;
+      border-radius: 15px;
+      background: #e0f2fe;
+      color: #075985;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step h4 { margin: 0 0 6px; font-size: 17px; }
+    .step p { margin: 0; color: var(--slate); }
+
+    .footer {
+      margin-top: 34px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media print {
+      body { background: white; }
+      .page { max-width: none; padding: 20px; }
+      .section, .hero, .card { box-shadow: none; }
+      .section { page-break-inside: avoid; }
+    }
+
+    @media (max-width: 900px) {
+      .grid-4, .grid-2 { grid-template-columns: 1fr; }
+      .hero { padding: 34px 26px; }
+      h1 { font-size: 34px; }
+      .content, .section-header { padding-left: 22px; padding-right: 22px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">Enterprise Revenue Enablement Framework</div>
+      <h1>Four Launch Artifacts for a Solutions Architect Enablement Program</h1>
+      <p>A practical, executive-ready launch package for building a field-ready, revenue-impacting Solutions Architect enablement program. These artifacts define why the program exists, what excellent performance looks like, how readiness will be measured, and the critical path SAs follow to become productive.</p>
+      <div class="pill-row">
+        <div class="pill">Outcome-led</div>
+        <div class="pill">Competency-based</div>
+        <div class="pill">Field-ready</div>
+        <div class="pill">Measurable</div>
+        <div class="pill">Manager-reinforced</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Executive Summary</h2>
+        <p>The four launch artifacts should be built in a specific order because each artifact informs the next. The mistake most organizations make is starting with training content or a critical path before defining business outcomes, role expectations, and readiness standards.</p>
+      </div>
+      <div class="content">
+        <div class="grid-4">
+          <div class="card">
+            <div class="badge b1">1</div>
+            <h3>Program Charter</h3>
+            <p>Defines the business reason, scope, stakeholders, outcomes, and success metrics for the enablement program.</p>
+          </div>
+          <div class="card">
+            <div class="badge b2">2</div>
+            <h3>SA Competency Matrix</h3>
+            <p>Defines the capabilities and observable behaviors required for high-performing Solutions Architects.</p>
+          </div>
+          <div class="card">
+            <div class="badge b3">3</div>
+            <h3>Field-Readiness Scorecard</h3>
+            <p>Defines what “ready” means and how readiness will be assessed before an SA operates independently.</p>
+          </div>
+          <div class="card">
+            <div class="badge b4">4</div>
+            <h3>Critical Path Overview</h3>
+            <p>Defines the ordered journey from foundation learning to independent field execution.</p>
+          </div>
+        </div>
+
+        <div class="callout"><strong>Recommended build order:</strong> Charter → Competency Matrix → Field-Readiness Scorecard → Critical Path Overview. This prevents the team from building training content before agreeing on the business outcome, target behaviors, and readiness standard.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Artifact 1: Program Charter</h2>
+        <p>The Program Charter is the executive agreement that defines why the Solutions Architect Enablement Program exists and what outcomes it is expected to produce.</p>
+      </div>
+      <div class="content">
+        <div class="artifact-title"><span class="b1">1</span><h3>Program Charter Template</h3></div>
+        <table>
+          <thead><tr><th>Charter Element</th><th>Enterprise-Grade Definition</th><th>Example for SA Enablement</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Program Purpose</strong></td><td>Defines the business reason for investing in the program.</td><td>Accelerate SA ramp, increase technical deal quality, improve customer confidence, and shorten time from technical evaluation to validated solution.</td></tr>
+            <tr><td><strong>Business Outcomes</strong></td><td>Connects enablement to revenue, productivity, and field performance.</td><td>Reduce ramp time, improve technical win rate, increase POC conversion, improve demo consistency, and reduce dependency on senior technical specialists.</td></tr>
+            <tr><td><strong>Target Audience</strong></td><td>Defines who is included and whether the program applies globally, regionally, or by segment.</td><td>New-hire SAs, existing SAs, senior SAs transitioning into enterprise accounts, partner-facing SAs, and SA managers.</td></tr>
+            <tr><td><strong>Scope</strong></td><td>Clarifies what the program will and will not cover.</td><td>Includes onboarding, product and architecture readiness, discovery, demos, POC support, competitive positioning, and manager coaching. Excludes HR orientation and general corporate compliance training.</td></tr>
+            <tr><td><strong>Stakeholders</strong></td><td>Identifies business owners, contributors, and decision-makers.</td><td>Revenue Enablement, SA Leadership, Sales Leadership, Product Marketing, Product Management, Customer Success, Partners, and Field Operations.</td></tr>
+            <tr><td><strong>Success Metrics</strong></td><td>Defines how the program will prove impact.</td><td>Time to competency, certification completion, manager readiness rating, demo certification pass rate, technical win rate, sales cycle velocity, POC success rate, and quota influence.</td></tr>
+            <tr><td><strong>Governance</strong></td><td>Defines decision cadence and ownership.</td><td>Monthly working group with Enablement, SA leadership, and Product Marketing; quarterly executive review of outcomes, gaps, and content priorities.</td></tr>
+          </tbody>
+        </table>
+        <div class="subhead">What this artifact accomplishes</div>
+        <ul>
+          <li>Aligns executives on the purpose and measurable value of the program.</li>
+          <li>Prevents enablement from becoming a random training request factory.</li>
+          <li>Creates the business case for headcount, systems, content, and manager participation.</li>
+          <li>Establishes the language used to defend priorities and tradeoffs.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Artifact 2: SA Competency Matrix</h2>
+        <p>The Competency Matrix defines what great looks like. It translates the SA role into skills, behaviors, and proficiency levels that can be coached, assessed, and improved.</p>
+      </div>
+      <div class="content">
+        <div class="artifact-title"><span class="b2">2</span><h3>Competency Matrix Template</h3></div>
+        <table>
+          <thead><tr><th>Competency Domain</th><th>What It Means</th><th>Observable Behaviors</th><th>Proficiency Evidence</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Customer & ICP Understanding</strong></td><td>Understands the ideal customer profile, buying triggers, technical maturity, use cases, and common pain points.</td><td>Identifies fit, asks relevant discovery questions, and connects platform value to customer priorities.</td><td>Can explain top ICPs, disqualifiers, buyer personas, and common use cases without relying on notes.</td></tr>
+            <tr><td><strong>Discovery & Qualification</strong></td><td>Uncovers business goals, technical constraints, current architecture, decision criteria, and risk.</td><td>Runs structured discovery, clarifies success criteria, documents constraints, and identifies decision influencers.</td><td>Completes a scored discovery simulation or live manager-observed discovery call.</td></tr>
+            <tr><td><strong>Technical Architecture</strong></td><td>Designs solutions aligned to customer requirements, platform capabilities, security, scalability, and operational needs.</td><td>Produces architecture options, explains tradeoffs, and recommends fit-for-purpose solutions.</td><td>Completes architecture review using a realistic customer scenario.</td></tr>
+            <tr><td><strong>Product & Platform Fluency</strong></td><td>Understands core product capabilities, differentiators, limitations, roadmap awareness, and integrations.</td><td>Explains product value clearly, knows when to escalate, and avoids overpromising.</td><td>Passes product knowledge assessment and demonstrates applied product positioning.</td></tr>
+            <tr><td><strong>Demo & Storytelling</strong></td><td>Delivers demos that are tailored, outcome-based, and connected to customer pain.</td><td>Frames the problem, shows relevant capabilities, handles questions, and ties back to business impact.</td><td>Passes demo certification with scoring rubric.</td></tr>
+            <tr><td><strong>POC / Technical Evaluation Support</strong></td><td>Guides customers through successful technical validation with clear scope, success criteria, and timelines.</td><td>Defines POC goals, manages technical risks, supports blockers, and drives technical closure.</td><td>Builds a mock POC plan with success criteria and risk mitigation.</td></tr>
+            <tr><td><strong>Competitive Positioning</strong></td><td>Understands competitor strengths, weaknesses, landmines, and positioning traps.</td><td>Responds to objections with confidence, avoids negative selling, and reframes around customer priorities.</td><td>Completes competitive objection handling simulation.</td></tr>
+            <tr><td><strong>Internal Collaboration</strong></td><td>Works effectively with AEs, Product, Support, CS, and Partners to move technical deals forward.</td><td>Creates clear handoffs, documents technical risk, and engages the right stakeholders at the right time.</td><td>Receives manager and AE signoff on deal collaboration readiness.</td></tr>
+          </tbody>
+        </table>
+        <div class="subhead">Suggested proficiency levels</div>
+        <table>
+          <thead><tr><th>Level</th><th>Description</th><th>Expected Independence</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Level 1: Aware</strong></td><td>Understands concepts and terminology but requires support to apply them.</td><td>Can observe and explain.</td></tr>
+            <tr><td><strong>Level 2: Working</strong></td><td>Can apply skills in controlled or low-risk scenarios with coaching.</td><td>Can contribute with guidance.</td></tr>
+            <tr><td><strong>Level 3: Proficient</strong></td><td>Can perform independently in standard customer scenarios.</td><td>Can lead core motions independently.</td></tr>
+            <tr><td><strong>Level 4: Advanced</strong></td><td>Can handle complex, ambiguous, or strategic enterprise scenarios.</td><td>Can coach others and lead high-stakes engagements.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Artifact 3: Field-Readiness Scorecard</h2>
+        <p>The Field-Readiness Scorecard defines how the organization will know whether an SA is ready to operate independently in front of customers.</p>
+      </div>
+      <div class="content">
+        <div class="artifact-title"><span class="b3">3</span><h3>Readiness Scorecard Template</h3></div>
+        <table>
+          <thead><tr><th>Readiness Area</th><th>Assessment Method</th><th>Passing Standard</th><th>Owner</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Company, Market & ICP</strong></td><td>Knowledge check and manager discussion.</td><td>Can explain target customer, buying triggers, primary pain points, and disqualification signals.</td><td>Enablement + Manager</td></tr>
+            <tr><td><strong>Product & Platform Knowledge</strong></td><td>Product assessment and scenario-based questions.</td><td>Demonstrates core capabilities, limitations, positioning, and escalation rules.</td><td>Product Marketing + Enablement</td></tr>
+            <tr><td><strong>Discovery Readiness</strong></td><td>Role play or observed customer discovery.</td><td>Asks business and technical questions, confirms success criteria, identifies risks, and documents next steps.</td><td>SA Manager</td></tr>
+            <tr><td><strong>Demo Certification</strong></td><td>Live or recorded demo scored with rubric.</td><td>Tailors demo to use case, frames business value, handles questions, and closes with next step.</td><td>Enablement + SA Leadership</td></tr>
+            <tr><td><strong>Architecture Design</strong></td><td>Case study and architecture review board.</td><td>Produces viable design, explains tradeoffs, addresses constraints, and aligns to customer outcomes.</td><td>Principal SA / Field CTO</td></tr>
+            <tr><td><strong>POC Planning</strong></td><td>Mock POC plan.</td><td>Defines scope, success criteria, timeline, resources, risks, and customer commitments.</td><td>SA Manager + Sales Leadership</td></tr>
+            <tr><td><strong>Competitive Objection Handling</strong></td><td>Scenario simulation.</td><td>Handles top competitor and risk objections with credible, customer-centered responses.</td><td>Product Marketing</td></tr>
+            <tr><td><strong>Field Collaboration</strong></td><td>AE feedback and manager observation.</td><td>Demonstrates clean handoffs, clear notes, deal-risk visibility, and proactive next-step ownership.</td><td>AE + SA Manager</td></tr>
+          </tbody>
+        </table>
+        <div class="callout"><strong>Recommended readiness rule:</strong> An SA should not be considered independently field-ready until they have passed knowledge, simulation, and manager-observed execution gates. Completion alone is not readiness.</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Artifact 4: Critical Path Overview</h2>
+        <p>The Critical Path Overview is the ordered route from new-hire foundation to independent field execution. It should be built only after the charter, competency matrix, and readiness scorecard are defined.</p>
+      </div>
+      <div class="content">
+        <div class="artifact-title"><span class="b4">4</span><h3>Critical Path to SA Field Readiness</h3></div>
+        <div class="timeline">
+          <div class="step"><div class="num">1</div><div><h4>Foundation: Company, Market, ICP, Products, Tools, Process</h4><p>Establishes baseline understanding of the company, target customers, go-to-market motion, platform, internal systems, and sales process.</p></div></div>
+          <div class="step"><div class="num">2</div><div><h4>Customer Problem & Use-Case Fluency</h4><p>Teaches SAs to recognize high-value customer problems, business triggers, use cases, technical constraints, and disqualification signals.</p></div></div>
+          <div class="step"><div class="num">3</div><div><h4>Product and Architecture Fundamentals</h4><p>Builds product fluency, reference architectures, integration patterns, security considerations, operational models, and technical tradeoff judgment.</p></div></div>
+          <div class="step"><div class="num">4</div><div><h4>Discovery and Qualification Practice</h4><p>Develops the ability to run structured discovery, uncover technical and business requirements, confirm success criteria, and identify risk.</p></div></div>
+          <div class="step"><div class="num">5</div><div><h4>Demo Narrative and Technical Storytelling</h4><p>Moves SAs from feature tours to tailored, customer-specific demos that connect platform capability to business outcomes.</p></div></div>
+          <div class="step"><div class="num">6</div><div><h4>POC and Technical Evaluation Execution</h4><p>Prepares SAs to scope technical evaluations, define success criteria, manage blockers, and drive technical closure.</p></div></div>
+          <div class="step"><div class="num">7</div><div><h4>Competitive Positioning and Objection Handling</h4><p>Equips SAs to respond to competitive claims, technical objections, cost concerns, risk questions, and procurement skepticism.</p></div></div>
+          <div class="step"><div class="num">8</div><div><h4>Certification and Field-Readiness Gate</h4><p>Validates readiness through knowledge checks, simulations, demo certification, architecture review, manager observation, and AE feedback.</p></div></div>
+          <div class="step"><div class="num">9</div><div><h4>Supervised Field Execution</h4><p>Allows new SAs to lead portions of real customer engagements with manager or senior SA support before full independence.</p></div></div>
+          <div class="step"><div class="num">10</div><div><h4>Independent Execution and Continuous Reinforcement</h4><p>Transitions the SA into independent field operation while continuing coaching, deal reviews, refreshers, and quarterly competency reinforcement.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Implementation Roadmap</h2>
+        <p>A practical rollout sequence for launching the four artifacts without overwhelming the field.</p>
+      </div>
+      <div class="content">
+        <table>
+          <thead><tr><th>Phase</th><th>Timeline</th><th>Primary Work</th><th>Key Deliverables</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Phase 1: Align</strong></td><td>Weeks 1–2</td><td>Interview stakeholders, confirm business outcomes, clarify SA role, gather current-state pain points.</td><td>Program Charter v1, stakeholder map, success metrics.</td></tr>
+            <tr><td><strong>Phase 2: Define</strong></td><td>Weeks 3–4</td><td>Build competency matrix, define proficiency levels, identify observable behaviors.</td><td>SA Competency Matrix, role expectations, manager review guide.</td></tr>
+            <tr><td><strong>Phase 3: Validate</strong></td><td>Weeks 5–6</td><td>Create readiness scorecard, define gates, build assessment rubrics.</td><td>Field-Readiness Scorecard, demo rubric, discovery rubric, architecture review rubric.</td></tr>
+            <tr><td><strong>Phase 4: Sequence</strong></td><td>Weeks 7–8</td><td>Map critical path, organize onboarding milestones, identify required content and field activities.</td><td>Critical Path Overview, 30-60-90 ramp plan, content map.</td></tr>
+            <tr><td><strong>Phase 5: Pilot</strong></td><td>Weeks 9–12</td><td>Run pilot with a small SA cohort, collect manager and participant feedback, measure readiness outcomes.</td><td>Pilot report, prioritized changes, executive readout.</td></tr>
+            <tr><td><strong>Phase 6: Scale</strong></td><td>Quarter 2+</td><td>Operationalize globally, enable managers, add reinforcement, review metrics quarterly.</td><td>Scaled program, manager coaching kit, quarterly business review.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="section-header">
+        <h2>Executive Talking Points</h2>
+        <p>Use this language when explaining the launch approach to Sales, SA, Product, or Revenue leadership.</p>
+      </div>
+      <div class="content">
+        <div class="grid-2">
+          <div class="card">
+            <h3>Why these artifacts matter</h3>
+            <p>These four artifacts convert enablement from a training calendar into a measurable field-readiness system. They define the business outcome, the target capabilities, the readiness standard, and the path to get there.</p>
+          </div>
+          <div class="card">
+            <h3>Why the Critical Path comes last</h3>
+            <p>The Critical Path should not be created until the organization has agreed on what success looks like. Otherwise, the team may build a clean learning sequence that does not produce the field behaviors the business actually needs.</p>
+          </div>
+          <div class="card">
+            <h3>What leaders should expect</h3>
+            <p>Leaders should expect a measurable reduction in ambiguity, a more consistent ramp experience, better manager coaching, clearer readiness gates, and a direct line of sight between enablement activity and revenue outcomes.</p>
+          </div>
+          <div class="card">
+            <h3>What this prevents</h3>
+            <p>This approach prevents content overload, inconsistent onboarding, premature field deployment, manager misalignment, and the classic enablement trap of measuring attendance instead of capability.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">Prepared as an enterprise-ready Solutions Architect Enablement launch framework.</div>
+  </main>
+</body>
+</html>

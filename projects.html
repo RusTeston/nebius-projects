@@ -161,8 +161,9 @@
             <h1 style="color:#E0FF4F;">NEBIUS</h1>
             <p class="tagline"><strong>Technical Sales Enablement</strong></p>
             <p class="intro">
-                <span style="color:#3B9EFF;">Technical enablement in AI infrastructure isn't about teaching features:</span><br><span style="color:#FF4D4D;">it's about teaching teams how to sell speed, scale, and competitive advantage.</span><br><em style="color:#fbbf24;">Enablement that can't point to business outcomes…. is just training.</em>
+                <span style="color:#3B9EFF;">Technical enablement in AI infrastructure isn't about teaching features:</span><br><span style="color:#3B9EFF;">it's about teaching teams how to sell speed, scale, and competitive advantage.</span><br><em style="color:#fbbf24;">Enablement that can't point to business outcomes…. is just training.</em>
             </p>
+            <p style="margin-top:16px;"><a href="#" onclick="document.getElementById('aboutNebiusModal').classList.add('active');document.body.style.overflow='hidden';return false;" style="color:#E0FF4F;font-size:1rem;font-weight:600;text-decoration:none;border:1px solid rgba(224,255,79,0.3);padding:8px 20px;border-radius:8px;display:inline-block;transition:all 0.2s;">ABOUT NEBIUS ▸</a></p>
         </header>
 
         <section>
@@ -246,5 +247,81 @@
             <p style="margin-top: 8px;"><a href="https://rus-teston.com" style="color: #0ea5e9; text-decoration: none;">← Back to Portfolio</a></p>
         </footer>
     </div>
+<!-- About Nebius Modal -->
+<div id="aboutNebiusModal" style="position:fixed;inset:0;background:rgba(4,8,20,0.88);backdrop-filter:blur(10px);z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.3s ease;" onclick="if(event.target===this){this.classList.remove('active');document.body.style.overflow='';}">
+  <div style="background:#10224A;border:1px solid rgba(224,255,79,0.2);border-radius:16px;padding:36px 40px;max-width:720px;width:92%;max-height:85vh;overflow-y:auto;position:relative;transform:scale(0.95);transition:transform 0.3s ease;box-shadow:0 20px 60px rgba(0,0,0,0.5);">
+    <button onclick="document.getElementById('aboutNebiusModal').classList.remove('active');document.body.style.overflow='';" style="position:absolute;top:14px;right:16px;background:#162C52;border:1px solid #1E3A5C;border-radius:8px;color:#B0CFEA;font-size:1.1rem;width:32px;height:32px;display:grid;place-items:center;cursor:pointer;">✕</button>
+    <h2 style="font-size:22px;font-weight:700;color:#E0FF4F;margin-bottom:4px;">About Nebius</h2>
+    <p style="font-size:13px;color:#5A8AAE;margin-bottom:24px;">Research findings — publicly available information as of April 2026</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div style="background:#162C52;border:1px solid #1E3A5C;border-radius:10px;padding:14px;"><div style="font-size:22px;font-weight:700;color:#00C853;">$1.2B+</div><div style="font-size:11px;color:#5A8AAE;text-transform:uppercase;letter-spacing:0.08em;">2025 ARR</div></div>
+      <div style="background:#162C52;border:1px solid #1E3A5C;border-radius:10px;padding:14px;"><div style="font-size:22px;font-weight:700;color:#00C853;">$7–$9B</div><div style="font-size:11px;color:#5A8AAE;text-transform:uppercase;letter-spacing:0.08em;">2026 ARR Target</div></div>
+      <div style="background:#162C52;border:1px solid #1E3A5C;border-radius:10px;padding:14px;"><div style="font-size:22px;font-weight:700;color:#E0FF4F;">#13</div><div style="font-size:11px;color:#5A8AAE;text-transform:uppercase;letter-spacing:0.08em;">TOP500 Supercomputer (ISEG2)</div></div>
+      <div style="background:#162C52;border:1px solid #1E3A5C;border-radius:10px;padding:14px;"><div style="font-size:22px;font-weight:700;color:#E0FF4F;">NBIS</div><div style="font-size:11px;color:#5A8AAE;text-transform:uppercase;letter-spacing:0.08em;">Nasdaq Listed</div></div>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <h3 style="font-size:13px;font-weight:700;color:#E0FF4F;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Company</h3>
+      <p style="font-size:13px;color:#B0CFEA;line-height:1.7;">Nebius is a full-stack AI cloud company headquartered in Amsterdam, spun out of Yandex's AI infrastructure team. Led by founder Arkady Volozh, the company operates 400+ engineers and targets 1+ GW of secured power by end of 2026. Sister companies include Avride (autonomous vehicles), TripleTen (edtech), and stakes in Toloka and ClickHouse.</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <h3 style="font-size:13px;font-weight:700;color:#E0FF4F;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Core Products</h3>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="background:#162C52;border:1px solid #1E3A5C;border-radius:8px;padding:12px 14px;"><span style="color:#00C853;font-weight:600;">AI Cloud</span><span style="color:#B0CFEA;"> — GPU clusters (GB300 to H100), InfiniBand networking, managed K8s & Slurm, 1 TB/s storage, self-healing infrastructure</span></div>
+        <div style="background:#162C52;border:1px solid #1E3A5C;border-radius:8px;padding:12px 14px;"><span style="color:#00C853;font-weight:600;">Token Factory</span><span style="color:#B0CFEA;"> — 60+ open-source models, sub-second latency, 100M+ tokens/min, OpenAI-compatible API, zero-retention mode</span></div>
+        <div style="background:#162C52;border:1px solid #1E3A5C;border-radius:8px;padding:12px 14px;"><span style="color:#00C853;font-weight:600;">Solutions</span><span style="color:#B0CFEA;"> — Data prep, model training, inference, fine-tuning, agentic search (Tavily), RAG, GenAI services</span></div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <h3 style="font-size:13px;font-weight:700;color:#E0FF4F;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Key Differentiators</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:12px;">
+        <div style="color:#B0CFEA;padding:6px 0;border-bottom:1px solid #1E3A5C;">• NVIDIA Reference Platform Partner (top tier)</div>
+        <div style="color:#B0CFEA;padding:6px 0;border-bottom:1px solid #1E3A5C;">• SemiAnalysis ClusterMAX™ Gold rating</div>
+        <div style="color:#B0CFEA;padding:6px 0;border-bottom:1px solid #1E3A5C;">• Lowest TCO (independent validation)</div>
+        <div style="color:#B0CFEA;padding:6px 0;border-bottom:1px solid #1E3A5C;">• EU data sovereignty (Finland, France, UK)</div>
+        <div style="color:#B0CFEA;padding:6px 0;border-bottom:1px solid #1E3A5C;">• SOC 2 Type II + HIPAA + ISO 27001 + GDPR</div>
+        <div style="color:#B0CFEA;padding:6px 0;border-bottom:1px solid #1E3A5C;">• MLPerf Inference v5.1 leadership</div>
+        <div style="color:#B0CFEA;padding:6px 0;border-bottom:1px solid #1E3A5C;">• Vertical integration (custom ODM hardware)</div>
+        <div style="color:#B0CFEA;padding:6px 0;border-bottom:1px solid #1E3A5C;">• Free 24/7 expert support + dedicated SAs</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <h3 style="font-size:13px;font-weight:700;color:#E0FF4F;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Notable Customers</h3>
+      <p style="font-size:12px;color:#B0CFEA;line-height:1.8;"><strong style="color:#F0F6FF;">Enterprise:</strong> Cloudflare, Shopify, Revolut, Prosus, Meta • <strong style="color:#F0F6FF;">AI Startups:</strong> Brave Search (11M+ daily AI queries), Recraft, CentML, Photoroom, HeyGen, Cursor, Lightning.AI, Decart • <strong style="color:#F0F6FF;">Healthcare:</strong> CRISPR-GPT (Stanford/DeepMind), xAID, Quantori, Simulacra AI</p>
+    </div>
+
+    <div style="margin-bottom:20px;">
+      <h3 style="font-size:13px;font-weight:700;color:#E0FF4F;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Pricing Advantage</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;font-size:12px;">
+        <div style="background:#162C52;border:1px solid #1E3A5C;border-radius:8px;padding:10px;text-align:center;"><div style="color:#00C853;font-weight:700;font-size:16px;">$2.95</div><div style="color:#5A8AAE;">Nebius H100/hr</div></div>
+        <div style="background:#162C52;border:1px solid #1E3A5C;border-radius:8px;padding:10px;text-align:center;"><div style="color:#ff6b6b;font-weight:700;font-size:16px;">$3.90–$6.88</div><div style="color:#5A8AAE;">AWS H100/hr</div></div>
+        <div style="background:#162C52;border:1px solid #1E3A5C;border-radius:8px;padding:10px;text-align:center;"><div style="color:#ff6b6b;font-weight:700;font-size:16px;">$6.98–$12.29</div><div style="color:#5A8AAE;">Azure H100/hr</div></div>
+      </div>
+    </div>
+
+    <div>
+      <h3 style="font-size:13px;font-weight:700;color:#E0FF4F;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;">Partnerships & Ecosystem</h3>
+      <p style="font-size:12px;color:#B0CFEA;line-height:1.7;">NVIDIA (Reference Platform + DGX Cloud Lepton) • TD SYNNEX (N. America distribution) • Anyscale • SkyPilot • WEKA • VAST Data • MLflow • Kubeflow • Ray • Triton • Saturn Cloud • Lightning AI</p>
+    </div>
+
+    <p style="margin-top:20px;font-size:11px;color:#3A6080;text-align:center;">Source: Publicly available information • nebius.com • April 2026</p>
+  </div>
+</div>
+<style>
+  #aboutNebiusModal.active { opacity:1; pointer-events:auto; }
+  #aboutNebiusModal.active > div { transform:scale(1); }
+</style>
+<script>
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      var m = document.getElementById('aboutNebiusModal');
+      if (m.classList.contains('active')) { m.classList.remove('active'); document.body.style.overflow = ''; }
+    }
+  });
+</script>
 </body>
 </html>
